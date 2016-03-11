@@ -1,0 +1,19 @@
+//Buses
+php artisan crud:controller BusesController --crud-name=buses --model-name=Bus --view-path="backend" --route-group=admin
+php artisan crud:view buses --fields="company_id:integer, bus_number:string, license_plate:string, vehicle_number:string, model:string, year:integer, seats:integer" --view-path="backend" --route-group=admin
+
+//Stations
+php artisan crud:controller StationsController --crud-name=stations --model-name=Station --view-path="backend" --route-group=admin
+php artisan crud:view stations --fields="company_id:integer, name:string, address:string" --view-path="backend" --route-group=admin
+
+//Trips
+php artisan crud:controller TripsController --crud-name=trips --model-name=Trip --view-path="backend" --route-group=admin
+php artisan crud:view trips --fields="company_id:integer, from:string, to:string, rating:decimal, depart_at:datetime, arrive_at:datetime" --view-path="backend" --route-group=admin
+
+//Tickets
+php artisan crud:controller TicketsController --crud-name=tickets --model-name=Ticket --view-path="backend" --route-group=admin
+php artisan crud:view tickets --fields="price:decimal, discount:integer" --view-path="backend" --route-group=admin
+
+//Companies
+php artisan crud:controller CompaniesController --crud-name=companies --model-name=Company --view-path="backend" --route-group=admin
+php artisan crud:view companies --fields="name:string, year_founded:integer, rate:decimal, verified:boolean, code:string" --view-path="backend" --route-group=admin

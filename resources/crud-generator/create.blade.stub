@@ -1,0 +1,37 @@
+@extends('layouts.backend')
+
+@section('title') %%modelName%% Homepage @endsection @section('heading') %%modelName%% @endsection
+
+@section('breadcrumb')
+
+    <li><a href="/home">Home</a></li>
+    <li><a href="/%%routeGroup%%%%crudName%%">%%modelName%%</a></li>
+    <li><a href="/%%routeGroup%%%%crudName%%/create">Create</a></li>
+
+
+@endsection
+
+@section('content')
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="box box-warning"> 
+            <div class="box-body">
+
+                {!! Form::open(['url' => '%%routeGroup%%%%crudName%%', 'class' => 'form-horizontal']) !!}
+
+                %%formFieldsHtml%%
+
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-3">
+                        {!! Form::submit('Create', ['class' => 'btn btn-primary form-control']) !!}
+                    </div>
+                </div>
+
+                {!! Form::close() !!}
+
+            </div>
+        </div>
+    </section>
+
+@endsection
