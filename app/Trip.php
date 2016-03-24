@@ -42,9 +42,9 @@ class Trip extends Model
      *
      * @return void
      **/
-    public function tickets()
+    public function fares()
     {
-        return $this->belongsToMany('App\Ticket');
+        return $this->belongsToMany('App\Fare');
     }
 
     /**
@@ -54,7 +54,7 @@ class Trip extends Model
      **/
     public function stations()
     {
-        return $this->belongsToMany('App\Station')->withPivot('time');
+        return $this->belongsToMany('App\Station')->withPivot('time', 'departure');
     }
 
     /**
@@ -64,7 +64,7 @@ class Trip extends Model
      **/
     public function company()
     {
-        return $this->belongsTo('App\Companies');
+        return $this->belongsTo('App\Company');
     }
 
     /**
@@ -75,6 +75,16 @@ class Trip extends Model
     public function buses()
     {
         return $this->belongsToMany('App\Bus');
+    }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function city()
+    {
+        return $this->belongsTo('App\City');
     }
 
 }

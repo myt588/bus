@@ -41,7 +41,7 @@ trait UserTrait
         if (is_string($role)) {
             return $this->roles->contains('name', $role);
         }
-        return !! $role->intersect($this->roles)->count();
+        // return !! $role->intersect($this->roles)->count();
     }
 
     /**
@@ -53,5 +53,15 @@ trait UserTrait
     public function hasPermission(Permission $permission)
     {
         return $this->hasRole($permission->roles);
+    }
+
+    /**
+     * Determine if the user is admin.
+     *
+     * @return boolean
+     */
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
     }
 }

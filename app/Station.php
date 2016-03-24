@@ -28,7 +28,7 @@ class Station extends Model
      *
      * @var array
      */
-    protected $fillable = ['company_id', 'name', 'address'];
+    protected $fillable = ['company_id', 'city_id', 'name', 'address'];
  
     /**
      * The attributes excluded from the model's JSON form.
@@ -54,6 +54,16 @@ class Station extends Model
      **/
     public function trips()
     {
-        return $this->belongsToMany('App\Trip')->withPivot('time');
+        return $this->belongsToMany('App\Trip')->withPivot('time', 'departure');
+    }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function city()
+    {
+        return $this->belongsTo('App\City');
     }
 }

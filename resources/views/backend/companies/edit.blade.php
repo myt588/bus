@@ -24,7 +24,7 @@
                     'class' => 'form-horizontal'
                 ]) !!}
 
-                            <div class="form-group {{ $errors->has('name') ? 'has-error' : ''}}">
+            <div class="form-group {{ $errors->has('name') ? 'has-error' : ''}}">
                 {!! Form::label('name', 'Name: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
                     {!! Form::text('name', null, ['class' => 'form-control']) !!}
@@ -38,22 +38,22 @@
                     {!! $errors->first('year_founded', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('rate') ? 'has-error' : ''}}">
-                {!! Form::label('rate', 'Rate: ', ['class' => 'col-sm-3 control-label']) !!}
+            <div class="form-group {{ $errors->has('rating') ? 'has-error' : ''}}">
+                {!! Form::label('rating', 'Rate: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
-                    {!! Form::number('rate', null, ['class' => 'form-control']) !!}
-                    {!! $errors->first('rate', '<p class="help-block">:message</p>') !!}
+                    {!! Form::number('rating', null, ['class' => 'form-control']) !!}
+                    {!! $errors->first('rating', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
             <div class="form-group {{ $errors->has('verified') ? 'has-error' : ''}}">
                 {!! Form::label('verified', 'Verified: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
-                                <div class="checkbox">
-                <label>{!! Form::radio('verified', '1') !!} Yes</label>
-            </div>
-            <div class="checkbox">
-                <label>{!! Form::radio('verified', '0', true) !!} No</label>
-            </div>
+                    <div class="checkbox">
+                        <label>{!! Form::radio('verified', '1') !!} Yes</label>
+                    </div>
+                    <div class="checkbox">
+                        <label>{!! Form::radio('verified', '0', true) !!} No</label>
+                    </div>
                     {!! $errors->first('verified', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>

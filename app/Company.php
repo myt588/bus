@@ -28,7 +28,7 @@ class Company extends Model
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['name', 'year_founded', 'rating', 'verified'];
+	protected $fillable = ['name', 'year_founded', 'rating', 'verified', 'code'];
 
 	/**
 	 * The attributes excluded from the model's JSON form.
@@ -66,4 +66,25 @@ class Company extends Model
     {
         return $this->hasMany('App\Station');
     }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function users()
+    {
+        return $this->hasMany('App\User');
+    }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function fares()
+    {
+        return $this->hasMany('App\Fare');
+    }
+
 }

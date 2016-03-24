@@ -12,6 +12,7 @@ use App\Company;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Session;
+use Auth;
 
 class TripsController extends Controller
 {
@@ -23,7 +24,13 @@ class TripsController extends Controller
      */
     public function index()
     {
-        $trips = Trip::all();
+        $user = Auth::user();
+        if ($user->isAdmin())
+        {
+            $trips = Trip::all();
+        } else {
+            $trips = Company::findOrFail($user->company_id)->trips;
+        }
         return view('backend.trips.index', compact('trips'));
     }
 
@@ -34,8 +41,15 @@ class TripsController extends Controller
      */
     public function create()
     {
-        $buses = Bus::lists('bus_number', 'id');
-        $stations = Station::lists('name', 'id');
+        $user = Auth::user();
+        if ($user->isAdmin())
+        {
+            $buses = Bus::lists('bus_number', 'id');
+            $stations = Station::lists('name', 'id');
+        } else {
+            $buses = Company::findOrFail($user->company_id)->buses()->lists('bus_number', 'id');
+            $stations = Company::findOrFail($user->company_id)->stations()->lists('name', 'id');
+        }
         $companies = Company::lists('name', 'id');
         return view('backend.trips.create', compact('buses', 'stations', 'companies'));
     }
@@ -86,8 +100,15 @@ class TripsController extends Controller
     public function edit($id)
     {
         $trip = Trip::findOrFail($id);
-        $buses = Bus::lists('bus_number', 'id');
-        $stations = Station::lists('name', 'id');
+        $user = Auth::user();
+        if ($user->isAdmin())
+        {
+            $buses = Bus::lists('bus_number', 'id');
+            $stations = Station::lists('name', 'id');
+        } else {
+            $buses = Company::findOrFail($user->company_id)->buses()->lists('bus_number', 'id');
+            $stations = Company::findOrFail($user->company_id)->stations()->lists('name', 'id');
+        }
         $companies = Company::lists('name', 'id');
         $stop = [];
         $time = [];

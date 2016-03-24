@@ -17,20 +17,35 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
 
+        DB::table('users')->delete();
+        factory(App\User::class, 10)->create();
+
         DB::table('companies')->delete();
         factory(App\Company::class, 10)->create();
 
-        DB::table('tickets')->delete();
-        factory(App\Ticket::class, 10)->create();
+        DB::table('fares')->delete();
+        factory(App\Fare::class, 10)->create();
 
         DB::table('buses')->delete();
         factory(App\Bus::class, 30)->create();
+
+        DB::table('cities')->delete();
+        factory(App\City::class, 10)->create();
 
         DB::table('stations')->delete();
         factory(App\Station::class, 10)->create();
 
         DB::table('trips')->delete();
-        factory(App\Trip::class, 10)->create();
+        factory(App\Trip::class, 50)->create();
+
+        DB::table('transactions')->delete();
+        factory(App\Transaction::class, 10)->create();
+
+        DB::table('tickets')->delete();
+        factory(App\Ticket::class, 10)->create();
+
+        DB::table('rentals')->delete();
+        factory(App\Rental::class, 10)->create();
 
         $createPost = new Permission();
         $createPost->name         = 'admin_full_access';
@@ -68,7 +83,8 @@ class DatabaseSeeder extends Seeder
             'name'      => 'aabus',
             'email'     => 'aabus@gmail.com',
             'password'  => Hash::make("aabus"),
-        ]);
+            'company_id'=> '1',
+        ])->assignRole("company_admin");
 
         Model::reguard();
     }

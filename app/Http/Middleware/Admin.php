@@ -15,7 +15,7 @@ class Admin
      */
     public function handle($request, Closure $next)
     {
-        if (\Auth::user()->hasRole("admin")) {
+        if (\Auth::user()->hasRole("admin") || \Auth::user()->hasRole("company_admin") ) {
             return $next($request);
         } else {
             \Auth::logout();

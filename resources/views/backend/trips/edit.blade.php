@@ -29,15 +29,17 @@
                     'class' => 'form-horizontal'
                 ]) !!}
                 
-                @can('admin_full_access')
-                <div class="form-group {{ $errors->has('company_id') ? 'has-error' : ''}}">
+                <div class="form-group {{ $errors->has('company_id') ? 'has-error' : '' }} @can('admin') @else hidden @endcan">
                     {!! Form::label('company_id', 'Company: ', ['class' => 'col-sm-3 control-label']) !!}
                     <div class="col-sm-6">
+                        @can('admin')
                         {!! Form::select('company_id', $companies, null, ['class' => 'form-control']) !!}
+                        @else
+                        {!! Form::select('company_id', $companies, Auth::user()->company_id, ['class' => 'form-control']) !!}
+                        @endcan
                         {!! $errors->first('company_id', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
-                @endcan
                 <div class="form-group {{ $errors->has('bus_id') ? 'has-error' : ''}}">
                     {!! Form::label('bus_id', 'Bus: ', ['class' => 'col-sm-3 control-label']) !!}
                     <div class="col-sm-6">

@@ -10,6 +10,7 @@ use App\Company;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Session;
+use Auth;
 
 class StationsController extends Controller
 {
@@ -21,8 +22,13 @@ class StationsController extends Controller
      */
     public function index()
     {
-        $stations = Station::paginate(15);
-
+        $user = Auth::user();
+        if ($user->isAdmin())
+        {
+            $stations = Station::paginate(15);
+        } else {
+            $stations = Company::findOrFail($user->company_id)->stations()->paginate(15);
+        }
         return view('backend.stations.index', compact('stations'));
     }
 

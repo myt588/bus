@@ -13,7 +13,8 @@
         "appzcoder/crud-generator": "^1.0",
         "kodeine/laravel-meta": "dev-master",
         "riari/laravel-forum": "~3.0",
-        "riari/laravel-forum-frontend": "~1.0"
+        "riari/laravel-forum-frontend": "~1.0",
+        "laravel/cashier": "~6.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -30,7 +31,10 @@
         ],
         "psr-4": {
             "App\\": "app/"
-        }
+        },
+        "files": [
+            "app/Helpers/helpers.php"
+        ]
     },
     "autoload-dev": {
         "classmap": [

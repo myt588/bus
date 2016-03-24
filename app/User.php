@@ -12,13 +12,14 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 use App\Traits\UserTrait;
+use Laravel\Cashier\Billable;
 
 class User extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
                                     CanResetPasswordContract
 {
     use Authenticatable, Authorizable, CanResetPassword;
-    use UserTrait;
+    use UserTrait, Billable;
     use SoftDeletes;
 
     /**
@@ -49,4 +50,13 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
     
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function company()
+    {
+        return $this->belongsTo('App\Company');
+    }
 }

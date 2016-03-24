@@ -10,6 +10,7 @@ use App\Company;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Session;
+use Auth;
 
 class BusesController extends Controller
 {
@@ -21,8 +22,13 @@ class BusesController extends Controller
      */
     public function index()
     {
-        $buses = Bus::all();
-
+        $user = Auth::user();
+        if ($user->isAdmin())
+        {
+            $buses = Bus::all();
+        } else {
+            $buses = Company::findOrFail($user->company_id)->buses;
+        }
         return view('backend.buses.index', compact('buses'));
     }
 
@@ -44,10 +50,9 @@ class BusesController extends Controller
      */
     public function store(Request $request)
     {
+    
         Bus::create($request->all());
-
         Session::flash('flash_message', 'Bus added!');
-
         return redirect('admin/buses');
     }
 
@@ -61,7 +66,6 @@ class BusesController extends Controller
     public function show($id)
     {
         $bus = Bus::findOrFail($id);
-
         return view('backend.buses.show', compact('bus'));
     }
 
@@ -90,6 +94,7 @@ class BusesController extends Controller
     {
         
         $bus = Bus::findOrFail($id);
+        
         $bus->update($request->all());
 
         Session::flash('flash_message', 'Bus updated!');

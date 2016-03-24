@@ -55,8 +55,8 @@
             <li><a href="{{URL::route('admin::admin.buses.index')}}"><i class="fa fa-circle-o"></i> Bus</a></li>
             <li><a href="{{URL::route('admin::admin.trips.index')}}"><i class="fa fa-circle-o"></i> Trip</a></li>
             <li><a href="{{URL::route('admin::admin.stations.index')}}"><i class="fa fa-circle-o"></i> Station</a></li>
-            <li><a href="{{URL::route('admin::admin.tickets.index')}}"><i class="fa fa-circle-o"></i> Tickets</a></li>
-            <li><a href=""><i class="fa fa-circle-o"></i> Rental</a></li>
+            <li><a href="{{URL::route('admin::admin.fares.index')}}"><i class="fa fa-circle-o"></i> Fare</a></li>
+            <li><a href="{{URL::route('admin::admin.rentals.index')}}"><i class="fa fa-circle-o"></i> Rental</a></li>
             <li><a href=""><i class="fa fa-circle-o"></i> Tour</a></li>
           </ul>
         </li>

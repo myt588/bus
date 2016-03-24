@@ -22,28 +22,12 @@ class Ticket extends Model
      * @var string
      */
     protected $table = 'tickets';
-    
+
     /**
-     * The attributes that are mass assignable.
+     * Attributes that should be mass-assignable.
      *
      * @var array
      */
-    protected $fillable = ['price', 'discount', 'final_price'];
+    protected $fillable = ['user_id', 'fare_id', 'transaction_id', 'description'];
 
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = [];
-
-    /**
-     * DB Relation Function
-     *
-     * @return void
-     **/
-    public function trips()
-    {
-        return $this->belongsToMany('App\Trip');
-    }
 }

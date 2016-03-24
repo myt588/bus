@@ -30,7 +30,7 @@
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>S.No</th><th>Final Price</th><th>Price</th><th>Discount</th><th>Actions</th>
+                        <th>User Id</th><th>Fare Id</th><th>Transaction Id</th><th>Description</th><th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,9 +39,7 @@
                     {{-- */$x++;/* --}}
                     <tr>
                         <td>{{ $x }}</td>
-                        <td><a href="{{ url('admin/tickets', $item->id) }}">{{ $item->final_price }}</a></td>
-                        <td>{{ $item->price }}</td>
-                        <td>{{ $item->discount }}</td>
+                        <td><a href="{{ url('admin/tickets', $item->id) }}">{{ $item->user_id }}</a></td><td>{{ $item->fare_id }}</td><td>{{ $item->transaction_id }}</td><td>{{ $item->description }}</td>
                         <td>
                             <a class="btn btn-primary btn-xs" href="{{ url('admin/tickets/' . $item->id . '/edit') }}">
                                Update
@@ -59,7 +57,7 @@
                 </tbody>
                 <thead>
                     <tr>
-                        <th>S.No</th><th>Final Price</th><th>Price</th><th>Discount</th><th>Actions</th>
+                        <th>User Id</th><th>Fare Id</th><th>Transaction Id</th><th>Description</th><th>Actions</th>
                     </tr>
                 </thead>
             </table>

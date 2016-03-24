@@ -6,8 +6,6 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Ticket;
-use App\Trip;
-use App\Company;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Session;
@@ -34,9 +32,7 @@ class TicketsController extends Controller
      */
     public function create()
     {
-        $companies = Company::lists('name', 'id');
-        $trips = Trip::lists('name', 'id');
-        return view('backend.tickets.create', compact('companies', 'trips'));
+        return view('backend.tickets.create');
     }
 
     /**
@@ -46,9 +42,10 @@ class TicketsController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        $ticket = Ticket::create($data);
-        $ticket->trips()->attach($data['trip_id']);
+        $this->validate($request, ['user_id' => 'required', 'fare_id' => 'required', ]);
+
+        Ticket::create($request->all());
+
         Session::flash('flash_message', 'Ticket added!');
 
         return redirect('admin/tickets');
@@ -77,11 +74,9 @@ class TicketsController extends Controller
      */
     public function edit($id)
     {
-        $companies = Company::lists('name', 'id');
         $ticket = Ticket::findOrFail($id);
-        $trips = Trip::lists('name', 'id');
-        $trips_selected = $ticket->trips;
-        return view('backend.tickets.edit', compact('ticket', 'trips', 'companies', 'trips_selected'));
+
+        return view('backend.tickets.edit', compact('ticket'));
     }
 
     /**
@@ -93,10 +88,10 @@ class TicketsController extends Controller
      */
     public function update($id, Request $request)
     {
-        $data = $request->all();
+        $this->validate($request, ['user_id' => 'required', 'fare_id' => 'required', ]);
+
         $ticket = Ticket::findOrFail($id);
-        $ticket->update($data);
-        $ticket->trips()->sync($data['trip_id']);
+        $ticket->update($request->all());
 
         Session::flash('flash_message', 'Ticket updated!');
 
