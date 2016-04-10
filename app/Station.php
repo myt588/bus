@@ -66,4 +66,9 @@ class Station extends Model
     {
         return $this->belongsTo('App\City');
     }
+
+    public function stationTime() 
+    {
+        return date('h:i a', strtotime($this->pivot->time));
+    }
 }

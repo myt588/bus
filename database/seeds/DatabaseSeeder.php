@@ -68,22 +68,25 @@ class DatabaseSeeder extends Seeder
         $admin->givePermissionTo($createPost);
 
         User::create([
-            'name'      => 'yetian',
-            'email'     => 'yetian.mao@gmail.com',
-            'password'  => Hash::make("Tianjiayou"),
+            'first_name'    => 'yetian',
+            'last_name'     => 'mao',
+            'email'         => 'yetian.mao@gmail.com',
+            'password'      => Hash::make("Tianjiayou"),
         ]);
 
         User::create([
-            'name'      => 'admin',
-            'email'     => 'admin@gmail.com',
-            'password'  => Hash::make("admin"),
+            'first_name'    => 'admin',
+            'last_name'     => 'admin',
+            'email'         => 'admin@gmail.com',
+            'password'      => Hash::make("admin"),
         ])->assignRole("admin");
 
         User::create([
-            'name'      => 'aabus',
-            'email'     => 'aabus@gmail.com',
-            'password'  => Hash::make("aabus"),
-            'company_id'=> '1',
+            'first_name'    => 'aabus',
+            'last_name'     => 'aabus',
+            'email'         => 'aabus@gmail.com',
+            'password'      => Hash::make("aabus"),
+            'company_id'    => '1',
         ])->assignRole("company_admin");
 
         Model::reguard();

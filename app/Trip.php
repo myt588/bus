@@ -87,4 +87,25 @@ class Trip extends Model
         return $this->belongsTo('App\City');
     }
 
+    /**
+     * get Company Name
+     *
+     * @return void
+     **/
+    public function companyName()
+    {
+        return $this->company->name;
+    }
+
+    public function totalTime()
+    {
+        return date('h:i', strtotime($this->arrive_at - $this->depart_at));
+    }
+
+    public function farePrice()
+    {
+        return $this->fares->first()->final_price;
+    }
+
+
 }

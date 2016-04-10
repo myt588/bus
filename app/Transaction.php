@@ -21,4 +21,15 @@ class Transaction extends Model
      */
     protected $fillable = ['stripe_id', 'quantity', 'description'];
 
+
+     /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function ticket()
+    {
+        return $this->belongsTo('App\Ticket');
+    }
+
 }

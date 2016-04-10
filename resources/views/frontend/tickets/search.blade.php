@@ -25,13 +25,12 @@
 @endsection
 
 @section('content')
-
 <section id="content">
     <div class="container">
         <div id="main">
             <div class="row">
                 <div class="col-sm-4 col-md-3">
-                    <h4 class="search-results-title"><i class="soap-icon-search"></i><b>1,984</b> results found.</h4>
+                    <h4 class="search-results-title"><i class="soap-icon-search"></i><b>{{ $trips->count() }}</b> results found.</h4>
                     <div class="toggle-container filters-container">
                         <div class="panel style1 arrow-right">
                             <h4 class="panel-title">
@@ -82,36 +81,6 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="panel style1 arrow-right">
-                            <h4 class="panel-title">
-                                <a data-toggle="collapse" href="#modify-search-panel" class="collapsed">Modify Search</a>
-                            </h4>
-                            <div id="modify-search-panel" class="panel-collapse collapse">
-                                <div class="panel-content">
-                                    <form method="post">
-                                        <div class="form-group">
-                                            <label>Leaving from</label>
-                                            <input type="text" class="input-text full-width" placeholder="" value="city, district, or specific airpot" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Departure on</label>
-                                            <div class="datepicker-wrap">
-                                                <input type="text" name="date_from" class="input-text full-width" placeholder="mm/dd/yy" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Arriving On</label>
-                                            <div class="datepicker-wrap">
-                                                <input type="text" name="date_to" class="input-text full-width" placeholder="mm/dd/yy" />
-                                            </div>
-                                        </div>
-                                        <br />
-                                        <button class="btn-medium icon-check uppercase full-width">search again</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -119,13 +88,13 @@
                     <div class="tab-container box">
                         <ul class="nav nav-tabs nav-justified hidden-xs">
                             <li><a href=""><i class="fa icon-angle-left fa-1x"></i><</a></li>
-                            <li><a href="#tours-suggestions" data-toggle="tab">Fri, Apr 1</a></li>
-                            <li><a href="#careers" data-toggle="tab">Fri, Apr 2</a></li>
-                            <li><a href="#careers" data-toggle="tab">Fri, Apr 3</a></li>
-                            <li class="active"><a href="#careers" data-toggle="tab">Fri, Apr 4</a></li>
-                            <li><a href="#careers" data-toggle="tab">Fri, Apr 5</a></li>
-                            <li><a href="#careers" data-toggle="tab">Fri, Apr 6</a></li>
-                            <li><a href="#careers" data-toggle="tab">Fri, Apr 7</a></li>
+                            <li>{{ link_to_route('tickets.search', $title = $date_list[-3], $parameters = array_add($data, 'date_new', '-3'), $attributes = array()) }}</li>
+                            <li>{{ link_to_route('tickets.search', $title = $date_list[-2], $parameters = array_add($data, 'date_new', '-2'), $attributes = array()) }}</li>
+                            <li>{{ link_to_route('tickets.search', $title = $date_list[-1], $parameters = array_add($data, 'date_new', '-1'), $attributes = array()) }}</li>
+                            <li class="active"><a>{{ $date_list[0] }}</a></li>
+                            <li>{{ link_to_route('tickets.search', $title = $date_list[1], $parameters = array_add($data, 'date_new', '+1'), $attributes = array()) }}</li>
+                            <li>{{ link_to_route('tickets.search', $title = $date_list[2], $parameters = array_add($data, 'date_new', '+2'), $attributes = array()) }}</li>
+                            <li>{{ link_to_route('tickets.search', $title = $date_list[3], $parameters = array_add($data, 'date_new', '+3'), $attributes = array()) }}</li>
                             <li><a href=""><i class="fa icon-angle-right fa-1x"></i>></a></li>
                         </ul>
                         <div class="tab-content">
@@ -138,7 +107,7 @@
                                             <div class="details-wrapper">
                                                 <div class="first-row">
                                                     <div>
-                                                        <h4 class="box-title">{{ $trip->name }}<small>{{ $trip->company->name }}</small></h4>
+                                                        <h4 class="box-title">{{ $trip->name }}<small>{{ $trip->companyName() }}</small></h4>
                                                         <a class="button btn-mini stop"></a>
                                                         <div class="amenities">
                                                             <i class="soap-icon-wifi circle"></i>
@@ -180,8 +149,25 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            {!! Form::open(['url' => '/tickets/picked']) !!}
-                                            {!! Form::number('trip_id', $trip->id, ['hidden' => 'hidden']) !!}
+
+                                            @if($data['options'] == 'round-trip')
+                                                @if(array_key_exists('trip_one_id', $data)) 
+                                                {!! Form::open(['url' => '/tickets/picked', 'method' => 'GET']) !!}
+                                                {!! Form::number('trip_one_id', $data['trip_one_id'], ['hidden']) !!}
+                                                {!! Form::number('trip_two_id', $trip->id, ['hidden']) !!}
+                                                {!! Form::number('trip_one_DS', $data['trip_one_DS'], ['hidden']) !!}
+                                                {!! Form::number('trip_one_AS', $data['trip_one_AS'], ['hidden']) !!}
+                                                @else
+                                                {!! Form::open(['url' => '/tickets/search', 'method' => 'GET']) !!}
+                                                {!! Form::number('trip_one_id', $trip->id, ['hidden']) !!}
+                                                @endif
+                                                {!! Form::text('return', $data['return'], ['hidden']) !!}
+                                            @else 
+                                            {!! Form::open(['url' => '/tickets/picked', 'method' => 'GET']) !!}
+                                            {!! Form::number('trip_one_id', $trip->id, ['hidden']) !!}
+                                            @endif
+                                            @include('frontend.tickets.partials.search-form-hidden', $data)
+
                                             <div id="{{$trip->id}}" class="collapse hidden-row">
                                                 <div class="row time">
                                                     <div class="col-xs-12 col-lg-6 col-md-6 col-sm-6 stops">
@@ -194,7 +180,12 @@
                                                             @if($station->pivot->departure == 1)
                                                             <div class="radio">
                                                                 <label>
-                                                                <input type="radio" name="departure_stations" id="{{$station->name}}" value="{{$station->name}}" checked="">
+                                                                <input 
+                                                                type="radio" 
+                                                                name="{{array_key_exists('trip_one_id', $data) ? 'trip_two_DS' : 'trip_one_DS'}}" 
+                                                                id="{{$station->id}}" 
+                                                                value="{{$station->id}}" 
+                                                                checked="">
                                                                 {{date('h:i a', strtotime($station->pivot->time))}} &nbsp; {{$station->name}}
                                                                 </label>
                                                             </div>
@@ -212,7 +203,12 @@
                                                             @if($station->pivot->departure == 0)
                                                             <div class="radio">
                                                                 <label>
-                                                                <input type="radio" name="arrival_stations" id="{{$station->name}}" value="{{$station->name}}" checked="">
+                                                                <input 
+                                                                type="radio" 
+                                                                name="{{array_key_exists('trip_one_id', $data) ? 'trip_two_AS' : 'trip_one_AS'}}"  
+                                                                id="{{$station->id}}" 
+                                                                value="{{$station->id}}" 
+                                                                checked="">
                                                                 {{date('h:i a', strtotime($station->pivot->time))}} &nbsp; {{$station->name}}
                                                                 </label>
                                                             </div>
@@ -222,7 +218,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="action">
-                                                    <button class="pull-right">ADD TO CART</button>
+                                                    <button id="selected" class="pull-right">ADD TO CART</button>
                                                 </div>
                                             </div>
                                             {!! Form::close() !!}
@@ -247,6 +243,7 @@
  <!-- Google Map Api -->
 <script type='text/javascript' src="http://maps.google.com/maps/api/js?sensor=false&amp;language=en"></script>
 <script type="text/javascript" src="/js/gmap3.min.js"></script>
+<!-- <script type="text/javascript" src="/js/app.js"></script> -->
 <script type="text/javascript">
     tjq(document).ready(function() {
         tjq("#price-range").slider({

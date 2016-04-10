@@ -142,3 +142,27 @@
     margin-top: 10px;
 }
 
+.alert {
+    -webkit-border-radius: 0 0 0 0;
+    -moz-border-radius: 0 0 0 0;
+    -ms-border-radius: 0 0 0 0;
+    border-radius: 0 0 0 0;
+    border: none;
+    padding: 15px 15px 15px 70px;
+    color: #48575A;
+    font-size: 1.3em;
+    position: relative;
+}
+
+.travelo-signup-box, .travelo-login-box {
+  border: 2px solid #01b7f2;
+  width: 800px;
+  margin: 0 auto;
+  display: none;
+}
+
+.checkout-option-box {
+  padding:18px 10px 15px 18px; 
+  line-height:20px;
+}
+

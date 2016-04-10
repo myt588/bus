@@ -14,7 +14,8 @@
         "kodeine/laravel-meta": "dev-master",
         "riari/laravel-forum": "~3.0",
         "riari/laravel-forum-frontend": "~1.0",
-        "laravel/cashier": "~6.0"
+        "laravel/cashier": "~6.0",
+        "barryvdh/laravel-debugbar": "^2.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

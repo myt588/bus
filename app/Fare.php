@@ -51,4 +51,14 @@ class Fare extends Model
         return $this->belongsTo('App\Company');
     }
 
+     /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function ticket()
+    {
+        return $this->belongsTo('App\Ticket');
+    }
+
 }

@@ -26,8 +26,8 @@
     </div>
     <div class="container">
         <div id="main">
-            <h1 class="page-title">Fly with us in Comfort!</h1>
-            <h2 class="page-description col-md-6 no-float no-padding">We're bringing you a modern, comfortable and connected flight experience.</h2>
+            <h1 class="page-title">Bus with us in Comfort!</h1>
+            <h2 class="page-description col-md-6 no-float no-padding">We're bringing you a modern, comfortable and connected bus experience.</h2>
             <div class="search-box-wrapper style2">
                 <div class="search-box">
                     <ul class="search-tabs clearfix">
@@ -45,85 +45,7 @@
                     
                     <div class="search-tab-content">
                         <div class="tab-pane fade active in" id="tickets-tab">
-                            {!! Form::open(['id' => 'ticketForm', 'url' => '/tickets/search']) !!}
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group" id="the-basics">
-                                            <label>Leaving From</label>
-                                            <!-- <input class="input-text full-width" type="text" id="select2"> -->
-                                            <!-- <select class="input-text full-width leaving_from" name="leaving_from"> </select> -->
-                                            {{ Form::select('leaving_from', $cities, null, ['class' => 'input-text full-width leaving_from', 'multiple']) }}
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Going To</label>
-                                            {{ Form::select('going_to', $cities, null, ['class' => 'input-text full-width going_to', 'multiple']) }}
-                                            <!-- <select class="input-text full-width going_to" name="going_to"> </select> -->
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-4">
-                                        <label>Departing On</label>
-                                        <div class="form-group">
-                                            <div class="datepicker-wrap">
-                                                <input type="text" name="date_from" class="input-text full-width" placeholder="mm/dd/yy" />
-                                            </div>
-                                        </div>
-                                        <label>Returning On</label>
-                                        <div class="form-group">
-                                            <div id="return-div" class="datepicker-wrap">
-                                                <input type="text" id = "return" name="date_to" class="input-text full-width" placeholder="mm/dd/yy"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-4">
-                                        <div class="form-group row">
-                                            <div class="col-xs-3">
-                                                <label>Adults</label>
-                                                <div class="selector">
-                                                    <select class="full-width" name="adults">
-                                                        <option value="1">1</option>
-                                                        <option value="2">2</option>
-                                                        <option value="3">3</option>
-                                                        <option value="4">4</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-3">
-                                                <label>Kids</label>
-                                                <div class="selector">
-                                                    <select class="full-width" name="kids">
-                                                        <option value="0">0</option>
-                                                        <option value="1">1</option>
-                                                        <option value="2">2</option>
-                                                        <option value="3">3</option>
-                                                        <option value="4">4</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-6 pull-right">
-                                                <label>&nbsp;</label>
-                                                <button class="full-width icon-check">SERACH NOW</button>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                        <label>&nbsp;</label>
-                                            <div class="radio radio-inline">
-                                                <label>
-                                                  <input type="radio" name="optionsRadios" id="one-way" value="one-way">
-                                                    One way
-                                                </label>
-                                            </div>
-                                            <div class="radio radio-inline">
-                                                <label>
-                                                  <input type="radio" name="optionsRadios" id="round-trip" value="round-trip" checked="">
-                                                    Round Trip
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {!! Form::close() !!}
+                            @include('frontend.tickets.partials.search-form')
                         </div>
                         <div class="tab-pane fade" id="rentals-tab">
                             <form action="car-list-view.html" method="post">
@@ -325,6 +247,15 @@
         placeholder: "city, distirct or specific airpot" 
     });
     $value = '';
+    if (document.getElementById('one-way').checked) {
+        $('#return-div').removeAttr('class');
+        $('#return').attr('disabled', 'true');
+        $value = $('#return').attr('value');
+        $('#return').attr('value', '');
+        $('#return').attr('placeholder', '');
+        $('#return').css('background-color', '#eee');
+        $('#return-div').css('height', '32px');
+    }
     $('#one-way').change(function() {
         $('#return-div').removeAttr('class');
         $('#return').attr('disabled', 'true');

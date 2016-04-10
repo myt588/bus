@@ -6,8 +6,8 @@
 
     <div class="container">
         <h1 class="logo navbar-brand">
-            <a href="index.html" title="Travelo - home">
-                <img src="/images/logo.png" alt="Travelo HTML5 Template" />
+            <a href="{{ route('home') }}" title="TriponBus - home">
+                <img src="/images/logo.png" />
             </a>
         </h1>
         

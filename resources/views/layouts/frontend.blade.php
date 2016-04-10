@@ -71,8 +71,6 @@
             @include('frontend.partials.login-navbar')
             
             @include('frontend.partials.main-header')
-
-            @include('frontend.partials.login-popover')
         </header>
 
         @yield('breadcrumb')

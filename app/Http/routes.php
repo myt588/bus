@@ -16,11 +16,6 @@
 // });
 
 
-Route::controllers([
-	'auth' => 'Auth\AuthController',
-	'password' => 'Auth\PasswordController',
-]);
-
 
 Route::group(['middleware' => ['web', 'auth', 'admin'], 'namespace' =>'Backend', 'as' => 'admin::', 'prefix' => 'admin'], function()
 {
@@ -55,38 +50,22 @@ Route::group(['middleware' => ['web', 'auth', 'admin'], 'namespace' =>'Backend',
 });
 
 Route::group(['middleware' => 'web'], function () {
-	
+
     Route::auth();
 
     Route::get('/home', function() {
     	return view('home');
     });
 
-    Route::get('/', 'HomeController@index');	
-    	
-	Route::post('/tickets/search', 'HomeController@search');
+    Route::get('/', 'HomeController@index')->name('home');	
 
-	Route::get('/tickets/search', function(){
-		$trips = App\Trip::all();
+	Route::get('/tickets/search', 'HomeController@search')->name('tickets.search');
 
-		 // dd($trips);
-		// dd($trips->first()->stations->first()->pivot);
-		// $date = date('Y-m-d', time());
-		// dd($date);
-		return view('frontend.tickets.search', compact('trips'));
-	});
+	Route::get('/tickets/picked', 'HomeController@picked')->name('tickets.picked');
 
-	Route::post('/tickets/picked', function(){
-		dd(Request::all());
-	});
+	Route::get('/tickets/checkout', 'HomeController@checkout')->name('tickets.checkout');
 
-	Route::get('/tickets/detailed', function(){
-		return view('frontend.tickets.detailed');
-	});
-
-	Route::get('/tickets/booking', function(){
-		return view('frontend.tickets.booking');
-	});
+	Route::post('/tickets/pay', 'HomeController@pay')->name('tickets.pay');
 
 	Route::get('/tickets/confirmed', function(){
 		return view('frontend.tickets.thankyou');

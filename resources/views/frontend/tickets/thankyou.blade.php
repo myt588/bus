@@ -11,7 +11,7 @@
         </div>
         <ul class="breadcrumbs pull-right">
             <li><a href="#">HOME</a></li>
-            <li><a href="#">Pages</a></li>
+            <li><a href="#">TICKETS</a></li>
             <li class="active">Thank you</li>
         </ul>
     </div>
@@ -40,13 +40,11 @@
                     <h2>Traveler Information</h2>
                     <dl class="term-description">
                         <dt>Booking number:</dt><dd>5784-BD245</dd>
-                        <dt>First name:</dt><dd>Jessica</dd>
-                        <dt>Last name:</dt><dd>Brown</dd>
-                        <dt>E-mail address:</dt><dd>Info@Jessica.com</dd>
-                        <dt>Street Address and number:</dt><dd>353 Third floor Avenue</dd>
-                        <dt>Town / City:</dt><dd>Paris,France</dd>
-                        <dt>ZIP code:</dt><dd>75800-875</dd>
-                        <dt>Country:</dt><dd>United States of america</dd>
+                        <dt>First name:</dt><dd>{{ $ticket_one->firstName() }}</dd>
+                        <dt>Last name:</dt><dd>{{ $ticket_one->lastName() }}</dd>
+                        <dt>E-mail address:</dt><dd>{{ $ticket_one->email() }}</dd>
+                        <dt>Bus Number:</dt><dd></dd>
+                        <dt>Operator:</dt><dd></dd>
                     </dl>
                     <hr />
                     <h2>Payment</h2>
@@ -69,26 +67,6 @@
                         <br>
                         <a class="contact-email" href="#">help@travelo.com</a>
                     </address>
-                </div>
-                <div class="travelo-box book-with-us-box">
-                    <h4>Why Book with us?</h4>
-                    <ul>
-                        <li>
-                            <i class="soap-icon-hotel-1 circle"></i>
-                            <h5 class="title"><a href="#">135,00+ Hotels</a></h5>
-                            <p>Nunc cursus libero pur congue arut nimspnty.</p>
-                        </li>
-                        <li>
-                            <i class="soap-icon-savings circle"></i>
-                            <h5 class="title"><a href="#">Low Rates &amp; Savings</a></h5>
-                            <p>Nunc cursus libero pur congue arut nimspnty.</p>
-                        </li>
-                        <li>
-                            <i class="soap-icon-support circle"></i>
-                            <h5 class="title"><a href="#">Excellent Support</a></h5>
-                            <p>Nunc cursus libero pur congue arut nimspnty.</p>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>

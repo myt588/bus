@@ -1,7 +1,9 @@
 <div class="topnav hidden-xs">
     <div class="container">
         <ul class="quick-menu pull-left">
+            @if(Auth::check())
             <li><a href="#">MY ACCOUNT</a></li>
+            @endif
             <li class="ribbon">
                 <a href="#">English</a>
                 <ul class="menu mini">
@@ -11,8 +13,13 @@
             </li>
         </ul>
         <ul class="quick-menu pull-right">
-            <li><a href="#travelo-login" class="soap-popupbox">LOGIN</a></li>
-            <li><a href="#travelo-signup" class="soap-popupbox">SIGNUP</a></li>
+            @if(Auth::check())
+            <li><a href="{{ url('/logout') }}">LOGOUT</a></li>
+            @else
+            <li><a href="{{ url('/login') }}">LOGIN</a></li>
+            <li><a href="{{ url('/register') }}">SIGNUP</a></li>
+            @endif
+            
             <li class="ribbon currency">
                 <a href="#" title="">USD</a>
                 <ul class="menu mini">
