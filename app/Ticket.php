@@ -28,7 +28,7 @@ class Ticket extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'fare_id', 'transaction_id', 'description'];
+    protected $fillable = ['user_id', 'trip_id', 'transaction_id', 'description'];
 
 
     /**
@@ -46,9 +46,9 @@ class Ticket extends Model
      *
      * @return void
      **/
-    public function fare()
+    public function trip()
     {
-        return $this->hasOne('App\Fare');
+        return $this->belongsTo('App\Trip');
     }
 
     /**
@@ -58,7 +58,7 @@ class Ticket extends Model
      **/
     public function transaction()
     {
-        return $this->hasOne('App\Transaction');
+        return $this->belongsTo('App\Transaction');
     }
 
 
@@ -77,9 +77,10 @@ class Ticket extends Model
         return $this->user->email;
     }
 
-    // public function busNumber() 
-    // {
-    //     return $this->fare->trips->first->buses->first->
-    // }
+    public function isPast()
+    {
+        $date = $this->depart_date . ' ' . $this->trip->depart_at;
+        return (strtotime($date) < time());
+    }
 
 }

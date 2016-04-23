@@ -72,4 +72,4 @@
     </div>
 </form>
 <div class="seperator"></div>
-<p>Already a Travelo member? <a href="{{ url('/login') }}" class="goto-login soap-popupbox">Login</a></p>
+<p>Already a Travelo member? <a href="{{ url('/login') }}" class="goto-login">Login</a></p>

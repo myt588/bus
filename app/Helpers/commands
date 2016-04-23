@@ -30,3 +30,6 @@ php artisan crud:generate Tickets --fields="user_id:integer:required, fare_id:in
 //Rentals
 php artisan crud:generate Rentals --fields="company_id:integer, bus_id:integer, transaction_id:integer:nullable, description:text, one_day:decimal, three_days:decimal, one_week:decimal" --route=yes --pk=id --view-path="backend" --namespace=Backend --route-group=admin
 
+//Rent
+php artisan crud:generate Rents --fields="user_id:integer, rental_id:integer, transaction_id:integer:nullable, description:text" --route=yes --pk=id --view-path="backend" --namespace=Backend --route-group=admin
+

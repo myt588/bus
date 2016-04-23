@@ -166,3 +166,9 @@
   line-height:20px;
 }
 
+.matrix .flash-alert {
+    background: #ecf7fd;
+    padding: 20px 30px;
+    margin-bottom: 30px;
+}
+

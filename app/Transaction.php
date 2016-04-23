@@ -19,7 +19,7 @@ class Transaction extends Model
      *
      * @var array
      */
-    protected $fillable = ['stripe_id', 'quantity', 'description'];
+    protected $fillable = ['confirmation_number', 'quantity', 'description'];
 
 
      /**
@@ -27,9 +27,19 @@ class Transaction extends Model
      *
      * @return void
      **/
-    public function ticket()
+    public function tickets()
     {
-        return $this->belongsTo('App\Ticket');
+        return $this->hasMany('App\Ticket');
+    }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function rents()
+    {
+        return $this->hasMany('App\Rent');
     }
 
 }

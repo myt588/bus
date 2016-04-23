@@ -39,12 +39,10 @@
                     <hr />
                     <h2>Traveler Information</h2>
                     <dl class="term-description">
-                        <dt>Booking number:</dt><dd>5784-BD245</dd>
-                        <dt>First name:</dt><dd>{{ $ticket_one->firstName() }}</dd>
-                        <dt>Last name:</dt><dd>{{ $ticket_one->lastName() }}</dd>
-                        <dt>E-mail address:</dt><dd>{{ $ticket_one->email() }}</dd>
-                        <dt>Bus Number:</dt><dd></dd>
-                        <dt>Operator:</dt><dd></dd>
+                        <dt>Booking number:</dt><dd>{{ $transaction->confirmation_number }}</dd>
+                        <dt>First name:</dt><dd>{{ $transaction->tickets->first()->firstName() }}</dd>
+                        <dt>Last name:</dt><dd>{{ $transaction->tickets->first()->lastName() }}</dd>
+                        <dt>E-mail address:</dt><dd>{{ $transaction->tickets->first()->email() }}</dd>
                     </dl>
                     <hr />
                     <h2>Payment</h2>

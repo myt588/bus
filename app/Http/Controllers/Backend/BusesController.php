@@ -9,6 +9,7 @@ use App\Bus;
 use App\Company;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Http\Requests\BusRequest;
 use Session;
 use Auth;
 
@@ -48,10 +49,13 @@ class BusesController extends Controller
      *
      * @return Response
      */
-    public function store(Request $request)
+    public function store(BusRequest $request)
     {
-    
-        Bus::create($request->all());
+        $data = $request->all();
+        $this->validate($request, [
+            'bus_number'        => 'required|unique:buses,bus_number',
+            ]);
+        Bus::create($data);
         Session::flash('flash_message', 'Bus added!');
         return redirect('admin/buses');
     }
@@ -90,15 +94,13 @@ class BusesController extends Controller
      *
      * @return Response
      */
-    public function update($id, Request $request)
+    public function update($id, BusRequest $request)
     {
         
         $bus = Bus::findOrFail($id);
-        
-        $bus->update($request->all());
-
+        $data = $request->all();
+        $bus->update($data);
         Session::flash('flash_message', 'Bus updated!');
-
         return redirect('admin/buses');
     }
 

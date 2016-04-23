@@ -32,10 +32,9 @@
     <div class="box">
         <!-- /.box-header -->
         <div class="box-body">
-            <table class="table table-bordered table-striped">
+            <table id="example1" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>S.No</th>
                         @can('admin_full_access')<th>Company</th>@endcan
                         <th>From</th>
                         <th>To</th>
@@ -46,18 +45,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                {{-- */$x=0;/* --}}
                 @foreach($trips as $item)
-                    {{-- */$x++;/* --}}
                     <tr>
-                        <td><a href="{{ url('admin/trips', $item->id) }}">{{ $x }}</a></td>
-                        @can('admin_full_access')<td> {{ App\Company::find($item->company_id)->name }} </td>@endcan
-                        <td>{{ App\Station::find($item->from)->name }}</td>
-                        <td>{{ App\Station::find($item->to)->name }}</td>
+                        @can('admin_full_access')<td> {{ $item->company->name }} </td>@endcan
+                        <td>{{ $item->fromCity->getCityName() }}</td>
+                        <td>{{ $item->toCity->getCityName() }}</td>
                         <td>{{ $item->rating }}</td>
                         <td>{{ $item->depart_at }}</td>
                         <td>{{ $item->arrive_at }}</td>
                         <td>
+                            <a class="btn btn-info btn-xs" href="{{ url('admin/trips/' . $item->id) }}">
+                               Details
+                            </a> /
                             <a class="btn btn-primary btn-xs" href="{{ url('admin/trips/' . $item->id . '/edit') }}">
                                Update
                             </a> /
@@ -74,7 +73,6 @@
                 </tbody>
                 <thead>
                     <tr>
-                        <th>S.No</th>
                         @can('admin_full_access')<th>Company</th>@endcan
                         <th>From</th>
                         <th>To</th>
@@ -99,14 +97,6 @@
 <script>
   $(function () {
     $("#example1").DataTable();
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false
-    });
   });
 </script>
 @endsection

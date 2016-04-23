@@ -13,11 +13,11 @@
 <div class="page-title-container">
     <div class="container">
         <div class="page-title pull-left">
-            <h2 class="entry-title">Trip Detailed</h2>
+            <h2 class="entry-title">Trip Details</h2>
         </div>
         <ul class="breadcrumbs pull-right">
             <li><a href="#">HOME</a></li>
-            <li class="active">Trip Detailed</li>
+            <li class="active">Trip Details</li>
         </ul>
     </div>
 </div>
@@ -31,68 +31,33 @@
             <div id="main" class="col-md-9">
                 <div id="flight-features" class="tab-container">
                     <ul class="tabs">
-                        <li class="active"><a href="#flight-details" data-toggle="tab">Trip Details</a></li>
+                        <li class="active"><a href="#car-details" data-toggle="tab">Trip Details</a></li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane fade in active" id="flight-details">
-                            <div class="intro table-wrapper full-width hidden-table-sm box">
-                                <div class="col-md-4 table-cell travelo-box">
-                                    <dl class="term-description">
-                                        <dt>Operator:</dt><dd>{{ $trip_one->companyName() }}</dd>
-                                        <dt>Bus Number:</dt><dd>{{ $trip_one->buses->first()->bus_number }}</dd>
-                                        <dt>Terms & Conditions:</dt><dd>view</dd>
-                                        <dt>Adult:</dt><dd>{!! Form::select('adults', ['0', '1', '2', '3', '4'], $data['adults'], ['id' => 'going_adults']) !!}</dd>
-                                        <dt>Children:</dt><dd>{!! Form::select('kids', ['0', '1', '2', '3', '4'], $data['kids'], ['id' => 'going_kids']) !!}</dd>
-                                        <dt>Fare:</dt><dd>${{ $trip_one->farePrice() }}</dd>
-                                    </dl>
-                                </div>
-                                <div class="col-md-8 table-cell">
-                                    <div class="detailed-features booking-details">
-                                        <div class="travelo-box">
-                                            <h4 class="box-title">{{ $trip_one->name }}
-                                            <small>{{ $trip_one->companyName() }}</small></h4>
-                                        </div>
-                                        <div class="table-wrapper flights">
-                                            <div class="table-row">
-                                                <div class="table-cell timing-detail">
-                                                    <div class="timing">
-                                                        @include('frontend.tickets.partials.departure-station', [$data, $trip_one_DS, $trip_one_AS, $trip_one])
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="tab-pane fade in active" id="car-details">
+                            @include('frontend.tickets.partials.trip-detail-box', [
+                                'trip'      => $trip_one, 
+                                'trip_DS'   => $trip_one_DS, 
+                                'trip_AS'   => $trip_one_AS, 
+                                'date'      => $data['depart'], 
+                                'adults'    => $data['adults_depart'],
+                                'kids'      => $data['kids_depart'],
+                                'adults_id' => 'adults_depart',
+                                'kids_id'   => 'kids_depart',
+                                'checkout'  => false    
+                            ])
                             @if(array_key_exists('trip_two_id', $data))
-                            <div class="intro table-wrapper full-width hidden-table-sm box">
-                                <div class="col-md-4 table-cell travelo-box">
-                                    <dl class="term-description">
-                                        <dt>Operator:</dt><dd>{{ $trip_two->companyName() }}</dd>
-                                        <dt>Bus Number:</dt><dd>{{ $trip_two->buses->first()->bus_number }}</dd>
-                                        <dt>Terms & Conditions:</dt><dd>view</dd>
-                                        <dt>Adult:</dt><dd>{!! Form::select('adults', ['0', '1', '2', '3', '4'], $data['adults']) !!}</dd>
-                                        <dt>Children:</dt><dd>{!! Form::select('kids', ['0', '1', '2', '3', '4'], $data['kids']) !!}</dd>
-                                        <dt>Fare:</dt><dd>${{ $trip_two->farePrice() }}</dd>
-                                    </dl>
-                                </div>
-                                <div class="col-md-8 table-cell">
-                                    <div class="detailed-features booking-details">
-                                        <div class="travelo-box">
-                                            <h4 class="box-title">{{ $trip_two->name }}<small>{{ $trip_two->companyName() }}</small></h4>
-                                        </div>
-                                        <div class="table-wrapper flights">
-                                            <div class="table-row">
-                                                <div class="table-cell timing-detail">
-                                                    <div class="timing">
-                                                        @include('frontend.tickets.partials.arrival-station', [$data, $trip_two_DS, $trip_two_AS, $trip_two])
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @include('frontend.tickets.partials.trip-detail-box', [
+                                'trip'      => $trip_two, 
+                                'trip_DS'   => $trip_two_DS, 
+                                'trip_AS'   => $trip_two_AS, 
+                                'date'      => $data['depart'], 
+                                'adults'    => $data['adults_return'],
+                                'kids'      => $data['kids_return'],
+                                'adults_id' => 'adults_return',
+                                'kids_id'   => 'kids_return',
+                                'checkout'  => false
+                            ])
                             @endif
                         </div>
                     </div>
@@ -104,28 +69,20 @@
                         <h2 class="box-title">{{ $trip_one->name }}<small>{{ $trip_one->companyName() }}</small></h2>
                         <span class="price clearfix">
                             <small class="pull-left">avg/person</small>
-                            <span class="pull-right">${{ array_key_exists('trip_two_id', $data) ? $trip_one->farePrice() + $trip_two->farePrice() : $trip_one->farePrice() }}</span>
+                            <span class="pull-right">$@include('frontend.tickets.partials.total-price')</span>
                         </span>
                         
                         <p class="description">Nunc cursus libero purus ac congue ar lorem cursus ut sed vitae pulvinar massa idend porta nequetiam elerisque mi id, consectetur adipi deese cing elit maus fringilla bibe endum.</p>
                         @if(Auth::check())
                         <a id="bookButton" href="{{route('tickets.checkout', $data, null)}}" class="button green full-width uppercase btn-medium">book now</a>
                         @else
-                        <a id="bookButton" href="#travelo-login" class="soap-popupbox button green full-width uppercase btn-medium">book now</a>
+                        <a id="bookButton" href="#travelo-signup" class="soap-popupbox button green full-width uppercase btn-medium">book now</a>
                         @endif
                     </div>
                 </article>
-                <div class="travelo-box contact-box">
-                    <h4>Need Travelo Help?</h4>
-                    <p>We would be more than happy to help you. Our team advisor are 24/7 at your service to help you.</p>
-                    <address class="contact-details">
-                        <span class="contact-phone"><i class="soap-icon-phone"></i> 1-800-123-HELLO</span>
-                        <br>
-                        <a class="contact-email" href="#">help@travelo.com</a>
-                    </address>
-                </div>
+                @include('frontend.partials.help-box')
             </div>
-            <div id="travelo-login" class="travelo-login-box travelo-box">
+            <div id="travelo-signup" class="travelo-login-box travelo-box">
                 <div class="row">
                     <div class="col-md-5">
                         <div class="panel panel-default">
@@ -143,11 +100,11 @@
                                     <strong>Create Account and Check Out</strong><br>
                                     <span>To manage your tickets &amp; earn loyalty points. <a target="_new" href="">learn more?</a></span>
                                      <div style="padding:10px 0 10px 0;">
-                                        <button class="full-width btn-medium">Create Account and Check out</button>
+                                        <a href="{{ url('/register') }}" class="button green full-width btn-medium">Create Account and Check out</a>
                                      </div>
                                      <strong>Check Out as a Guest</strong>
                                      <div style="padding:10px 0 11px 0;">
-                                        <button class="full-width btn-medium">Check Out as a Guest</button>
+                                        <a href="{{route('tickets.checkout', $data, null)}}" class="button green full-width btn-medium">Check Out as a Guest</a>
                                     </div>
                                 </div>
                             </div>
@@ -210,11 +167,41 @@
             });
         });
 
-        tjq('#going_adults').change(function() {
-            window.location = window.location.href + '&adults=$this.value';
+        tjq('#adults_depart').change(function() {
+            updateSelect('adults_depart', this);
         });
 
-        // tjq('#bookButton').attr('href', window.location.href);
+        tjq('#kids_depart').change(function() {
+            updateSelect('kids_depart', this);
+        });
+
+        tjq('#adults_return').change(function() {
+            updateSelect('adults_return', this);
+        });
+
+        tjq('#kids_return').change(function() {
+            updateSelect('kids_return', this);
+        });
+
+        function updateSelect($key, $this) {
+            if (window.location.search.indexOf('&' + $key + '=') > -1) {
+                window.location = updateQueryStringParameter(window.location.href, $key, $this.options[$this.selectedIndex].value);
+            } else {
+                window.location = window.location.href + '&' + $key + '=' + $this.options[$this.selectedIndex].value;
+            }
+        }
+
+        function updateQueryStringParameter(uri, key, value) {
+           var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+           var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+           if (uri.match(re)) {
+             return uri.replace(re, '$1' + key + "=" + value + '$2');
+           }
+           else {
+             return uri + separator + key + "=" + value;
+           }
+        }
+
     });
 </script>
 @endsection

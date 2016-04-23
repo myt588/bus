@@ -13,13 +13,18 @@
 
 $factory->define(App\Bus::class, function (Faker\Generator $faker) {
     return [
-        'company_id'            => $faker->numberBetween(1, 10),
+        'company_id'            => 1,
         'license_plate' 		=> $faker->numberBetween($min = 1000000, $max = 9000000),
         'bus_number' 			=> $faker->buildingNumber,
         'vehicle_number' 		=> $faker->swiftBicNumber,
-        'model' 				=> 'BMW',
+        'model' 				=> $faker->word,
+        'make'                  => $faker->word,
         'year' 					=> $faker->numberBetween($min = 1990, $max = 2016),
-        'seats'                 => $faker->numberBetween($min = 20, $max = 50),
+        'seats'                 => $faker->numberBetween($min = 10, $max = 60),
+        'type'                  => $faker->randomElement(['Minibus', 'Luxury Bus', 'Standard Bus', 'Electrical Bus']),
+        'wifi'                  => $faker->boolean(50),
+        'usb'                   => $faker->boolean(50),
+        'toilet'                => $faker->boolean(50),
     ];
 });
 
@@ -65,16 +70,20 @@ $factory->define(App\Trip::class, function (Faker\Generator $faker) {
         'company_id'            => $faker->numberBetween(1, 10),
         'from' 					=> $from = $faker->numberBetween(1, 10),
         'to' 					=> $to = $faker->numberBetween(1, 10),
+        'bus_id'                => $faker->numberBetween(1, 10),
         'rating' 				=> $faker->randomFloat($nbMaxDecimals = 1, $min = 0, $max = 5),
         'depart_at' 			=> $faker->time($format = 'H:i', $max = 'now'),
         'arrive_at' 			=> $faker->time($format = 'H:i', $max = 'now'),
         'name'                  => App\City::find($from)->city . ', ' . App\City::find($from)->state . ' to ' . App\City::find($to)->city . ', ' . App\City::find($to)->state,
         'weekdays'              => array_rand(['1', '2', '4', '8', '16', '32', '64', '127'], 1),
+        'price'                 => $price = $faker->randomFloat($nbMaxDecimals = 1, $min = 0, $max = 100),
+        'discount'              => $discount = $faker->randomFloat($nbMaxDecimals = 1, $min = 0, $max = 1),
     ];
 });
 
 $factory->define(App\Transaction::class, function (Faker\Generator $faker) {
     return [
+        'confirmation_number'   => random('distinct', 8),
         'description'           => $faker->text,
     ];
 });
@@ -82,7 +91,7 @@ $factory->define(App\Transaction::class, function (Faker\Generator $faker) {
 $factory->define(App\Ticket::class, function (Faker\Generator $faker) {
     return [
         'user_id'               => $faker->numberBetween(1, 10),
-        'fare_id'               => $faker->numberBetween(1, 10),
+        'trip_id'               => $faker->numberBetween(1, 10),
         'transaction_id'        => $faker->numberBetween(1, 10),
         'description'           => $faker->text,
     ];
@@ -99,13 +108,12 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Rental::class, function (Faker\Generator $faker) {
     return [
-        'company_id'            => $faker->numberBetween(1, 10),
-        'bus_id'                => $faker->numberBetween(1, 10),
-        'transaction_id'        => $faker->numberBetween(1, 10),
+        'company_id'            => 1,
         'description'           => $faker->text,
         'one_day'               => $faker->numberBetween(1, 10),
         'three_days'            => $faker->numberBetween(10, 50),
         'one_week'              => $faker->numberBetween(50, 100),
+        'created_at'            => $faker->dateTimeBetween($startDate = '-7 days', $endDate = '+7 days'),
     ];
 });
 

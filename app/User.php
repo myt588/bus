@@ -69,4 +69,20 @@ class User extends Model implements AuthenticatableContract,
     {
         return $this->hasMany('App\Ticket');
     }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function rents()
+    {
+        return $this->hasMany('App\Rent');
+    }
+
+    public function fullName()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
 }

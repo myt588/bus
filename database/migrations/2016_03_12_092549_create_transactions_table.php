@@ -15,7 +15,7 @@ class CreateTransactionsTable extends Migration
         
         Schema::create('transactions', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('stripe_id');
+            $table->string('confirmation_number');
             $table->decimal('quantity');
             $table->text('description');
             $table->timestamps();

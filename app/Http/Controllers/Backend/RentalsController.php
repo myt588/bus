@@ -6,9 +6,13 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Rental;
+use App\Company;
+use App\Bus;
+use App\Http\Requests\RentalRequest;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Session;
+use Auth;
 
 class RentalsController extends Controller
 {
@@ -20,8 +24,7 @@ class RentalsController extends Controller
      */
     public function index()
     {
-        $rentals = Rental::paginate(15);
-
+        $rentals = Auth::user()->isAdmin() ? Rental::all() : Auth::user()->company->rentals;
         return view('backend.rentals.index', compact('rentals'));
     }
 
@@ -32,7 +35,9 @@ class RentalsController extends Controller
      */
     public function create()
     {
-        return view('backend.rentals.create');
+        $companies = Company::lists('name', 'id');
+        $buses = Auth::user()->isAdmin() ? Bus::lists('bus_number', 'id') : Auth::user()->company->buses->lists('bus_number', 'id');
+        return view('backend.rentals.create', compact('companies', 'buses'));
     }
 
     /**
@@ -40,7 +45,7 @@ class RentalsController extends Controller
      *
      * @return Response
      */
-    public function store(Request $request)
+    public function store(RentalRequest $request)
     {
         
         Rental::create($request->all());
@@ -85,7 +90,7 @@ class RentalsController extends Controller
      *
      * @return Response
      */
-    public function update($id, Request $request)
+    public function update($id, RentalRequest $request)
     {
         
         $rental = Rental::findOrFail($id);

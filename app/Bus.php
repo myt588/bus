@@ -29,7 +29,9 @@ class Bus extends Model
      *
      * @var array
      */
-    protected $fillable = ['company_id', 'license_plate', 'bus_number', 'vehicle_number', 'model', 'year', 'seats'];
+    protected $fillable = [
+    'company_id', 'license_plate', 'bus_number', 'vehicle_number', 'make', 'model', 'year', 'seats', 'wifi', 'usb', 'toilet'
+    ];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -56,7 +58,40 @@ class Bus extends Model
      **/
     public function trips()
     {
-        return $this->belongsToMany('App\Trip');
+        return $this->hasMany('App\Trip');
+    }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function rental()
+    {
+        return $this->hasOne('App\Rental');
+    }
+
+    public function features()
+    {
+        $features = '';
+        if ($this->wifi)
+        {
+            $features = $features . 'wifi ';
+        }
+        if ($this->usb)
+        {
+            $features = $features . 'usb ';
+        }
+        if ($this->tiolet)
+        {
+            $features = $features . 'tiolet';
+        }
+        return $features;
+    }
+
+    public function makeModel()
+    {
+        return $this->make . ' ' . $this->model;
     }
 
 }

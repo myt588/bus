@@ -71,4 +71,9 @@ class Station extends Model
     {
         return date('h:i a', strtotime($this->pivot->time));
     }
+
+    public function fullAddress()
+    {
+        return $this->address . ', ' . $this->city->city . ', ' . $this->city->state;
+    }
 }

@@ -19,6 +19,7 @@ class CreateCompaniesTable extends Migration
             $table->decimal('rating');
             $table->boolean('verified');
             $table->string('code');
+            $table->string('base');
             $table->timestamps();
             $table->softDeletes();
         });

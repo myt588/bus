@@ -7,10 +7,12 @@ use App\Http\Controllers\Controller;
 
 use App\Station;
 use App\Company;
+use App\City;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Session;
 use Auth;
+use App\Http\Requests\StationRequest;
 
 class StationsController extends Controller
 {
@@ -25,9 +27,9 @@ class StationsController extends Controller
         $user = Auth::user();
         if ($user->isAdmin())
         {
-            $stations = Station::paginate(15);
+            $stations = Station::all();
         } else {
-            $stations = Company::findOrFail($user->company_id)->stations()->paginate(15);
+            $stations = Company::findOrFail($user->company_id)->stations;
         }
         return view('backend.stations.index', compact('stations'));
     }
@@ -48,11 +50,12 @@ class StationsController extends Controller
      *
      * @return Response
      */
-    public function store(Request $request)
+    public function store(StationRequest $request)
     {
-        
-        Station::create($request->all());
-
+        $city = City::create($request->all());
+        $data = $request->all();
+        $data['city_id'] = $city->id;
+        Station::create($data);
         Session::flash('flash_message', 'Station added!');
 
         return redirect('admin/stations');
@@ -94,7 +97,7 @@ class StationsController extends Controller
      *
      * @return Response
      */
-    public function update($id, Request $request)
+    public function update($id, StationRequest $request)
     {
         
         $station = Station::findOrFail($id);

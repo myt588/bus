@@ -1,5 +1,10 @@
 @extends('layouts.backend')
 
+@section('css')
+<!-- DataTables -->
+<link rel="stylesheet" href="/plugins/datatables/dataTables.bootstrap.css">
+@endsection
+
 @section('title') Rental Homepage @endsection 
 
 @section('heading') 
@@ -27,20 +32,29 @@
     <div class="box">
         <!-- /.box-header -->
         <div class="box-body">
-            <table class="table table-bordered table-striped">
+            <table id="example1" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>No.</th><th>Company Id</th><th>Bus Id</th><th>Transaction Id</th><th>Description</th><th>One Day</th><th>Three Days</th><th>Actions</th>
+                        @can('admin_full_access')<th>Company</th>@endcan
+                        <th>Bus</th>
+                        <th>One Day</th>
+                        <th>Three Days</th>
+                        <th>One Week</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                {{-- */$x=0;/* --}}
                 @foreach($rentals as $item)
-                    {{-- */$x++;/* --}}
                     <tr>
-                        <td>{{ $x }}</td>
-                        <td><a href="{{ url('admin/rentals', $item->id) }}">{{ $item->company_id }}</a></td><td>{{ $item->bus_id }}</td><td>{{ $item->transaction_id }}</td><td>{{ $item->description }}</td><td>{{ $item->one_day }}</td><td>{{ $item->three_days }}</td>
+                        @can('admin_full_access')<td>{{ $item->company_id }}</td>@endcan
+                        <td>{{ $item->bus->bus_number }}</td>
+                        <td>${{ $item->one_day }}</td>
+                        <td>${{ $item->three_days }}</td>
+                        <td>${{ $item->one_week }}</td>
                         <td>
+                            <a class="btn btn-info btn-xs" href="{{ url('admin/rentals/' . $item->id) }}">
+                               Details
+                            </a> /
                             <a class="btn btn-primary btn-xs" href="{{ url('admin/rentals/' . $item->id . '/edit') }}">
                                Update
                             </a> /
@@ -57,13 +71,29 @@
                 </tbody>
                 <thead>
                     <tr>
-                        <th>No.</th><th>Company Id</th><th>Bus Id</th><th>Transaction Id</th><th>Description</th><th>One Day</th><th>Three Days</th><th>Actions</th>
+                        @can('admin_full_access')<th>Company</th>@endcan
+                        <th>Bus</th>
+                        <th>One Day</th>
+                        <th>Three Days</th>
+                        <th>One Week</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
             </table>
-            <div class="pagination"> {!! $rentals->render() !!} </div>
         </div>
     </div>
 </section>
 
+@endsection
+
+@section('js')
+<!-- DataTables -->
+<script src="/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<!-- page script -->
+<script>
+  $(function () {
+    $("#example1").DataTable();
+  });
+</script>
 @endsection

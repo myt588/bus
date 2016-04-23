@@ -35,4 +35,4 @@
     </div>
 </form>
 <div class="seperator"></div>
-<p>Don't have an account? <a href="{{ url('/register') }}" class="goto-login soap-popupbox">Sign up</a></p>
+<p>Don't have an account? <a href="{{ url('/register') }}" class="goto-login">Sign up</a></p>

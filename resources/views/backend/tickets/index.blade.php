@@ -1,15 +1,15 @@
 @extends('layouts.backend')
 
+@section('css')
+<!-- DataTables -->
+<link rel="stylesheet" href="/plugins/datatables/dataTables.bootstrap.css">
+@endsection
+
 @section('title') Ticket Homepage @endsection 
 
 @section('heading') 
 
     Ticket 
-    <small>
-        <a href=" {{ url('admin/tickets/create') }} "class="btn btn-sm  btn-primary iframe">
-            Add New Ticket
-        </a>
-    </small>
 
 @endsection
 
@@ -24,46 +24,120 @@
 @section('content')
 <!-- Main content -->
 <section class="content">
-    <div class="box">
-        <!-- /.box-header -->
-        <div class="box-body">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>User Id</th><th>Fare Id</th><th>Transaction Id</th><th>Description</th><th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {{-- */$x=0;/* --}}
-                @foreach($tickets as $item)
-                    {{-- */$x++;/* --}}
-                    <tr>
-                        <td>{{ $x }}</td>
-                        <td><a href="{{ url('admin/tickets', $item->id) }}">{{ $item->user_id }}</a></td><td>{{ $item->fare_id }}</td><td>{{ $item->transaction_id }}</td><td>{{ $item->description }}</td>
-                        <td>
-                            <a class="btn btn-primary btn-xs" href="{{ url('admin/tickets/' . $item->id . '/edit') }}">
-                               Update
-                            </a> /
-                            {!! Form::open([
-                                'method'=>'DELETE',
-                                'url' => ['admin/tickets', $item->id],
-                                'style' => 'display:inline'
-                            ]) !!}
-                                {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs']) !!}
-                            {!! Form::close() !!}
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-                <thead>
-                    <tr>
-                        <th>User Id</th><th>Fare Id</th><th>Transaction Id</th><th>Description</th><th>Actions</th>
-                    </tr>
-                </thead>
-            </table>
-            <div class="pagination"> {!! $tickets->render() !!} </div>
+    <div class="row">
+        <div class="col-md-6">
+            @include('backend.partials.tickets-report-box-2', [
+                    'header'    => 'Tickets Booked For Today',
+                    'type'      => 'box-primary',
+                    'trips'     => $trips_today,
+                    'dateSign'  => 'today +',
+                    'break'     => true,
+                    'booked'    => true,
+                    ])
+            @include('backend.partials.tickets-report-box-2', [
+                    'header'    => 'Tickets Booked For Tomorrow',
+                    'type'      => 'box-primary',
+                    'trips'     => $trips_booked,
+                    'dateSign'  => 'tomorrow +',
+                    'break'     => true,
+                    'booked'    => true,
+                    ])
+            @include('backend.partials.tickets-report-box-2', [
+                    'header'    => 'Tickets Booked For Next Week',
+                    'type'      => 'box-warning',
+                    'trips'     => $trips_booked,
+                    'dateSign'  => 'tomorrow +',
+                    'break'     => false,
+                    'booked'    => true,
+                    ])
+        </div>
+        <div class="col-md-6">
+            @include('backend.partials.tickets-report-box-2', [
+                    'header'    => 'Tickets Sold Today',
+                    'type'      => 'box-success',
+                    'trips'     => $trips_today,
+                    'dateSign'  => 'today -',
+                    'break'     => true,
+                    'booked'    => false,
+                    ])
+            @include('backend.partials.tickets-report-box-2', [
+                    'header'    => 'Tickets Sold Last Week',
+                    'type'      => 'box-success',
+                    'trips'     => $trips_sold,
+                    'dateSign'  => 'yesterday -',
+                    'break'     => false,
+                    'booked'    => false,
+                    ])
         </div>
     </div>
+
 </section>
 
+@endsection
+
+@section('js')
+<!-- DataTables -->
+<script src="/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<!-- page script -->
+<script>
+    $(function () {
+        $(".dataTable").DataTable({
+            "searching": true,
+            "footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+ 
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+ 
+            // Total over all pages
+            totalMoney = api
+                .column( 6 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+
+            // Total over this page
+            pageTotalMoney = api
+                .column( 6, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+
+             // Update footer
+            $( api.column( 6 ).footer() ).html(
+                '$' + pageTotalMoney +' ($'+ totalMoney +' total)'
+            );
+
+            // Total over all pages
+            total = api
+                .column( 4 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Total over this page
+            pageTotal = api
+                .column( 4, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Update footer
+            $( api.column( 4 ).footer() ).html(
+                pageTotal +' ('+ total +' total)'
+            );
+        }
+    } );
+    });
+</script>
 @endsection

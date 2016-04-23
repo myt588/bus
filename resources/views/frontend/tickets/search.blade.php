@@ -100,6 +100,9 @@
                         <div class="tab-content">
                             <div class="tab-pane fade in active" id="tours-suggestions">
                                 <div class="flight-list listing-style3 flight">
+                                    @if(count($trips) == 0)
+                                    <h1>Sorry, Nothing Matches your Search! </h1>
+                                    @endif
                                     <!-- content cell start -->
                                     @foreach($trips as $trip)
                                     <article class="box">
@@ -117,7 +120,7 @@
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <span class="price"><small>AVG/PERSON</small> ${{ $trip->fares->first()->final_price }} </span>
+                                                        <span class="price"><small>AVG/PERSON</small> ${{ $trip->price() }} </span>
                                                     </div>
                                                 </div>
                                                 <div class="second-row">
@@ -140,7 +143,7 @@
                                                             <div class="icon"><i class="soap-icon-clock yellow-color"></i></div>
                                                             <div>
                                                                 <span class="skin-color">total time</span><br />
-                                                                {{ date('h:i', strtotime($trip->arrive_at - $trip->depart_at)) }}
+                                                                {{ $trip->totalTime() }}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -162,6 +165,8 @@
                                                 {!! Form::number('trip_one_id', $trip->id, ['hidden']) !!}
                                                 @endif
                                                 {!! Form::text('return', $data['return'], ['hidden']) !!}
+                                                {!! Form::text('adults_return', $data['adults_return'], ['hidden']) !!}
+                                                {!! Form::text('kids_return', $data['kids_return'], ['hidden']) !!}
                                             @else 
                                             {!! Form::open(['url' => '/tickets/picked', 'method' => 'GET']) !!}
                                             {!! Form::number('trip_one_id', $trip->id, ['hidden']) !!}

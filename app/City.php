@@ -35,8 +35,23 @@ class City extends Model
      *
      * @return void
      **/
-    public function trips()
+    public function trips_start()
     {
-        return $this->hasMany('App\Trip');
+        return $this->hasMany('App\Trip', 'from');
+    }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function trips_end()
+    {
+        return $this->hasMany('App\Trip', 'to');
+    }
+
+    public function getCityName()
+    {
+        return $this->city . ', ' . $this->state;
     }
 }

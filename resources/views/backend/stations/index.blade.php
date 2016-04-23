@@ -1,5 +1,10 @@
 @extends('layouts.backend')
 
+@section('css')
+<!-- DataTables -->
+<link rel="stylesheet" href="/plugins/datatables/dataTables.bootstrap.css">
+@endsection
+
 @section('title') Station Homepage @endsection 
 
 @section('heading') 
@@ -27,26 +32,31 @@
     <div class="box">
         <!-- /.box-header -->
         <div class="box-body">
-            <table class="table table-bordered table-striped">
+            <table id="example1" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>S.No</th>
                         @can('admin_full_access')<th>Company</th>@endcan
                         <th>Name</th>
                         <th>Address</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Zipcode</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                {{-- */$x=0;/* --}}
                 @foreach($stations as $item)
-                    {{-- */$x++;/* --}}
                     <tr>
-                        <td><a href="{{ url('admin/stations', $item->id) }}">{{ $x }}</a></td>
                         @can('admin_full_access')<td>{{ App\Company::find($item->company_id)->name  }}</td>@endcan
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->address }}</td>
+                        <td>{{ $item->city->city}}</td>
+                        <td>{{ $item->city->state}}</td>
+                        <td>{{ $item->city->zipcode}}</td>
                         <td>
+                            <a class="btn btn-info btn-xs" href="{{ url('admin/stations/' . $item->id) }}">
+                               Details
+                            </a> /
                             <a class="btn btn-primary btn-xs" href="{{ url('admin/stations/' . $item->id . '/edit') }}">
                                Update
                             </a> /
@@ -61,10 +71,32 @@
                     </tr>
                 @endforeach
                 </tbody>
+                <thead>
+                    <tr>
+                        @can('admin_full_access')<th>Company</th>@endcan
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Zipcode</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
             </table>
-            <div class="pagination"> {!! $stations->render() !!} </div>
         </div>
     </div>
 </section>
 
+@endsection
+
+@section('js')
+<!-- DataTables -->
+<script src="/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<!-- page script -->
+<script>
+  $(function () {
+    $("#example1").DataTable();
+  });
+</script>
 @endsection

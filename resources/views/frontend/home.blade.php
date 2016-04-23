@@ -31,190 +31,15 @@
             <div class="search-box-wrapper style2">
                 <div class="search-box">
                     <ul class="search-tabs clearfix">
-                        <li class="active"><a href="#tickets-tab" data-toggle="tab"><i class="fa fa-ticket"></i><span>TICKETS</span></a></li>
-                        <li><a href="#rentals-tab" data-toggle="tab"><i class="soap-icon-car"></i><span>RENTALS</span></a></li>
-                        <li><a href="#tours-tab" data-toggle="tab"><i class="soap-icon-cruise"></i><span>TOURS</span></a></li>
+                        <li class="active"><a href="#tickets-tab" data-toggle="tab">Tickets</a></li>
+                        <li><a href="#rentals-tab" data-toggle="tab">Rentals</a></li>
                     </ul>
-                    <div class="visible-mobile">
-                        <ul id="mobile-search-tabs" class="search-tabs clearfix">
-                            <li class="active"><a href="#tickets-tab">TICKETS</a></li>
-                            <li><a href="#rentals-tab">RENTALS</a></li>
-                            <li><a href="#tours-tab">TOURS</a></li>
-                        </ul>
-                    </div>
-                    
                     <div class="search-tab-content">
                         <div class="tab-pane fade active in" id="tickets-tab">
                             @include('frontend.tickets.partials.search-form')
                         </div>
                         <div class="tab-pane fade" id="rentals-tab">
-                            <form action="car-list-view.html" method="post">
-                                <h4 class="title">Where do you want to go?</h4>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <input type="text" class="input-text full-width" placeholder="Pick Up (city, distirct or specific airpot)" />
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" class="input-text full-width" placeholder="Drop Off (city, distirct or specific airpot)" />
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-xs-6">
-                                                    <div class="datepicker-wrap">
-                                                        <input type="text" name="date_from" class="input-text full-width" placeholder="Pick-Up Date / Time" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-6">
-                                                    <div class="selector">
-                                                        <select class="full-width">
-                                                            <option value="1">anytime</option>
-                                                            <option value="2">morning</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-xs-6">
-                                                    <div class="datepicker-wrap">
-                                                        <input type="text" name="date_to" class="input-text full-width" placeholder="Drop-Off Date / Time" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-6">
-                                                    <div class="selector">
-                                                        <select class="full-width">
-                                                            <option value="1">anytime</option>
-                                                            <option value="2">morning</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-4">
-                                        <div class="form-group row">
-                                            <div class="col-xs-3">
-                                                <div class="selector">
-                                                    <select class="full-width">
-                                                        <option value="">Adults</option>
-                                                        <option value="1">01</option>
-                                                        <option value="2">02</option>
-                                                        <option value="3">03</option>
-                                                        <option value="4">04</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-3">
-                                                <div class="selector">
-                                                    <select class="full-width">
-                                                        <option value="">Kids</option>
-                                                        <option value="1">01</option>
-                                                        <option value="2">02</option>
-                                                        <option value="3">03</option>
-                                                        <option value="4">04</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <input type="text" class="input-text full-width" placeholder="Promo Code" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="col-xs-6">
-                                                <div class="selector">
-                                                    <select class="full-width">
-                                                        <option value="">select a car type</option>
-                                                        <option value="economy">Economy</option>
-                                                        <option value="compact">Compact</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <button class="full-width">SERACH NOW</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="tab-pane fade" id="tours-tab">
-                            <form action="cruise-list-view.html" method="post">
-                                <h4 class="title">Where do you want to go?</h4>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <input type="text" class="input-text full-width" placeholder="enter a destination or hotel name" />
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-4">
-                                        <div class="form-group row">
-                                            <div class="col-xs-6">
-                                                <div class="datepicker-wrap">
-                                                    <input type="text" class="input-text full-width" placeholder="Departure Date" />
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <div class="selector">
-                                                    <select class="full-width">
-                                                        <option value="">select cruise length</option>
-                                                        <option value="1">1-2 Nights</option>
-                                                        <option value="2">3-4 Nights</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-4">
-                                        <div class="form-group row">
-                                            <div class="col-xs-6">
-                                                <div class="selector">
-                                                    <select class="full-width">
-                                                        <option value="">select cruise line</option>
-                                                        <option>Azamara Club Cruises</option>
-                                                        <option>Carnival Cruise Lines</option>
-                                                        <option>Celebrity Cruises</option>
-                                                        <option>Costa Cruise Lines</option>
-                                                        <option>Cruise &amp; Maritime Voyages</option>
-                                                        <option>Crystal Cruises</option>
-                                                        <option>Cunard Line Ltd.</option>
-                                                        <option>Disney Cruise Line</option>
-                                                        <option>Holland America Line</option>
-                                                        <option>Hurtigruten Cruise Line</option>
-                                                        <option>MSC Cruises</option>
-                                                        <option>Norwegian Cruise Line</option>
-                                                        <option>Oceania Cruises</option>
-                                                        <option>Orion Expedition Cruises</option>
-                                                        <option>P&amp;O Cruises</option>
-                                                        <option>Paul Gauguin Cruises</option>
-                                                        <option>Peter Deilmann Cruises</option>
-                                                        <option>Princess Cruises</option>
-                                                        <option>Regent Seven Seas Cruises</option>
-                                                        <option>Royal Caribbean International</option>
-                                                        <option>Seabourn Cruise Line</option>
-                                                        <option>Silversea Cruises</option>
-                                                        <option>Star Clippers</option>
-                                                        <option>Swan Hellenic Cruises</option>
-                                                        <option>Thomson Cruises</option>
-                                                        <option>Viking River Cruises</option>
-                                                        <option>Windstar Cruises</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <button class="full-width">SEARCH NOW</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                            @include('frontend.rentals.partials.search-form')
                         </div>
                     </div>
                 </div>
@@ -240,7 +65,7 @@
 <script src="/plugins/select2/select2.full.min.js"></script>
 <script>
   jQuery(document).ready(function($){
-    $(".leaving_from, .going_to").select2({
+    $(".location").select2({
         width: '100%',
         multiple: true,
         maximumSelectionLength: 1,
@@ -248,15 +73,21 @@
     });
     $value = '';
     if (document.getElementById('one-way').checked) {
-        $('#return-div').removeAttr('class');
-        $('#return').attr('disabled', 'true');
-        $value = $('#return').attr('value');
-        $('#return').attr('value', '');
-        $('#return').attr('placeholder', '');
-        $('#return').css('background-color', '#eee');
-        $('#return-div').css('height', '32px');
+        oneWaySetting();
     }
     $('#one-way').change(function() {
+        oneWaySetting();
+    });
+    $('#round-trip').change(function(){
+        roundTripSetting();
+    });
+    $('#adults_depart').change(function(){
+        $('#adults_return').attr('value', $('#adults_depart').attr('value'));
+    });
+    $('#kids_depart').change(function(){
+        $('#kids_return').attr('value', $('#kids_depart').attr('value'));
+    });
+    function oneWaySetting() {
         $('#return-div').removeAttr('class');
         $('#return').attr('disabled', 'true');
         $value = $('#return').attr('value');
@@ -264,14 +95,18 @@
         $('#return').attr('placeholder', '');
         $('#return').css('background-color', '#eee');
         $('#return-div').css('height', '32px');
-    });
-    $('#round-trip').change(function(){
+        $('#adults_return').attr('disabled', 'true');
+        $('#kids_return').attr('disabled', 'true');
+    }
+    function roundTripSetting() {
         $('#return-div').attr('class', 'datepicker-wrap');
         $('#return').removeAttr('disabled');
         $('#return').attr('value', $value);
         $('#return').attr('placeholder', 'mm/dd/yy');
         $('#return').css('background-color', '#fff');
-    });
+        $('#adults_return').removeAttr('disabled');
+        $('#kids_return').removeAttr('disabled');
+    }
 });
 </script>
 @endsection

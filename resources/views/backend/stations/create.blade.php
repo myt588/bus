@@ -15,6 +15,7 @@
 
     <!-- Main content -->
     <section class="content">
+        @include('backend.partials.info-box', ['info_header' => 'Tips!', 'info' => 'Address needs to be entered correctly in order to be better located!'])
         <div class="box box-warning"> 
             <div class="box-body">
 
@@ -43,6 +44,27 @@
                     <div class="col-sm-6">
                         {!! Form::text('address', null, ['class' => 'form-control']) !!}
                         {!! $errors->first('address', '<p class="help-block">:message</p>') !!}
+                    </div>
+                </div>
+                <div class="form-group {{ $errors->has('city') ? 'has-error' : ''}}">
+                    {!! Form::label('city', 'City: ', ['class' => 'col-sm-3 control-label']) !!}
+                    <div class="col-sm-6">
+                        {!! Form::text('city', null, ['class' => 'form-control']) !!}
+                        {!! $errors->first('city', '<p class="help-block">:message</p>') !!}
+                    </div>
+                </div>
+                <div class="form-group {{ $errors->has('state') ? 'has-error' : ''}}">
+                    {!! Form::label('state', 'State: ', ['class' => 'col-sm-3 control-label']) !!}
+                    <div class="col-sm-6">
+                        {!! Form::text('state', null, ['class' => 'form-control']) !!}
+                        {!! $errors->first('state', '<p class="help-block">:message</p>') !!}
+                    </div>
+                </div>
+                <div class="form-group {{ $errors->has('zipcode') ? 'has-error' : ''}}">
+                    {!! Form::label('zipcode', 'ZipCode: ', ['class' => 'col-sm-3 control-label']) !!}
+                    <div class="col-sm-6">
+                        {!! Form::text('zipcode', null, ['class' => 'form-control']) !!}
+                        {!! $errors->first('zipcode', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
 

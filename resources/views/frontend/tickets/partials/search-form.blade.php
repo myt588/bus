@@ -3,11 +3,11 @@
         <div class="col-md-4">
             <div class="form-group" id="the-basics">
                 <label class="control-label">Leaving From</label>
-                {{ Form::select('leaving_from', $cities, null, ['class' => 'input-text full-width leaving_from', 'multiple']) }}
+                {{ Form::select('leaving_from', $cities, null, ['class' => 'input-text full-width location', 'multiple']) }}
             </div>
             <div class="form-group">
                 <label class="control-label">Going To</label>
-                {{ Form::select('going_to', $cities, null, ['class' => 'input-text full-width going_to', 'multiple']) }}
+                {{ Form::select('going_to', $cities, null, ['class' => 'input-text full-width location', 'multiple']) }}
             </div>
         </div>
         
@@ -31,24 +31,15 @@
                 <div class="col-xs-3">
                     <label>Adults</label>
                     <div class="selector">
-                        <select class="full-width" name="adults">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        </select>
+                        {!! Form::select('adults_depart', ['0', '1', '2', '3', '4'], 1, ['id' => 'adults_depart']) !!}
+                        {!! Form::select('adults_return', ['0', '1', '2', '3', '4'], 1, ['id' => 'adults_return', 'hidden']) !!}
                     </div>
                 </div>
                 <div class="col-xs-3">
                     <label>Kids</label>
                     <div class="selector">
-                        <select class="full-width" name="kids">
-                            <option value="0">0</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        </select>
+                        {!! Form::select('kids_depart', ['0', '1', '2', '3', '4'], 0, ['id' => 'kids_depart']) !!}
+                        {!! Form::select('kids_return', ['0', '1', '2', '3', '4'], 0, ['id' => 'kids_return', 'hidden']) !!}
                     </div>
                 </div>
                 <div class="col-xs-6 pull-right">

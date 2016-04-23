@@ -15,6 +15,10 @@
 
     <!-- Main content -->
     <section class="content">
+        <div class="callout callout-info">
+            <h4>Tip!</h4>
+            <p>Vehicle Number is optional</p>
+        </div>
         <div class="box box-warning"> 
             <div class="box-body">
 
@@ -35,10 +39,11 @@
                         {!! $errors->first('company_id', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
+                
                 <div class="form-group {{ $errors->has('bus_number') ? 'has-error' : ''}}">
                     {!! Form::label('bus_number', 'Bus Number: ', ['class' => 'col-sm-3 control-label']) !!}
                     <div class="col-sm-6">
-                        {!! Form::text('bus_number', null, ['class' => 'form-control']) !!}
+                        {!! Form::text('bus_number', null, ['class' => 'form-control', 'disabled']) !!}
                         {!! $errors->first('bus_number', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
@@ -49,11 +54,11 @@
                         {!! $errors->first('license_plate', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
-                <div class="form-group {{ $errors->has('vehicle_number') ? 'has-error' : ''}}">
-                    {!! Form::label('vehicle_number', 'Vehicle Number: ', ['class' => 'col-sm-3 control-label']) !!}
+                <div class="form-group {{ $errors->has('make') ? 'has-error' : ''}}">
+                    {!! Form::label('make', 'Make: ', ['class' => 'col-sm-3 control-label']) !!}
                     <div class="col-sm-6">
-                        {!! Form::text('vehicle_number', null, ['class' => 'form-control']) !!}
-                        {!! $errors->first('vehicle_number', '<p class="help-block">:message</p>') !!}
+                        {!! Form::text('make', null, ['class' => 'form-control']) !!}
+                        {!! $errors->first('make', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
                 <div class="form-group {{ $errors->has('model') ? 'has-error' : ''}}">
@@ -77,9 +82,27 @@
                         {!! $errors->first('seats', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
+                <div class="form-group {{ $errors->has('vehicle_number') ? 'has-error' : ''}}">
+                    {!! Form::label('vehicle_number', 'Vehicle Number: ', ['class' => 'col-sm-3 control-label']) !!}
+                    <div class="col-sm-6">
+                        {!! Form::text('vehicle_number', null, ['class' => 'form-control']) !!}
+                        {!! $errors->first('vehicle_number', '<p class="help-block">:message</p>') !!}
+                    </div>
+                    Optional
+                </div>
+                <div class="form-group {{ $errors->has('features') ? 'has-error' : ''}}">
+                    {!! Form::label('features', 'Features: ', ['class' => 'col-sm-3 control-label']) !!}
+                    <div class="col-sm-6">
+                        {!! Form::checkbox('wifi', true) !!} Wifi
+                        {!! Form::checkbox('usb', true) !!} USB
+                        {!! Form::checkbox('toilet', true) !!} Toilet
+                        {!! $errors->first('features', '<p class="help-block">:message</p>') !!}
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-3">
-                        {!! Form::submit('Update', ['class' => 'btn btn-primary form-control']) !!}
+                        {!! Form::submit('Create', ['class' => 'btn btn-primary form-control']) !!}
                     </div>
                 </div>
 
@@ -89,4 +112,12 @@
         </div>
     </section>
 
+@endsection
+
+@section('js')
+<script>
+  $(function () {
+
+  });
+</script>
 @endsection

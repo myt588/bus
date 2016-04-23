@@ -6,6 +6,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Ticket;
+use App\Trip;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Session;
@@ -20,19 +21,23 @@ class TicketsController extends Controller
      */
     public function index()
     {
-        $tickets = Ticket::paginate(15);
-
-        return view('backend.tickets.index', compact('tickets'));
+        $trips_sold = $this->tripsBetweenDates('yesterday - 6 days', 'yesterday');
+        $trips_today = $this->tripsBetweenDates('today', 'tomorrow');
+        $trips_booked = $this->tripsBetweenDates('tomorrow', 'tomorrow + 6 days');
+        return view('backend.tickets.index', compact('trips_booked', 'trips_sold', 'trips_today'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
+
+    public function tripsBetweenDates($start, $end)
     {
-        return view('backend.tickets.create');
+        $datediff = strtotime($end) - strtotime($start);
+        $dayCount = floor($datediff/(60*60*24));
+        $trips = collect([]);
+        for ($i = 0; $i < $dayCount; $i++)
+        {
+            $trips->push(Trip::where('weekdays', '&', stringToWeekday($start . '+ ' . $i . ' days'))->get());
+        }
+        return $trips;
     }
 
     /**
@@ -58,11 +63,11 @@ class TicketsController extends Controller
      *
      * @return Response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
-        $ticket = Ticket::findOrFail($id);
-
-        return view('backend.tickets.show', compact('ticket'));
+        $trip = Trip::findOrFail($id);
+        $tickets = $trip->tickets()->where('depart_date', '=', $request->date)->get();
+        return view('backend.tickets.show', compact('tickets'));
     }
 
     /**

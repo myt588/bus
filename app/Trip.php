@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DB;
 
 class Trip extends Model
 {
@@ -28,7 +29,7 @@ class Trip extends Model
      *
      * @var array
      */
-    protected $fillable = ['company_id', 'from', 'to', 'rating', 'depart_at', 'arrive_at', 'name'];
+    protected $fillable = ['company_id', 'from', 'to', 'bus_id', 'rating', 'depart_at', 'arrive_at', 'name', 'price', 'discount', 'weekdays'];
     
     /**
      * The attributes excluded from the model's JSON form.
@@ -72,9 +73,9 @@ class Trip extends Model
      *
      * @return void
      **/
-    public function buses()
+    public function bus()
     {
-        return $this->belongsToMany('App\Bus');
+        return $this->belongsTo('App\Bus');
     }
 
     /**
@@ -82,9 +83,29 @@ class Trip extends Model
      *
      * @return void
      **/
-    public function city()
+    public function tickets()
     {
-        return $this->belongsTo('App\City');
+        return $this->hasMany('App\Ticket');
+    }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function fromCity()
+    {
+        return $this->belongsTo('App\City', 'from');
+    }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function toCity()
+    {
+        return $this->belongsTo('App\City', 'to');
     }
 
     /**
@@ -99,13 +120,22 @@ class Trip extends Model
 
     public function totalTime()
     {
-        return date('h:i', strtotime($this->arrive_at - $this->depart_at));
+        return date('h:i', strtotime($this->arrive_at) - strtotime($this->depart_at));
     }
 
-    public function farePrice()
+    public function price()
     {
-        return $this->fares->first()->final_price;
+        return $this->price * $this->discount;
     }
 
+    public function ticketsBookedCountOn($date)
+    {
+        return $this->tickets()->where('depart_date', '=', $date)->count();
+    }
+
+    public function ticketsSoldCountOn($date)
+    {
+        return $this->tickets()->whereDate('created_at', '=', $date)->count();
+    }
 
 }

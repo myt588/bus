@@ -87,4 +87,14 @@ class Company extends Model
         return $this->hasMany('App\Fare');
     }
 
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function rentals()
+    {
+        return $this->hasMany('App\Rental');
+    }
+
 }

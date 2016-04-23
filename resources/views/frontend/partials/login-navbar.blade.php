@@ -2,7 +2,11 @@
     <div class="container">
         <ul class="quick-menu pull-left">
             @if(Auth::check())
-            <li><a href="#">MY ACCOUNT</a></li>
+                @if(Auth::user()->isAdmin() || Auth::user()->isCompanyAdmin())
+                    <li><a href="{{ route('admin::dashboard') }}">MY ACCOUNT</a></li>
+                @else
+                    <li><a href="{{ route('admin::dashboard') }}">MY ACCOUNT</a></li>
+                @endif
             @endif
             <li class="ribbon">
                 <a href="#">English</a>

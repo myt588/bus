@@ -30,19 +30,49 @@
     <div class="container">
         <div class="row">
             <div id="main" class="col-sms-6 col-sm-8 col-md-9">
-                <div class="booking-section travelo-box">
-                    
-                    {!! Form::open(['route' => 'tickets.pay', 'class' => 'booking-form', 'id' => 'payment-form']) !!}
-                        @if(array_key_exists('trip_two_id', $data)) 
-                        {!! Form::number('trip_two_id', $data['trip_two_id'], ['hidden']) !!}
-                        {!! Form::number('trip_two_DS', $data['trip_two_DS'], ['hidden']) !!}
-                        {!! Form::number('trip_two_AS', $data['trip_two_DS'], ['hidden']) !!}
-                        @endif
-                        {!! Form::number('trip_one_id', $data['trip_one_id'], ['hidden']) !!}
-                        {!! Form::number('trip_one_DS', $data['trip_one_DS'], ['hidden']) !!}
-                        {!! Form::number('trip_one_AS', $data['trip_one_AS'], ['hidden']) !!}
-                        {!! Form::text('totalPrice', array_key_exists('trip_returning_id', $data) ? $trip_one->farePrice() + $trip_two->farePrice() : $trip_one->farePrice(), ['hidden']) !!}
-                        @include('frontend.tickets.partials.search-form-hidden', $data)
+                {!! Form::open(['route' => 'tickets.pay', 'class' => 'booking-form', 'id' => 'payment-form']) !!}
+                    @if(array_key_exists('trip_two_id', $data)) 
+                    {!! Form::number('trip_two_id', $data['trip_two_id'], ['hidden']) !!}
+                    {!! Form::number('trip_two_DS', $data['trip_two_DS'], ['hidden']) !!}
+                    {!! Form::number('trip_two_AS', $data['trip_two_DS'], ['hidden']) !!}
+                    {!! Form::text('adults_return', $data['adults_return'], ['hidden']) !!}
+                    {!! Form::text('kids_return', $data['kids_return'], ['hidden']) !!}
+                    @endif
+                    {!! Form::number('trip_one_id', $data['trip_one_id'], ['hidden']) !!}
+                    {!! Form::number('trip_one_DS', $data['trip_one_DS'], ['hidden']) !!}
+                    {!! Form::number('trip_one_AS', $data['trip_one_AS'], ['hidden']) !!}
+                    {!! Form::text('totalPrice', (array_key_exists('trip_two_id', $data) ? 
+                    $trip_one->price() * ($data['adults_depart'] + $data['kids_depart']) + $trip_two->price() * ($data['adults_return'] + $data['kids_return']) : 
+                    $trip_one->price() * ($data['adults_depart'] + $data['kids_depart'])), ['hidden']) !!}
+                    @include('frontend.tickets.partials.search-form-hidden', $data)
+                    <div class="booking-section travelo-box">
+                        <div class="tab-pane fade in active" id="car-details">
+                            @include('frontend.tickets.partials.trip-detail-box', [
+                                'trip'      => $trip_one, 
+                                'trip_DS'   => $trip_one_DS, 
+                                'trip_AS'   => $trip_one_AS, 
+                                'date'      => $data['depart'], 
+                                'adults'    => $data['adults_depart'],
+                                'kids'      => $data['kids_depart'],
+                                'adults_id' => 'adults_depart',
+                                'kids_id'   => 'kids_depart',
+                                'checkout'  => true    
+                            ])
+                            @if(array_key_exists('trip_two_id', $data))
+                            @include('frontend.tickets.partials.trip-detail-box', [
+                                'trip'      => $trip_two, 
+                                'trip_DS'   => $trip_two_DS, 
+                                'trip_AS'   => $trip_two_AS, 
+                                'date'      => $data['depart'], 
+                                'adults'    => $data['adults_return'],
+                                'kids'      => $data['kids_return'],
+                                'adults_id' => 'adults_return',
+                                'kids_id'   => 'kids_return',
+                                'checkout'  => true
+                            ])
+                            @endif
+                        </div>
+                        <hr />
                         <div class="person-information">
                             <h2>Your Personal Information</h2>
                             <div class="form-group row">
@@ -97,7 +127,7 @@
                             <div class="form-group row">
                                 <div class="col-sm-6 col-md-5">
                                     <label>Card number</label>
-                                    <input type="text" class="input-text full-width" size="20" data-stripe="number"/>
+                                    <input type="text" class="input-text full-width" size="20" data-stripe="number" />
                                 </div>
                                 <div class="col-sm-6 col-md-5">
                                     <label>CVC</label>
@@ -128,8 +158,9 @@
                                 <button type="submit" class="full-width btn-large">CONFIRM BOOKING</button>
                             </div>
                         </div>
-                    {{ Form::close() }}
-                </div>
+                    </div>
+                    @include('errors.error-list')
+                {{ Form::close() }}
             </div>
             <div class="sidebar col-sms-6 col-sm-4 col-md-3">
                 <div class="booking-details travelo-box">
@@ -141,24 +172,16 @@
                             <a href="{{URL::route('tickets.picked', $data, null)}}" class="button">EDIT</a>
                         </div>
 
-                        <div class="details">
-                            <div class="constant-column-3 timing clearfix">
-                                @include('frontend.tickets.partials.departure-station', [$data, $trip_one_DS, $trip_one_AS, $trip_one])
-                            </div>
-                        </div>
+                        @include('frontend.tickets.partials.trip-detail-box2', ['trip' => $trip_one, 'trip_DS' => $trip_one_DS, 'trip_AS' => $trip_one_AS, 'date' => $data['depart']])
                         @if(array_key_exists('trip_two_id', $data))
-                        <div class="details">
-                            <div class="constant-column-3 timing clearfix">
-                                @include('frontend.tickets.partials.arrival-station', [$data, $trip_two_DS, $trip_two_AS, $trip_two])
-                            </div>
-                        </div>
+                        @include('frontend.tickets.partials.trip-detail-box2', ['trip' => $trip_two, 'trip_DS' => $trip_two_DS, 'trip_AS' => $trip_two_AS, 'date' => $data['return']])
                         @endif
                     </article>
                     
                     <h4>Other Details</h4>
                     <dl class="other-details">
                         <dt class="feature">Operator:</dt><dd class="value">{{$trip_one->companyName()}}</dd>
-                        <dt class="total-price">Total Price</dt><dd class="total-price-value">${{ array_key_exists('trip_two_id', $data) ? $trip_one->farePrice() + $trip_two->farePrice() : $trip_one->farePrice() }}</dd>
+                        <dt class="total-price">Total Price</dt><dd class="total-price-value">$@include('frontend.tickets.partials.total-price')</dd>
                     </dl>
                 </div>
                 

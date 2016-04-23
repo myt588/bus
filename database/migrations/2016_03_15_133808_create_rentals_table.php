@@ -19,8 +19,6 @@ class CreateRentalsTable extends Migration
             $table->foreign('company_id')->references('id')->on('companies');
             $table->integer('bus_id')->unsigned();
             $table->foreign('bus_id')->references('id')->on('buses');
-            $table->integer('transaction_id')->unsigned()->nullable();
-            $table->foreign('transaction_id')->references('id')->on('transactions');
             $table->text('description');
             $table->decimal('one_day');
             $table->decimal('three_days');

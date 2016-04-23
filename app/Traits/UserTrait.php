@@ -64,4 +64,14 @@ trait UserTrait
     {
         return $this->hasRole('admin');
     }
+
+    /**
+     * Determine if the user is admin.
+     *
+     * @return boolean
+     */
+    public function isCompanyAdmin()
+    {
+        return $this->hasRole('company_admin');
+    }
 }

@@ -27,20 +27,20 @@
     <div class="box">
         <!-- /.box-header -->
         <div class="box-body">
-            <table class="table table-bordered table-striped">
+            <table id="example1" class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         %%formHeadingHtml%%<th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                {{-- */$x=0;/* --}}
                 @foreach($%%crudName%% as $item)
-                    {{-- */$x++;/* --}}
                     <tr>
-                        <td>{{ $x }}</td>
                         %%formBodyHtml%%
                         <td>
+                            <a class="btn btn-info btn-xs" href="{{ url('%%routeGroup%%%%crudName%%/' . $item->id ) }}">
+                               Details
+                            </a> /
                             <a class="btn btn-primary btn-xs" href="{{ url('%%routeGroup%%%%crudName%%/' . $item->id . '/edit') }}">
                                Update
                             </a> /

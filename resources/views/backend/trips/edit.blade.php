@@ -11,7 +11,7 @@
 
     <li><a href="/home">Home</a></li>
     <li><a href="/admin/trips">Trip</a></li>
-    <li><a href="/admin/trips/%{{$trip->id}}/edit">Edit</a></li>
+    <li><a href="/admin/trips/{{$trip->id}}/edit">Edit</a></li>
 
 @endsection
 
@@ -75,6 +75,41 @@
                         {!! $errors->first('arrive_at', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
+                 <div class="form-group {{ $errors->has('price') ? 'has-error' : ''}}">
+                    {!! Form::label('price', 'Price: ', ['class' => 'col-sm-3 control-label']) !!}
+                    <div class="col-sm-6">
+                        {!! Form::number('price', null, ['class' => 'form-control price', 'step' => '0.01', 'min' => '0']) !!}
+                        {!! $errors->first('price', '<p class="help-block">:message</p>') !!}
+                    </div>
+                </div>
+                <div class="form-group {{ $errors->has('discount') ? 'has-error' : ''}}">
+                    {!! Form::label('discount', 'Discount: ', ['class' => 'col-sm-3 control-label']) !!}
+                    <div class="col-sm-6">
+                        {!! Form::number('discount', null, ['class' => 'form-control discount', 'step' => '0.01', 'min' => '0', 'max' => '1']) !!}
+                        {!! $errors->first('discount', '<p class="help-block">:message</p>') !!}
+                    </div>
+                </div>
+                <div class="form-group {{ $errors->has('discount') ? 'has-error' : ''}}">
+                    {!! Form::label('final_price', 'Final Price: ', ['class' => 'col-sm-3 control-label']) !!}
+                    <div class="col-sm-6">
+                        {!! Form::number('final_price', null, ['class' => 'form-control final_price', 'readonly', 'id' => 'final']) !!}
+                        {!! $errors->first('final_price', '<p class="help-block">:message</p>') !!}
+                    </div>
+                </div>
+                <div class="form-group {{ $errors->has('weekdays') ? 'has-error' : ''}}">
+                    {!! Form::label('weekdays', 'Weekdays: ', ['class' => 'col-sm-3 control-label']) !!}
+                    <div class="col-sm-6">
+                        {!! Form::checkbox('weekdays[]', 'WEEKDAY_SUNDAY', false) !!} Sunday
+                        {!! Form::checkbox('weekdays[]', 'WEEKDAY_MONDAY', false) !!} Monday
+                        {!! Form::checkbox('weekdays[]', 'WEEKDAY_TUESDAY', false) !!} Tuesday
+                        {!! Form::checkbox('weekdays[]', 'WEEKDAY_WEDNESDAY', false) !!} Wednesday
+                        {!! Form::checkbox('weekdays[]', 'WEEKDAY_THURSDAY', false) !!} Thursday
+                        {!! Form::checkbox('weekdays[]', 'WEEKDAY_FRIDAY', false) !!} Friday
+                        {!! Form::checkbox('weekdays[]', 'WEEKDAY_SATURDAY', false) !!} Saturday
+                        {!! Form::checkbox('weekdays[]', 'EVERYDAY', false) !!} Every Day
+                        {!! $errors->first('weekdays', '<p class="help-block">:message</p>') !!}
+                    </div>
+                </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Additional Stop(s):</label>
                     <div class="col-sm-1">
@@ -83,24 +118,33 @@
                 </div>
                 @for($i = 0; $i < count($stop); $i ++)
                 <div class="form-group">
-                    <div class="col-sm-offset-3 col-sm-4">
+                    <div class="col-sm-offset-3 col-sm-3">
                         {!! Form::select('stop[]', $stations, $stop[$i], ['class' => 'form-control']) !!}
                     </div>
-                    <div class="col-sm-4 bootstrap-timepicker">
+                    <div class="col-sm-3 bootstrap-timepicker">
                         {!! Form::text('time[]', $time[$i], ['class' => 'form-control timepicker']) !!}
+                    </div>
+                    <div class="col-sm-2 bootstrap-timepicker">
+                        {!! Form::checkbox('departure[]', true, $departure[$i] ? true : false) !!} Departure Station
+                        {!! Form::checkbox('departure[]', false, $departure[$i] ? false : true) !!} Arrival Station
                     </div>
                     <div class="col-sm-1">
                         <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
                     </div>
                 </div>
+
                 @endfor
                 <!-- The option field template containing an option field and a Remove button -->
                 <div class="form-group hide" id="optionTemplate">
-                    <div class="col-sm-offset-3 col-sm-4">
+                    <div class="col-sm-offset-3 col-sm-3">
                         {!! Form::select('stop[]', $stations, null, ['class' => 'form-control', 'disabled']) !!}
                     </div>
-                    <div class="col-sm-4 bootstrap-timepicker">
+                    <div class="col-sm-3 bootstrap-timepicker">
                         {!! Form::text('time[]', null, ['class' => 'form-control timepicker', 'disabled']) !!}
+                    </div>
+                    <div class="col-sm-2 bootstrap-timepicker">
+                        {!! Form::checkbox('departure[]', true) !!} Departure Station
+                        {!! Form::checkbox('departure[]', false) !!} Arrival Station
                     </div>
                     <div class="col-sm-1">
                         <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
@@ -132,6 +176,12 @@
     });
     // The maximum number of options
     var MAX_OPTIONS = 5;
+
+    $('.price, .discount').change(function(){
+        $('.final_price').val($('.price').val() * $('.discount').val());
+    });
+
+    $('#final').val($('.price').val() * $('.discount').val());
 
     $('#surveyForm')
         // Add button click handler

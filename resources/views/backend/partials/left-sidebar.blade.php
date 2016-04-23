@@ -26,41 +26,40 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
         <li class="header">MAIN NAVIGATION</li>
-        <li class="treeview">
-          <a href="#">
+        <li {!! set_active('admin/dashboard', 'treeview') !!}>
+          <a href="{{URL::route('admin::dashboard')}}">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span> 
           </a>
         </li>
-        <li class="treeview">
+        <li {!! set_active(['admin/tickets', 'admin/tickets/*'], 'treeview') !!}>
           <a href="#">
             <i class="fa fa-files-o"></i>
             <span>Reports</span>
             <i class="fa fa-angle-left pull-right"></i>
           </a>
           <ul class="treeview-menu">
-            <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Orders Report</a></li>
-            <li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> Sales Report</a></li>
-            <li><a href="pages/layout/fixed.html"><i class="fa fa-circle-o"></i> Booking Report</a></li>
+            <li><a href="{{route('admin::admin.tickets.index')}}"><i class="fa fa-circle-o"></i> Tickets Report</a></li>
+            <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Rentals Report</a></li>
+            <li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> Tours Report</a></li>
             <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Customer Reviews</a></li>
           </ul>
         </li>
-        <li class="treeview active ">
+        <li {!! set_active(['admin/buses', 'admin/stations', 'admin/trips', 'admin/rentals'], 'treeview') !!}>
           <a href="#">
             <i class="fa fa-pie-chart"></i>
             <span>Manage Products</span>
             <i class="fa fa-angle-left pull-right"></i>
           </a>
           <ul class="treeview-menu">
-            @can('admin_full_access')<li><a href="{{URL::route('admin::admin.companies.index')}}"><i class="fa fa-circle-o"></i> Company</a></li>@endcan
-            <li><a href="{{URL::route('admin::admin.buses.index')}}"><i class="fa fa-circle-o"></i> Bus</a></li>
-            <li><a href="{{URL::route('admin::admin.trips.index')}}"><i class="fa fa-circle-o"></i> Trip</a></li>
-            <li><a href="{{URL::route('admin::admin.stations.index')}}"><i class="fa fa-circle-o"></i> Station</a></li>
-            <li><a href="{{URL::route('admin::admin.fares.index')}}"><i class="fa fa-circle-o"></i> Fare</a></li>
-            <li><a href="{{URL::route('admin::admin.rentals.index')}}"><i class="fa fa-circle-o"></i> Rental</a></li>
+            @if(Auth::user()->isAdmin())<li><a href="{{URL::route('admin::admin.companies.index')}}"><i class="fa fa-circle-o"></i> Company</a></li>@endif
+            <li><a href="{{route('admin::admin.buses.index')}}"><i class="fa fa-circle-o"></i> Bus</a></li>
+            <li><a href="{{route('admin::admin.stations.index')}}"><i class="fa fa-circle-o"></i> Station</a></li>
+            <li><a href="{{route('admin::admin.trips.index')}}"><i class="fa fa-circle-o"></i> Trip</a></li>
+            <li><a href="{{route('admin::admin.rentals.index')}}"><i class="fa fa-circle-o"></i> Rental</a></li>
             <li><a href=""><i class="fa fa-circle-o"></i> Tour</a></li>
           </ul>
         </li>
-        <li class="treeview">
+        <li {!! set_active('', 'treeview') !!}>
           <a href="#">
             <i class="fa fa-laptop"></i>
             <span>Settings</span>
@@ -74,7 +73,7 @@
             <li><a href="pages/UI/timeline.html"><i class="fa fa-circle-o"></i> My Policy</a></li>
           </ul>
         </li>
-        <li class="treeview">
+        <li {!! set_active('', 'treeview') !!}>
           <a href="#">
             <i class="fa fa-edit"></i> <span>My Programs</span>
             <i class="fa fa-angle-left pull-right"></i>
@@ -84,7 +83,7 @@
             <li><a href="pages/forms/advanced.html"><i class="fa fa-circle-o"></i> My Gifts</a></li>
           </ul>
         </li>
-        <li class="treeview">
+        <li {!! set_active('', 'treeview') !!}>
           <a href="#">
             <i class="fa fa-table"></i> <span>Manage Users</span>
             <i class="fa fa-angle-left pull-right"></i>
@@ -94,11 +93,6 @@
             <li><a href="pages/tables/data.html"><i class="fa fa-circle-o"></i> Manage Users</a></li>
           </ul>
         </li>
-        <li><a href="documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
-        <li class="header">LABELS</li>
-        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
       </ul>
     </section>
     <!-- /.sidebar -->

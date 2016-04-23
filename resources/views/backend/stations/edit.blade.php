@@ -49,6 +49,27 @@
                         {!! $errors->first('address', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
+                <div class="form-group {{ $errors->has('city') ? 'has-error' : ''}}">
+                    {!! Form::label('city', 'City: ', ['class' => 'col-sm-3 control-label']) !!}
+                    <div class="col-sm-6">
+                        {!! Form::text('city', $station->city->city, ['class' => 'form-control']) !!}
+                        {!! $errors->first('city', '<p class="help-block">:message</p>') !!}
+                    </div>
+                </div>
+                <div class="form-group {{ $errors->has('state') ? 'has-error' : ''}}">
+                    {!! Form::label('state', 'State: ', ['class' => 'col-sm-3 control-label']) !!}
+                    <div class="col-sm-6">
+                        {!! Form::text('state', $station->city->state, ['class' => 'form-control']) !!}
+                        {!! $errors->first('state', '<p class="help-block">:message</p>') !!}
+                    </div>
+                </div>
+                <div class="form-group {{ $errors->has('zipcode') ? 'has-error' : ''}}">
+                    {!! Form::label('zipcode', 'ZipCode: ', ['class' => 'col-sm-3 control-label']) !!}
+                    <div class="col-sm-6">
+                        {!! Form::text('zipcode', $station->city->zipcode, ['class' => 'form-control']) !!}
+                        {!! $errors->first('zipcode', '<p class="help-block">:message</p>') !!}
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-3">
