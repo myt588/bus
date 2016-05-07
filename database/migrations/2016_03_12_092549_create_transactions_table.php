@@ -15,6 +15,8 @@ class CreateTransactionsTable extends Migration
         
         Schema::create('transactions', function(Blueprint $table) {
             $table->increments('id');
+            $table->integer('company_id')->unsigned();
+            $table->foreign('company_id')->references('id')->on('companies');
             $table->string('confirmation_number');
             $table->decimal('quantity');
             $table->text('description');

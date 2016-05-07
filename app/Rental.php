@@ -51,5 +51,15 @@ class Rental extends Model
     {
         return $this->hasMany('App\Rent');
     }
+    
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function photos()
+    {
+        return $this->morphToMany('App\Photo', 'imageable');
+    }
 
 }

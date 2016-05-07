@@ -109,6 +109,16 @@ class Trip extends Model
     }
 
     /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function photos()
+    {
+        return $this->morphToMany('App\Photo', 'imageable');
+    }
+
+    /**
      * get Company Name
      *
      * @return void
@@ -123,9 +133,15 @@ class Trip extends Model
         return date('h:i', strtotime($this->arrive_at) - strtotime($this->depart_at));
     }
 
+    public function subname()
+    {
+        return 'Depart: ' . $this->depart_at . ' & Arrive: ' . $this->arrive_at;
+    }
+
     public function price()
     {
-        return $this->price * $this->discount;
+        $number = $this->price * $this->discount;
+        return number_format((float)$number, 2, '.', '');
     }
 
     public function ticketsBookedCountOn($date)
@@ -136,6 +152,27 @@ class Trip extends Model
     public function ticketsSoldCountOn($date)
     {
         return $this->tickets()->whereDate('created_at', '=', $date)->count();
+    }
+
+    public function isAvailable($date)
+    {
+        return $this->weekdays & stringToWeekday($date);
+    }
+
+    public function availableDatesBetween($start, $end)
+    {
+        $datediff = abs(strtotime($end) - strtotime($start));
+        $dayCount = floor($datediff/(60*60*24));
+        $dates = collect([]);
+        for ($i = 0; $i <= $dayCount; $i++)
+        {
+            $date = $start . '+ ' . $i . ' days';
+            if ($this->isAvailable($date))
+            {
+                $dates->push(stringToDate($date));
+            }
+        }
+        return $dates;
     }
 
 }

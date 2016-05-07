@@ -62,9 +62,39 @@ class Station extends Model
      *
      * @return void
      **/
+    public function ticketsDepart()
+    {
+        return $this->hasMany('App\Tickets', 'depart_station');
+    }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function ticketsArrive()
+    {
+        return $this->hasMany('App\Tickets', 'arrive_station');
+    }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
     public function city()
     {
         return $this->belongsTo('App\City');
+    }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function photos()
+    {
+        return $this->morphToMany('App\Photo', 'imageable');
     }
 
     public function stationTime() 

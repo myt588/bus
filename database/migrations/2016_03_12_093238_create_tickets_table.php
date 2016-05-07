@@ -20,6 +20,10 @@ class CreateTicketsTable extends Migration
             $table->foreign('transaction_id')->references('id')->on('transactions');
             $table->integer('trip_id')->unsigned();
             $table->foreign('trip_id')->references('id')->on('trips');
+            $table->integer('depart_station')->unsigned();
+            $table->foreign('depart_station')->references('id')->on('stations');
+            $table->integer('arrive_station')->unsigned();
+            $table->foreign('arrive_station')->references('id')->on('stations');
             $table->date('depart_date');
             $table->text('description');
             $table->timestamps();

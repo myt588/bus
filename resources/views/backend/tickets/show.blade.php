@@ -22,7 +22,7 @@
                 <thead>
                     <tr>
                         <th>Trip</th>
-                        <th>Transaction</th>
+                        <th>Confirmation #</th>
                         <th>Buyer Name</th>
                         <th>Passenger Name</th>
                         <th>Actions</th>
@@ -32,7 +32,7 @@
                 @foreach($tickets as $item)
                     <tr>
                         <td>{{ $item->trip->name }}</td>
-                        <td>{{ $item->transaction_id }}</td>
+                        <td>{{ $item->transaction->confirmation_number }}</td>
                         <td><a href="">{{ $item->user->fullName() }}</a></td>
                         <td>{{ $item->description }}</td>
                         <td>

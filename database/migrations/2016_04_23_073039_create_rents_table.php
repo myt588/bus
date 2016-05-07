@@ -15,11 +15,11 @@ class CreateRentsTable extends Migration
         
         Schema::create('rents', function(Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
+            $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->integer('rental_id');
+            $table->integer('rental_id')->unsigned();
             $table->foreign('rental_id')->references('id')->on('rentals');
-            $table->integer('transaction_id')->nullable();
+            $table->integer('transaction_id')->unsigned()->nullable();
             $table->foreign('transaction_id')->references('id')->on('transactions');
             $table->text('description');
             $table->date('start');

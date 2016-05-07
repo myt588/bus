@@ -119,9 +119,13 @@
                 <div class="col-sm-3 bootstrap-timepicker">
                     {!! Form::text('time[]', null, ['class' => 'form-control timepicker', 'disabled']) !!}
                 </div>
-                <div class="col-sm-2 bootstrap-timepicker">
-                    {!! Form::checkbox('departure[]', true) !!} Departure Station
-                    {!! Form::checkbox('departure[]', false) !!} Arrival Station
+                <div class=" col-sm-2">
+
+                        {!! Form::checkbox('departure[]', true) !!} Departure Station
+                        <br/>
+
+                        {!! Form::checkbox('departure[]', false) !!} Arrival Station
+
                 </div>
                 <div class="col-sm-1">
                     <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>

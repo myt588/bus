@@ -82,6 +82,16 @@ class Company extends Model
      *
      * @return void
      **/
+    public function transactions()
+    {
+        return $this->hasMany('App\Transaction');
+    }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
     public function fares()
     {
         return $this->hasMany('App\Fare');
@@ -95,6 +105,48 @@ class Company extends Model
     public function rentals()
     {
         return $this->hasMany('App\Rental');
+    }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function photos()
+    {
+        return $this->morphToMany('App\Photo', 'imageable');
+    }
+
+    public function ticketsCount()
+    {
+        $count = 0;
+        foreach($this->trips as $trip)
+        {
+            $count += $trip->tickets->count();
+        }
+        return $count;
+    }
+
+    public function sales()
+    {
+        $sales = 0;
+        foreach($this->trips as $trip)
+        {
+            $sales += $trip->tickets->count() * $trip->price();
+        }
+        return $sales;
+    }
+
+    public function tripsBetweenDates($start, $end)
+    {
+        $datediff = abs(strtotime($end) - strtotime($start));
+        $dayCount = floor($datediff/(60*60*24));
+        $trips = collect([]);
+        for ($i = 0; $i <= $dayCount; $i++)
+        {
+            $trips->push($this->trips()->where('weekdays', '&', stringToWeekday($start . '+ ' . $i . ' days'))->get());
+        }
+        return $trips;
     }
 
 }

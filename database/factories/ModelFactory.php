@@ -40,8 +40,6 @@ $factory->define(App\Company::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Station::class, function (Faker\Generator $faker) {
     return [
-        'company_id'            => $faker->numberBetween(1, 10),
-        'city_id'               => $faker->numberBetween(1, 10),
         'name' 					=> $faker->name,
         'address' 				=> $faker->streetAddress,
     ];
@@ -67,10 +65,10 @@ function getTo($from){
 
 $factory->define(App\Trip::class, function (Faker\Generator $faker) {
     return [
-        'company_id'            => $faker->numberBetween(1, 10),
-        'from' 					=> $from = $faker->numberBetween(1, 10),
-        'to' 					=> $to = $faker->numberBetween(1, 10),
-        'bus_id'                => $faker->numberBetween(1, 10),
+        'company_id'            => factory(App\Company::class)->create()->id,
+        'from'                  => $from = factory(App\City::class)->create()->id,
+        'to'                    => $to = factory(App\City::class)->create()->id,
+        'bus_id'                => factory(App\Bus::class)->create()->id,
         'rating' 				=> $faker->randomFloat($nbMaxDecimals = 1, $min = 0, $max = 5),
         'depart_at' 			=> $faker->time($format = 'H:i', $max = 'now'),
         'arrive_at' 			=> $faker->time($format = 'H:i', $max = 'now'),
@@ -83,6 +81,7 @@ $factory->define(App\Trip::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Transaction::class, function (Faker\Generator $faker) {
     return [
+        'company_id'            => $faker->numberBetween(1, 10),
         'confirmation_number'   => random('distinct', 8),
         'description'           => $faker->text,
     ];
@@ -90,9 +89,6 @@ $factory->define(App\Transaction::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Ticket::class, function (Faker\Generator $faker) {
     return [
-        'user_id'               => $faker->numberBetween(1, 10),
-        'trip_id'               => $faker->numberBetween(1, 10),
-        'transaction_id'        => $faker->numberBetween(1, 10),
         'description'           => $faker->text,
     ];
 });

@@ -28,7 +28,7 @@ class Ticket extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'trip_id', 'transaction_id', 'description'];
+    protected $fillable = ['user_id', 'trip_id', 'transaction_id', 'description', 'depart_date', 'depart_station', 'arrive_station'];
 
 
     /**
@@ -59,6 +59,26 @@ class Ticket extends Model
     public function transaction()
     {
         return $this->belongsTo('App\Transaction');
+    }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function departStation()
+    {
+        return $this->belongsTo('App\Station', 'depart_station');
+    }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function arriveStation()
+    {
+        return $this->belongsTo('App\Station', 'arrive_station');
     }
 
 

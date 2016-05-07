@@ -10,7 +10,7 @@
                 <a id="back-to-top" href="#" class="animated" data-animation-type="bounce"><i class="soap-icon-longarrow-up circle"></i></a>
             </div>
             <div class="copyright pull-right">
-                <p>&copy; 2014 Travelo</p>
+                <p>&copy; 2016 TriponBus</p>
             </div>
         </div>
     </div>

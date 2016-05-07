@@ -38,7 +38,7 @@
                         @can('admin_full_access')<th>Company</th>@endcan
                         <th>From</th>
                         <th>To</th>
-                        <th>Rating</th>
+                        <th>Price</th>
                         <th>Depart At</th>
                         <th>Arrive At</th>
                         <th>Actions</th>
@@ -50,7 +50,7 @@
                         @can('admin_full_access')<td> {{ $item->company->name }} </td>@endcan
                         <td>{{ $item->fromCity->getCityName() }}</td>
                         <td>{{ $item->toCity->getCityName() }}</td>
-                        <td>{{ $item->rating }}</td>
+                        <td>${{ $item->price() }}</td>
                         <td>{{ $item->depart_at }}</td>
                         <td>{{ $item->arrive_at }}</td>
                         <td>
@@ -76,7 +76,7 @@
                         @can('admin_full_access')<th>Company</th>@endcan
                         <th>From</th>
                         <th>To</th>
-                        <th>Rating</th>
+                        <th>Price</th>
                         <th>Depart At</th>
                         <th>Arrive At</th>
                         <th>Actions</th>

@@ -18,8 +18,14 @@ class CreateUsersTable extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->string('password', 60);
+            $table->string('phone');
             $table->integer('company_id')->nullable()->unsigned();
             $table->foreign('company_id')->references('id')->on('companies');
+            $table->string('stripe_id')->nullable();
+            $table->string('card_brand')->nullable();
+            $table->string('card_last_four')->nullable();
+            $table->timestamp('trial_ends_at')->nullable();
+            $table->string('photo')->default('/images/person-placeholder.jpg');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

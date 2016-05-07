@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Bus;
 
 class RentalsSeeder extends Seeder
 {
@@ -12,21 +11,22 @@ class RentalsSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Bus::class, 100)->create()->each(function($r) {
+        factory(App\Bus::class, 20)->create()->each(function($r) {
             $r->rental()->save(factory(App\Rental::class)->make());
         });
-        // $faker = Faker\Factory::create();
-        // foreach(range(1, 200) as $index)
-        // {
-        //     DB::table('rentals')->insert([
-        // 		'bus_id'                => factory(App\Bus::class)->create(),
-        // 		'company_id'        	=> 1,
-        // 		'description'           => $faker->sentence,
-        //         'created_at'            => $faker->dateTimeBetween($startDate = '-7 days', $endDate = '+7 days'),
-        // 		'one_day'				=> $faker->numberBetween($min = 1000, $max = 2000),
-        // 		'three_days'			=> $faker->numberBetween($min = 3000, $max = 4000),
-        // 		'one_week'				=> $faker->numberBetween($min = 5000, $max = 6000)
-        //     ]);
-        // }
+        
+        $faker = Faker\Factory::create();
+        foreach(range(1, 10) as $index)
+        {
+            DB::table('rents')->insert([
+                'user_id'               => 3,
+                'rental_id'             => $faker->numberBetween(1, 20),
+                'transaction_id'        => $faker->numberBetween(1, 10),
+                'description'           => $faker->name,
+                'start'                 => $faker->dateTimeBetween($startDate = '-7 days', $endDate = '+7 days'),
+                'end'                   => $faker->dateTimeBetween($startDate = '-7 days', $endDate = '+7 days'),
+                'created_at'            => $faker->dateTimeBetween($startDate = '-7 days', $endDate = '+7 days')
+            ]);
+        }
     }
 }

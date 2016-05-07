@@ -71,6 +71,16 @@ class Bus extends Model
         return $this->hasOne('App\Rental');
     }
 
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function photos()
+    {
+        return $this->morphToMany('App\Photo', 'imageable');
+    }
+
     public function features()
     {
         $features = '';

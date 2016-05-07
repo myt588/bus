@@ -1,7 +1,7 @@
 <li {!! set_active('/', 'menu-item-has-children') !!}>
     <a href="{{url('/')}}">Home</a>
 </li>
-<li class="menu-item-has-children">
+<!-- <li class="menu-item-has-children">
     <a href="hotel-index.html">Bus Tickets</a>
 </li>
 <li {!! set_active('rentals', 'menu-item-has-children') !!}>
@@ -12,4 +12,4 @@
 </li>
 <li class="menu-item-has-children">
     <a href="cruise-index.html">Shows</a>
-</li>
+</li> -->

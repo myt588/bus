@@ -115,21 +115,56 @@ class TicketsController extends Controller
             'source' => $request->stripeToken
             ]);
         $transaction = Transaction::create([
+            'company_id'            => Trip::findOrFail($request->trip_one_id)->company->id,
             'quantity'              => $request->totalPrice,
             'confirmation_number'   => random('distinct', 8),
             'description'           => "tickets price",
             ]);
         $amount_depart = $request->adults_depart + $request->kids_depart + 1;
-        $this->createTicket($request->adults_depart, $user->id, $request->trip_one_id, $transaction->id, $data, 'adults_depart');
-        $this->createTicket($request->kids_depart, $user->id, $request->trip_one_id, $transaction->id, $data, 'kids_depart');
+        $this->createTicket($request->adults_depart,
+                            $user->id, 
+                            $request->trip_one_id, 
+                            $transaction->id, 
+                            $data, 
+                            $request->depart,
+                            $request->trip_one_DS, 
+                            $request->trip_one_AS, 
+                            'adults_depart');
+        $this->createTicket($request->kids_depart, 
+                            $user->id, 
+                            $request->trip_one_id, 
+                            $transaction->id, 
+                            $data, 
+                            $request->depart,
+                            $request->trip_one_DS, 
+                            $request->trip_one_AS, 
+                            'kids_depart');
         if (array_key_exists('trip_two_id', $data)){
-            $this->createTicket($request->adults_return, $user->id, $request->trip_two_id, $transaction->id, $data, 'adults_return');
-            $this->createTicket($request->kids_return, $user->id, $request->trip_two_id, $transaction->id, $data, 'kids_return');
+            $this->createTicket(
+                            $request->adults_return,
+                            $user->id, 
+                            $request->trip_two_id, 
+                            $transaction->id, 
+                            $data, 
+                            $request->return,
+                            $request->trip_two_DS, 
+                            $request->trip_two_AS, 
+                            'adults_return');
+            $this->createTicket(
+                            $request->kids_return,
+                            $user->id, 
+                            $request->trip_two_id, 
+                            $transaction->id, 
+                            $data, 
+                            $request->return,
+                            $request->trip_two_DS, 
+                            $request->trip_two_AS, 
+                            'kids_return');
         }
         return redirect()->route('tickets.thankyou', $transaction->id);
     }
 
-    public function createTicket($amount, $user_id, $trip_id, $transaction_id, $data, $name)
+    public function createTicket($amount, $user_id, $trip_id, $transaction_id, $data, $depart_date, $depart_station, $arrive_station, $name)
     {
         for ($i = 1 ; $i < $amount + 1 ; $i ++)
         {
@@ -138,6 +173,9 @@ class TicketsController extends Controller
                 'trip_id'           => $trip_id,
                 'transaction_id'    => $transaction_id,
                 'description'       => $data[$name . '_' . $i],
+                'depart_date'       => stringToDate($depart_date),
+                'depart_station'    => $depart_station,
+                'arrive_station'    => $arrive_station,
                 ]);
         }
     }
@@ -145,6 +183,7 @@ class TicketsController extends Controller
     public function thankyou($id)
     {
         $transaction = Transaction::findOrFail($id);
-        return view('frontend.tickets.thankyou', compact('transaction'));
+        $tickets = $transaction->tickets;
+        return view('frontend.tickets.thankyou', compact('transaction', 'tickets'));
     }
 }

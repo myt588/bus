@@ -51,7 +51,6 @@
             @yield('breadcrumb')
           </ol>
       </section>
-
       <!-- Content -->
       @yield('content')
     </div>

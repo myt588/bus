@@ -5,24 +5,13 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="{{Auth::user()->photo}}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Alexander Pierce</p>
+          <p>{{Auth::user()->company->name}}</p>
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
-      <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-              <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
-      <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
         <li class="header">MAIN NAVIGATION</li>
@@ -38,10 +27,11 @@
             <i class="fa fa-angle-left pull-right"></i>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{route('admin::admin.tickets.index')}}"><i class="fa fa-circle-o"></i> Tickets Report</a></li>
-            <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Rentals Report</a></li>
+            <li><a href="{{route('admin::tickets.bookings')}}"><i class="fa fa-circle-o"></i> Tickets Bookings Report</a></li>
+            <li><a href="{{route('admin::tickets.sales')}}"><i class="fa fa-circle-o"></i> Tickets Sales Report</a></li>
+           <!--  <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Rentals Report</a></li>
             <li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> Tours Report</a></li>
-            <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Customer Reviews</a></li>
+            <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Customer Reviews</a></li> -->
           </ul>
         </li>
         <li {!! set_active(['admin/buses', 'admin/stations', 'admin/trips', 'admin/rentals'], 'treeview') !!}>
@@ -56,24 +46,23 @@
             <li><a href="{{route('admin::admin.stations.index')}}"><i class="fa fa-circle-o"></i> Station</a></li>
             <li><a href="{{route('admin::admin.trips.index')}}"><i class="fa fa-circle-o"></i> Trip</a></li>
             <li><a href="{{route('admin::admin.rentals.index')}}"><i class="fa fa-circle-o"></i> Rental</a></li>
-            <li><a href=""><i class="fa fa-circle-o"></i> Tour</a></li>
+            <!-- <li><a href=""><i class="fa fa-circle-o"></i> Tour</a></li> -->
           </ul>
         </li>
-        <li {!! set_active('', 'treeview') !!}>
+        <li {!! set_active(['settings/profile', 'settings/template', 'settings/format', 'settings/policy'], 'treeview') !!}>
           <a href="#">
             <i class="fa fa-laptop"></i>
             <span>Settings</span>
             <i class="fa fa-angle-left pull-right"></i>
           </a>
           <ul class="treeview-menu">
-            <li><a href="pages/UI/general.html"><i class="fa fa-circle-o"></i> Company Info</a></li>
-            <li><a href="pages/UI/icons.html"><i class="fa fa-circle-o"></i> Confirmation Template</a></li>
-            <li><a href="pages/UI/buttons.html"><i class="fa fa-circle-o"></i> E-ticket Format</a></li>
-            <li><a href="pages/UI/sliders.html"><i class="fa fa-circle-o"></i> Post Order Data</a></li>
-            <li><a href="pages/UI/timeline.html"><i class="fa fa-circle-o"></i> My Policy</a></li>
+            <li><a href="{{route('admin::settings.profile')}}"><i class="fa fa-circle-o"></i> Company Info</a></li>
+            <li><a href="{{route('admin::settings.template')}}"><i class="fa fa-circle-o"></i> Confirmation Template</a></li>
+            <li><a href="{{route('admin::settings.format')}}"><i class="fa fa-circle-o"></i> E-ticket Format</a></li>
+            <li><a href="{{route('admin::settings.policy')}}"><i class="fa fa-circle-o"></i> My Policy</a></li>
           </ul>
         </li>
-        <li {!! set_active('', 'treeview') !!}>
+        <!-- <li {!! set_active('', 'treeview') !!}>
           <a href="#">
             <i class="fa fa-edit"></i> <span>My Programs</span>
             <i class="fa fa-angle-left pull-right"></i>
@@ -92,7 +81,7 @@
             <li><a href="pages/tables/simple.html"><i class="fa fa-circle-o"></i> Add User</a></li>
             <li><a href="pages/tables/data.html"><i class="fa fa-circle-o"></i> Manage Users</a></li>
           </ul>
-        </li>
+        </li> -->
       </ul>
     </section>
     <!-- /.sidebar -->

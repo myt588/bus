@@ -19,7 +19,7 @@ class Transaction extends Model
      *
      * @var array
      */
-    protected $fillable = ['confirmation_number', 'quantity', 'description'];
+    protected $fillable = ['company_id', 'confirmation_number', 'quantity', 'description'];
 
 
      /**
@@ -40,6 +40,16 @@ class Transaction extends Model
     public function rents()
     {
         return $this->hasMany('App\Rent');
+    }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function company()
+    {
+        return $this->belongsTo('App\Company');
     }
 
 }

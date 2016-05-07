@@ -41,7 +41,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'email', 'password'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'password', 'phone'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -78,6 +78,16 @@ class User extends Model implements AuthenticatableContract,
     public function rents()
     {
         return $this->hasMany('App\Rent');
+    }
+
+    /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function photos()
+    {
+        return $this->morphToMany('App\Photo', 'imageable');
     }
 
     public function fullName()

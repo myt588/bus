@@ -51,4 +51,10 @@ class Rent extends Model
     {
         return $this->belongsTo('App\Transaction');
     }
+
+    public function isPast()
+    {
+        $date = $this->depart_date;
+        return (strtotime($date) < time());
+    }
 }

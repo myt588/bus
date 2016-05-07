@@ -108,7 +108,7 @@
                                 </div>
                                 <div class="col-sm-6 col-md-5">
                                     <label>Phone number</label>
-                                    <input name="phone" type="text" class="input-text full-width" value="" placeholder="" />
+                                    <input name="phone" type="text" class="input-text full-width" value="{{ Auth::check() ? Auth::user()->phone : "" }}" placeholder="" />
                                 </div>
                             </div>
                             <div class="form-group">

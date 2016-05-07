@@ -45,6 +45,19 @@
                         <dt>E-mail address:</dt><dd>{{ $transaction->tickets->first()->email() }}</dd>
                     </dl>
                     <hr />
+                    <h2>Tickets</h2>
+                    <div id="car-details">
+                        @foreach($tickets as $item)
+                            @include('frontend.tickets.partials.ticket', [
+                                'trip'      => $item->trip, 
+                                'trip_DS'   => $item->trip->stations->find($item->depart_station), 
+                                'trip_AS'   => $item->trip->stations->find($item->arrive_station), 
+                                'date'      => $item->depart_date, 
+                                'ticket'    => $item,
+                            ])
+                        @endforeach
+                    </div>
+                    <hr />
                     <h2>Payment</h2>
                     <p>Praesent dolor lectus, rutrum sit amet risus vitae, imperdiet cursus neque. Nulla tempor nec lorem eu suscipit. Donec dignissim lectus a nunc molestie consectetur. Nulla eu urna in nisi adipiscing placerat. Nam vel scelerisque magna. Donec justo urna, posuere ut dictum quis.</p>
                     <br />

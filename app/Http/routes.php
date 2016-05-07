@@ -14,7 +14,10 @@
 Route::group(['middleware' => ['web', 'auth', 'admin'], 'namespace' =>'Backend', 'as' => 'admin::', 'prefix' => 'admin'], function()
 {
 	Route::get('dashboard', function () {
-    	return view('backend.dashboard');
+		$company = Auth::user()->company;
+		$trips = $company->tripsBetweenDates('today', 'tomorrow');
+		$orders = $company->transactions;
+    	return view('backend.dashboard', compact('company', 'trips', 'orders'));
 	})->name('dashboard');
 
 	Route::get('reports/tickets/booking', 'ReportsController@ticketsBooking')->name('reports.tickets.booking');
@@ -37,7 +40,9 @@ Route::group(['middleware' => ['web', 'auth', 'admin'], 'namespace' =>'Backend',
 	Route::resource('fares', 'FaresController');
 
 	//Ticket
-	Route::resource('tickets', 'TicketsController');
+	Route::get('tickets/bookings', 'TicketsController@bookings')->name('tickets.bookings');
+	Route::get('tickets/sales', 'TicketsController@sales')->name('tickets.sales');
+	Route::get('tickets/{id}', 'TicketsController@show')->name('tickets.show');
 
 	//Transactions
 	Route::resource('transactions', 'TransactionsController');
@@ -45,13 +50,23 @@ Route::group(['middleware' => ['web', 'auth', 'admin'], 'namespace' =>'Backend',
 	//Rentals
 	Route::resource('rentals', 'RentalsController');
 
+	Route::get('settings/profile', 'SettingsController@profile')->name('settings.profile');
+	Route::post('settings/profile', 'SettingsController@update')->name('settings.update');
+	Route::get('settings/template', 'SettingsController@template')->name('settings.template');
+	Route::get('settings/format', 'SettingsController@template')->name('settings.format');
+	Route::get('settings/policy', 'SettingsController@template')->name('settings.policy');
+
 });
 
 Route::group(['middleware' => 'web'], function () {
 
     Route::auth();
 
-    Route::get('/user/dashboard', 'UsersController@dashboard')->name('users.dashboard')->middleware('auth');
+    Route::get('/user/booking', 'UsersController@booking')->name('user.booking')->middleware('auth');
+    Route::get('/user/profile', 'UsersController@profile')->name('user.profile')->middleware('auth');
+    Route::get('/user/setting', 'UsersController@setting')->name('user.setting')->middleware('auth');
+    Route::get('/user/edit', 'UsersController@edit')->name('user.edit')->middleware('auth');
+    Route::patch('/user/update/', 'UsersController@update')->name('user.update')->middleware('auth');
 
     Route::get('/home', function() {
     	return view('home');

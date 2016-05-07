@@ -19,6 +19,7 @@ class CreateStationTripTable extends Migration
             $table->integer('station_id')->unsigned();
             $table->foreign('station_id')->references('id')->on('stations');
             $table->string('time');
+            $table->boolean('departure')->default(false);
         });
     }
 

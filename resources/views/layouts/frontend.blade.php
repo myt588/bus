@@ -77,11 +77,8 @@
         
         @yield('content')
 
-        @if(Request::path() == '/' )
-            @include('frontend.partials.footer')
-        @else 
-            @include('frontend.partials.footer2')
-        @endif
+        @include('frontend.partials.footer')
+        
         
     </div>
     

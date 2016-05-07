@@ -20,6 +20,11 @@ class CreateBusesTable extends Migration
             $table->string('bus_number');
             $table->string('vehicle_number');
             $table->string('model');
+            $table->string('make');
+            $table->string('type');
+            $table->boolean('wifi')->default(false);
+            $table->boolean('usb')->default(false);
+            $table->boolean('toilet')->default(false);
             $table->integer('year');
             $table->integer('seats');
             $table->timestamps();
