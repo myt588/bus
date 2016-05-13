@@ -19,7 +19,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="/dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
-       folder instead of downloading all of them to reduce the load. -->
+  folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="/dist/css/skins/_all-skins.min.css">
 
   @yield('css')
@@ -32,27 +32,31 @@
   <![endif]-->
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-<div class="wrapper">
+    <div class="wrapper">
 
-    <!-- Header -->
-    @include('backend.partials.header')
-    
-    <!-- Sidebar -->
-    @include('backend.partials.left-sidebar')
+        <!-- Header -->
+        @include('backend.partials.header')
 
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-      <!-- Content Header (Page header) -->
-      <section class="content-header">
-          <h1>
-            @yield('heading')
-          </h1>
-          <ol class="breadcrumb">
-            @yield('breadcrumb')
-          </ol>
-      </section>
-      <!-- Content -->
-      @yield('content')
+        <!-- Sidebar -->
+        @include('backend.partials.left-sidebar')
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    @yield('heading')
+                </h1>
+            <ol class="breadcrumb">
+                @yield('breadcrumb')
+            </ol>
+        </section>
+        <!-- Content -->
+        <section class="content">
+            @include('backend.partials.flash_message')
+            @yield('content')
+        </section>
+
     </div>
 
     <!-- Footer -->

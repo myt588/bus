@@ -34,7 +34,7 @@
             <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Customer Reviews</a></li> -->
           </ul>
         </li>
-        <li {!! set_active(['admin/buses', 'admin/stations', 'admin/trips', 'admin/rentals'], 'treeview') !!}>
+        <li {!! set_active(['admin/buses', 'admin/buses/*', 'admin/stations/*', 'admin/stations', 'admin/trips/*', 'admin/trips', 'admin/rentals', 'admin/rentals'], 'treeview') !!}>
           <a href="#">
             <i class="fa fa-pie-chart"></i>
             <span>Manage Products</span>

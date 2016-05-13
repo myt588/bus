@@ -13,78 +13,75 @@
 
 @section('content')
 
-    <!-- Main content -->
-    <section class="content">
-        <div class="box box-warning"> 
-            <div class="box-body">
+<div class="box box-warning"> 
+    <div class="box-body">
 
-                {!! Form::open(['id' => 'surveyForm', 'url' => 'admin/fares', 'class' => 'form-horizontal']) !!}
+        {!! Form::open(['id' => 'surveyForm', 'url' => 'admin/fares', 'class' => 'form-horizontal']) !!}
 
-                <div class="form-group {{ $errors->has('company_id') ? 'has-error' : '' }} @can('admin') @else hidden @endcan">
-                    {!! Form::label('company_id', 'Company: ', ['class' => 'col-sm-3 control-label']) !!}
-                    <div class="col-sm-6">
-                        @can('admin')
-                        {!! Form::select('company_id', $companies, null, ['class' => 'form-control']) !!}
-                        @else
-                        {!! Form::select('company_id', $companies, Auth::user()->company_id, ['class' => 'form-control']) !!}
-                        @endcan
-                        {!! $errors->first('company_id', '<p class="help-block">:message</p>') !!}
-                    </div>
-                </div>
-                <div class="form-group {{ $errors->has('price') ? 'has-error' : ''}}">
-                    {!! Form::label('price', 'Price: ', ['class' => 'col-sm-3 control-label']) !!}
-                    <div class="col-sm-6">
-                        {!! Form::number('price', null, ['class' => 'form-control price', 'step' => '0.01', 'min' => '0']) !!}
-                        {!! $errors->first('price', '<p class="help-block">:message</p>') !!}
-                    </div>
-                </div>
-                <div class="form-group {{ $errors->has('discount') ? 'has-error' : ''}}">
-                    {!! Form::label('discount', 'Discount: ', ['class' => 'col-sm-3 control-label']) !!}
-                    <div class="col-sm-6">
-                        {!! Form::number('discount', null, ['class' => 'form-control discount', 'step' => '0.01', 'min' => '0', 'max' => '1']) !!}
-                        {!! $errors->first('discount', '<p class="help-block">:message</p>') !!}
-                    </div>
-                </div>
-                <div class="form-group {{ $errors->has('trip') ? 'has-error' : ''}}">
-                    <label class="col-sm-3 control-label">Trip:</label>
-                    <div class="col-sm-6">
-                        {!! Form::select('trip_id[]', $trips, null, ['class' => 'form-control']) !!}
-                        {!! $errors->first('trip_id[]', '<p class="help-block">:message</p>') !!}
-                    </div>
-                    <div class="col-sm-1">
-                        <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
-                    </div>
-                </div>
-                <!-- The option field template containing an option field and a Remove button -->
-                <div class="form-group hide" id="optionTemplate">
-                    <div class="col-sm-offset-3 col-sm-6">
-                        {!! Form::select('trip_id[]', $trips, null, ['class' => 'form-control', 'disabled']) !!}
-                        {!! $errors->first('trip_id[]', '<p class="help-block">:message</p>') !!}
-                    </div>
-                    <div class="col-sm-1">
-                        <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
-                    </div>
-                </div>
-
-                <div class="form-group {{ $errors->has('discount') ? 'has-error' : ''}}">
-                    {!! Form::label('final_price', 'Final Price: ', ['class' => 'col-sm-3 control-label']) !!}
-                    <div class="col-sm-6">
-                        {!! Form::number('final_price', null, ['class' => 'form-control final_price', 'readonly']) !!}
-                        {!! $errors->first('final_price', '<p class="help-block">:message</p>') !!}
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-sm-offset-3 col-sm-3">
-                        {!! Form::submit('Create', ['class' => 'btn btn-primary form-control']) !!}
-                    </div>
-                </div>
-
-                {!! Form::close() !!}
-
+        <div class="form-group {{ $errors->has('company_id') ? 'has-error' : '' }} @can('admin') @else hidden @endcan">
+            {!! Form::label('company_id', 'Company: ', ['class' => 'col-sm-3 control-label']) !!}
+            <div class="col-sm-6">
+                @can('admin')
+                {!! Form::select('company_id', $companies, null, ['class' => 'form-control']) !!}
+                @else
+                {!! Form::select('company_id', $companies, Auth::user()->company_id, ['class' => 'form-control']) !!}
+                @endcan
+                {!! $errors->first('company_id', '<p class="help-block">:message</p>') !!}
             </div>
         </div>
-    </section>
+        <div class="form-group {{ $errors->has('price') ? 'has-error' : ''}}">
+            {!! Form::label('price', 'Price: ', ['class' => 'col-sm-3 control-label']) !!}
+            <div class="col-sm-6">
+                {!! Form::number('price', null, ['class' => 'form-control price', 'step' => '0.01', 'min' => '0']) !!}
+                {!! $errors->first('price', '<p class="help-block">:message</p>') !!}
+            </div>
+        </div>
+        <div class="form-group {{ $errors->has('discount') ? 'has-error' : ''}}">
+            {!! Form::label('discount', 'Discount: ', ['class' => 'col-sm-3 control-label']) !!}
+            <div class="col-sm-6">
+                {!! Form::number('discount', null, ['class' => 'form-control discount', 'step' => '0.01', 'min' => '0', 'max' => '1']) !!}
+                {!! $errors->first('discount', '<p class="help-block">:message</p>') !!}
+            </div>
+        </div>
+        <div class="form-group {{ $errors->has('trip') ? 'has-error' : ''}}">
+            <label class="col-sm-3 control-label">Trip:</label>
+            <div class="col-sm-6">
+                {!! Form::select('trip_id[]', $trips, null, ['class' => 'form-control']) !!}
+                {!! $errors->first('trip_id[]', '<p class="help-block">:message</p>') !!}
+            </div>
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
+            </div>
+        </div>
+        <!-- The option field template containing an option field and a Remove button -->
+        <div class="form-group hide" id="optionTemplate">
+            <div class="col-sm-offset-3 col-sm-6">
+                {!! Form::select('trip_id[]', $trips, null, ['class' => 'form-control', 'disabled']) !!}
+                {!! $errors->first('trip_id[]', '<p class="help-block">:message</p>') !!}
+            </div>
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
+            </div>
+        </div>
+
+        <div class="form-group {{ $errors->has('discount') ? 'has-error' : ''}}">
+            {!! Form::label('final_price', 'Final Price: ', ['class' => 'col-sm-3 control-label']) !!}
+            <div class="col-sm-6">
+                {!! Form::number('final_price', null, ['class' => 'form-control final_price', 'readonly']) !!}
+                {!! $errors->first('final_price', '<p class="help-block">:message</p>') !!}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-3">
+                {!! Form::submit('Create', ['class' => 'btn btn-primary form-control']) !!}
+            </div>
+        </div>
+
+        {!! Form::close() !!}
+
+    </div>
+</div>
 
 @endsection
 

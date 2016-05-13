@@ -93,8 +93,15 @@ return [
 
     'custom' => [
         'return' => [
-            'after_equal' => 'Return date needs to be after depart date',
+            'after_equal'   => 'Return date needs to be after depart date',
         ],
+        'depart_stops.*' => [
+            'same_city'     => 'The City of the :attribute must be the same as Departure City'    
+        ],
+        'arrive_stops.*' => [
+            'same_city'     => 'The City of the :attribute must be the same as Destination City'    
+        ]
+
     ],
 
     /*

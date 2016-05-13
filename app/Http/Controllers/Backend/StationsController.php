@@ -11,12 +11,16 @@ use App\City;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Session;
-use Auth;
 use App\Http\Requests\StationRequest;
 
 class StationsController extends Controller
 {
 
+    function __construct()
+    {
+        $this->user = auth()->user();
+        // $this->middleware('auth', ['only' => ['store', 'destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -24,12 +28,11 @@ class StationsController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        if ($user->isAdmin())
+        if ($this->user->isAdmin()) 
         {
             $stations = Station::all();
         } else {
-            $stations = Company::findOrFail($user->company_id)->stations;
+            $stations = $this->user->company->stations;
         }
         return view('backend.stations.index', compact('stations'));
     }
@@ -52,13 +55,33 @@ class StationsController extends Controller
      */
     public function store(StationRequest $request)
     {
-        $city = City::create($request->all());
+        $city = $this->createOrChooseCity($request->city, $request->state, $request->zipcode);
         $data = $request->all();
         $data['city_id'] = $city->id;
         Station::create($data);
-        Session::flash('flash_message', 'Station added!');
-
+        Session::flash('success', 'Station added!');
         return redirect('admin/stations');
+    }
+
+    /**
+     * Create a City Model if the city name doesn't exist
+     * Else Choose the existed one
+     *
+     * @param $city, $state, $zipcode
+     * @return $city
+     * @author 
+     **/
+    public function createOrChooseCity($city, $state, $zipcode)
+    {
+        $city_state = City::where('city', '=', $city)
+                    ->where('state', '=', $state)
+                    ->first();
+        if (empty($city_state))
+        {
+            $data = compact('city', 'state', 'zipcode');
+            return City::create($data);
+        }
+        return $city_state;
     }
 
     /**
@@ -71,7 +94,6 @@ class StationsController extends Controller
     public function show($id)
     {
         $station = Station::findOrFail($id);
-
         return view('backend.stations.show', compact('station'));
     }
 
@@ -86,7 +108,6 @@ class StationsController extends Controller
     {
         $companies = Company::lists('name', 'id');
         $station = Station::findOrFail($id);
-
         return view('backend.stations.edit', compact('station', 'companies'));
     }
 
@@ -99,12 +120,12 @@ class StationsController extends Controller
      */
     public function update($id, StationRequest $request)
     {
-        
+        $city = $this->createOrChooseCity($request->city, $request->state, $request->zipcode);
         $station = Station::findOrFail($id);
-        $station->update($request->all());
-
-        Session::flash('flash_message', 'Station updated!');
-
+        $data = $request->all();
+        $data['city_id'] = $city->id;
+        $station->update($data);
+        Session::flash('success', 'Station updated!');
         return redirect('admin/stations');
     }
 
@@ -117,10 +138,13 @@ class StationsController extends Controller
      */
     public function destroy($id)
     {
+        if (Station::findOrFail($id)->getLinkedItems())
+        {
+            Session::flash('danger', 'There is a trip linked with this station. Please unlink thoese connections by choosing another station for that trip first before deleting this record!');
+            return redirect()->back();
+        }
         Station::destroy($id);
-
-        Session::flash('flash_message', 'Station deleted!');
-
+        Session::flash('success', 'Station deleted!');
         return redirect('admin/stations');
     }
 

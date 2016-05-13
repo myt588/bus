@@ -22,51 +22,49 @@
 @endsection
 
 @section('content')
-<!-- Main content -->
-<section class="content">
-    <div class="row">
-        <div class="col-md-9">
-            @include('backend.partials.tickets-report-box')
-        </div>
-        <div class="col-md-3">
-            <div class="box box-danger">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Filters</h3>
-                </div>
-                <div class="box-body">
-                  <!-- Date dd/mm/yyyy -->
-                    <div class="form-group">
-                        <label>Start Date:</label>
-                        <div class="input-group">
-                            <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
-                            </div>
-                            <input id="start_date" type="text" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask="">
-                        </div>
-                        <!-- /.input group -->
-                    </div>
-                    <!-- /.form group -->
 
-                      <!-- Date mm/dd/yyyy -->
-                    <div class="form-group">
-                        <label>End Date:</label>
-                        <div class="input-group">
-                            <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
-                            </div>
-                            <input id="end_date" type="text" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask="">
+<div class="row">
+    <div class="col-md-9">
+        @include('backend.partials.tickets-report-box')
+    </div>
+    <div class="col-md-3">
+        <div class="box box-danger">
+            <div class="box-header with-border">
+                <h3 class="box-title">Filters</h3>
+            </div>
+            <div class="box-body">
+              <!-- Date dd/mm/yyyy -->
+                <div class="form-group">
+                    <label>Start Date:</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
                         </div>
-                        <!-- /.input group -->
+                        <input id="start_date" type="text" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask="">
                     </div>
-                    <!-- /.form group -->
+                    <!-- /.input group -->
                 </div>
-                <div class="box-footer">
-                    <button id="search" type="submit" class="btn btn-primary">Search</button>
+                <!-- /.form group -->
+
+                  <!-- Date mm/dd/yyyy -->
+                <div class="form-group">
+                    <label>End Date:</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <input id="end_date" type="text" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask="">
+                    </div>
+                    <!-- /.input group -->
                 </div>
+                <!-- /.form group -->
+            </div>
+            <div class="box-footer">
+                <button id="search" type="submit" class="btn btn-primary">Search</button>
             </div>
         </div>
-    </div>  
-</section>
+    </div>
+</div>  
 
 @endsection
 

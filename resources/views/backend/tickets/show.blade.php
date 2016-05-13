@@ -15,45 +15,45 @@
 @endsection
 
 @section('content')
-<section class="content">
-    <div class="box">
-        <div class="box-body">
-            <table id="example1" class="table table-bordered table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>Trip</th>
-                        <th>Confirmation #</th>
-                        <th>Buyer Name</th>
-                        <th>Passenger Name</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @foreach($tickets as $item)
-                    <tr>
-                        <td>{{ $item->trip->name }}</td>
-                        <td>{{ $item->transaction->confirmation_number }}</td>
-                        <td><a href="">{{ $item->user->fullName() }}</a></td>
-                        <td>{{ $item->description }}</td>
-                        <td>
-                            <a class="btn btn-primary btn-xs" href="{{ url('admin/tickets/' . $item->id . '/edit') }}">
-                               Update
-                            </a> /
-                            {!! Form::open([
-                                'method'=>'DELETE',
-                                'url' => ['admin/tickets', $item->id],
-                                'style' => 'display:inline'
-                            ]) !!}
-                                {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs']) !!}
-                            {!! Form::close() !!}
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>  
-            </table>
-        </div>
+
+<div class="box">
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Trip</th>
+                    <th>Confirmation #</th>
+                    <th>Buyer Name</th>
+                    <th>Passenger Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach($tickets as $item)
+                <tr>
+                    <td>{{ $item->trip->name }}</td>
+                    <td>{{ $item->transaction->confirmation_number }}</td>
+                    <td><a href="">{{ $item->user->fullName() }}</a></td>
+                    <td>{{ $item->description }}</td>
+                    <td>
+                        <a class="btn btn-primary btn-xs" href="{{ url('admin/tickets/' . $item->id . '/edit') }}">
+                           Update
+                        </a> /
+                        {!! Form::open([
+                            'method'=>'DELETE',
+                            'url' => ['admin/tickets', $item->id],
+                            'style' => 'display:inline'
+                        ]) !!}
+                            {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs']) !!}
+                        {!! Form::close() !!}
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>  
+        </table>
     </div>
-</section>
+</div>
+
 
 @endsection
 

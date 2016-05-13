@@ -28,7 +28,7 @@ class Station extends Model
      *
      * @var array
      */
-    protected $fillable = ['company_id', 'city_id', 'name', 'address'];
+    protected $fillable = ['company_id', 'city_id', 'name', 'address', 'lat', 'lng'];
  
     /**
      * The attributes excluded from the model's JSON form.
@@ -105,5 +105,19 @@ class Station extends Model
     public function fullAddress()
     {
         return $this->address . ', ' . $this->city->city . ', ' . $this->city->state;
+    }
+
+    /**
+     * Check if there is trip linked to this station
+     *
+     * @return Boolean
+     */
+    public function getLinkedItems()
+    {
+        if ($this->trips->count() != 0)
+        {
+            return true;
+        } 
+        return false;
     }
 }

@@ -37,6 +37,7 @@
                     {!! Form::number('trip_two_AS', $data['trip_two_DS'], ['hidden']) !!}
                     {!! Form::text('adults_return', $data['adults_return'], ['hidden']) !!}
                     {!! Form::text('kids_return', $data['kids_return'], ['hidden']) !!}
+                    {!! Form::text('return', $data['return'], ['hidden']) !!}
                     @endif
                     {!! Form::number('trip_one_id', $data['trip_one_id'], ['hidden']) !!}
                     {!! Form::number('trip_one_DS', $data['trip_one_DS'], ['hidden']) !!}

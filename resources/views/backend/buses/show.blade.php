@@ -11,38 +11,34 @@
 @endsection
 
 @section('content')
-<section class="content">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="box box-solid">
-                <div class="box-header with-border">
-                    <i class="fa fa-text-width"></i>
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <i class="fa fa-text-width"></i>
 
-                    <h3 class="box-title">{{ $bus->bus_number }}</h3>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <dl class="dl-horizontal">
-                        <dt>License Plate</dt>
-                        <dd>{{ $bus->license_plate }}</dd>
-                        <dt>Make</dt>
-                        <dd>{{ $bus->make }}</dd>
-                        <dt>Model</dt>
-                        <dd>{{ $bus->model }}</dd>
-                        <dt>Year</dt>
-                        <dd>{{ $bus->year }}</dd>
-                        <dt># of Seats</dt>
-                        <dd>{{ $bus->seats }}</dd>
-                        <dt>Features</dt>
-                        <dd>{{ $bus->features() }}</dd>
-                    </dl>
-                </div>
-                <!-- /.box-body -->
+                <h3 class="box-title">{{ $bus->bus_number }}</h3>
             </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <dl class="dl-horizontal">
+                    <dt>License Plate</dt>
+                    <dd>{{ $bus->license_plate }}</dd>
+                    <dt>Make</dt>
+                    <dd>{{ $bus->make }}</dd>
+                    <dt>Model</dt>
+                    <dd>{{ $bus->model }}</dd>
+                    <dt>Year</dt>
+                    <dd>{{ $bus->year }}</dd>
+                    <dt># of Seats</dt>
+                    <dd>{{ $bus->seats }}</dd>
+                    <dt>Features</dt>
+                    <dd>{{ $bus->features() }}</dd>
+                </dl>
+            </div>
+            <!-- /.box-body -->
         </div>
     </div>
+</div>
     
-</section>
-   
-
 @endsection

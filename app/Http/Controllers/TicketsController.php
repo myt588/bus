@@ -120,7 +120,6 @@ class TicketsController extends Controller
             'confirmation_number'   => random('distinct', 8),
             'description'           => "tickets price",
             ]);
-        $amount_depart = $request->adults_depart + $request->kids_depart + 1;
         $this->createTicket($request->adults_depart,
                             $user->id, 
                             $request->trip_one_id, 
@@ -140,6 +139,7 @@ class TicketsController extends Controller
                             $request->trip_one_AS, 
                             'kids_depart');
         if (array_key_exists('trip_two_id', $data)){
+            dd($request->return);
             $this->createTicket(
                             $request->adults_return,
                             $user->id, 

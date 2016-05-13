@@ -20,6 +20,8 @@ class CreateStationsTable extends Migration
             $table->foreign('city_id')->references('id')->on('cities');
             $table->string('name');
             $table->string('address');
+            $table->string('lat');
+            $table->string('lng');
             $table->timestamps();
             $table->softDeletes();
         });

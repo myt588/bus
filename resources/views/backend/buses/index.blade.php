@@ -27,68 +27,65 @@
 @endsection
 
 @section('content')
-<!-- Main content -->
-<section class="content">
-    <div class="box">
-        <!-- /.box-header -->
-        <div class="box-body">
-            <table id="example1" class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        @can('admin_full_access')<th>Company</th>@endcan
-                        <th>Bus Number</th>
-                        <th>License Plate</th>
-                        <th>Make</th>
-                        <th>Model</th>
-                        <th>Year</th>
-                        <th># of Seats</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @foreach($buses as $item)
-                    <tr>
-                        @can('admin_full_access')<td>{{ App\Company::find($item->company_id)->name }}@endcan
-                        <td>{{ $item->bus_number }}</td>
-                        <td>{{ $item->license_plate }}</td>
-                        <td>{{ $item->make }}</td>
-                        <td>{{ $item->model }}</td>
-                        <td>{{ $item->year }}</td>
-                        <td>{{ $item->seats }}</td>
-                        <td>
-                            <a class="btn btn-info btn-xs" href="{{ url('admin/buses/' . $item->id) }}">
-                               Details
-                            </a> /
-                            <a class="btn btn-primary btn-xs" href="{{ url('admin/buses/' . $item->id . '/edit') }}">
-                               Update
-                            </a> /
-                            {!! Form::open([
-                                'method'=>'DELETE',
-                                'url' => ['admin/buses', $item->id],
-                                'style' => 'display:inline'
-                            ]) !!}
-                                {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs']) !!}
-                            {!! Form::close() !!}
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-                <thead>
-                    <tr>
-                        @can('admin_full_access')<th>Company</th>@endcan
-                        <th>Bus Number</th>
-                        <th>License Plate</th>
-                        <th>Make</th>
-                        <th>Model</th>
-                        <th>Year</th>
-                        <th># of Seats</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
+<div class="box">
+    <!-- /.box-header -->
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    @can('admin_full_access')<th>Company</th>@endcan
+                    <th>Bus Number</th>
+                    <th>License Plate</th>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>Year</th>
+                    <th># of Seats</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach($buses as $item)
+                <tr>
+                    @can('admin_full_access')<td>{{ App\Company::find($item->company_id)->name }}@endcan
+                    <td>{{ $item->bus_number }}</td>
+                    <td>{{ $item->license_plate }}</td>
+                    <td>{{ $item->make }}</td>
+                    <td>{{ $item->model }}</td>
+                    <td>{{ $item->year }}</td>
+                    <td>{{ $item->seats }}</td>
+                    <td>
+                        <a class="btn btn-info btn-xs" href="{{ url('admin/buses/' . $item->id) }}">
+                           Details
+                        </a> /
+                        <a class="btn btn-primary btn-xs" href="{{ url('admin/buses/' . $item->id . '/edit') }}">
+                           Update
+                        </a> /
+                        {!! Form::open([
+                            'method'=>'DELETE',
+                            'url' => ['admin/buses', $item->id],
+                            'style' => 'display:inline'
+                        ]) !!}
+                            {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs']) !!}
+                        {!! Form::close() !!}
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+            <thead>
+                <tr>
+                    @can('admin_full_access')<th>Company</th>@endcan
+                    <th>Bus Number</th>
+                    <th>License Plate</th>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>Year</th>
+                    <th># of Seats</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+        </table>
     </div>
-</section>
+</div>
 
 @endsection
 

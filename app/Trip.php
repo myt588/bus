@@ -29,7 +29,19 @@ class Trip extends Model
      *
      * @var array
      */
-    protected $fillable = ['company_id', 'from', 'to', 'bus_id', 'rating', 'depart_at', 'arrive_at', 'name', 'price', 'discount', 'weekdays'];
+    protected $fillable = [
+        'company_id', 
+        'from', 
+        'to', 
+        'bus_id', 
+        'rating', 
+        'depart_at', 
+        'arrive_at', 
+        'name', 
+        'price', 
+        'discount', 
+        'weekdays'
+        ];
     
     /**
      * The attributes excluded from the model's JSON form.
@@ -173,6 +185,43 @@ class Trip extends Model
             }
         }
         return $dates;
+    }
+
+    /**
+     * Handling the many to many relationship between stations and trips
+     *
+     * @param Station $stops, $times, Boolean $departure
+     * @return void
+     * @author 
+     */
+    public function stationHandler($stops, $times, $departure)
+    {
+        for ($i=0; $i<count($stops); $i++) {
+            $this->stations()
+                 ->attach($stops[$i], ['time' => $times[$i], 'departure' => $departure]);
+        }
+    }
+
+    /**
+     * Get all the stations belong to one trip, organize them into two collections
+     *
+     * @param none
+     * @return void
+     * @author 
+     */
+    public function getStationsPivotData(&$depart_stops, &$arrive_stops)
+    {
+        $depart_stops = collect([]);
+        $arrive_stops = collect([]);
+        foreach ($this->stations as $item)
+        {
+            if($item->pivot->departure)
+            {
+                $depart_stops->push(['stop' => $item->id, 'time' => $item->pivot->time]);
+            } else {
+                $arrive_stops->push(['stop' => $item->id, 'time' => $item->pivot->time]);
+            }
+        }
     }
 
 }

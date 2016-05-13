@@ -11,6 +11,7 @@ use App\Station;
 use App\Company;
 use App\City;
 use Illuminate\Http\Request;
+use App\Http\Requests\TripCreateRequest;
 use Carbon\Carbon;
 use Session;
 use Auth;
@@ -38,19 +39,19 @@ class TripsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return View
      */
     public function create()
     {
-        $user = Auth::user();
+        $user = Auth::user(); 
         if ($user->isAdmin())
         {
             $buses = Bus::lists('bus_number', 'id');
             $stations = Station::lists('name', 'id');
             $cities = $this->cityName(City::lists('city', 'state'));
         } else {
-            $buses = Company::findOrFail($user->company_id)->buses()->lists('bus_number', 'id');
-            $stations = Company::findOrFail($user->company_id)->stations()->lists('name', 'id');
+            $buses = $user->company->buses()->lists('bus_number', 'id');
+            $stations = $user->company->stations()->lists('name', 'id');
             $cities = $this->cityName(City::lists('city', 'state'));
         }
         $companies = Company::lists('name', 'id');
@@ -73,23 +74,16 @@ class TripsController extends Controller
      *
      * @return Response
      */
-    public function store(Request $request)
+    public function store(TripCreateRequest $request)
     {
         $data = $request->all();
-
         $data['weekdays'] = $this->weekdaysCal($data['weekdays']);
         $trip = Trip::create($data);
         $trip->name = $trip->fromCity->getCityName() . ' to ' . $trip->toCity->getCityName();
         $trip->save();
-        if (array_key_exists('stop', $data)) {
-            for ($i=0; $i<count($data['stop']); $i++) {
-                $departure = $data['departure'][$i] ? 1 : 0;
-                $trip->stations()->attach($data['stop'][$i], ['time' => $data['time'][$i], 
-                                                              'departure' => $departure]);
-            }
-        }   
-        Session::flash('flash_message', 'Trip added!');
-
+        $trip->stationHandler($data['depart_stops'], $data['depart_times'], true);
+        $trip->stationHandler($data['arrive_stops'], $data['arrive_times'], false);  
+        Session::flash('success', 'Trip added!');
         return redirect('admin/trips');
     }
 
@@ -126,25 +120,21 @@ class TripsController extends Controller
     public function edit($id)
     {
         $trip = Trip::findOrFail($id);
-        $user = Auth::user();
+        $user = Auth::user(); 
         if ($user->isAdmin())
         {
             $buses = Bus::lists('bus_number', 'id');
             $stations = Station::lists('name', 'id');
+            $cities = $this->cityName(City::lists('city', 'state'));
         } else {
-            $buses = Company::findOrFail($user->company_id)->buses()->lists('bus_number', 'id');
-            $stations = Company::findOrFail($user->company_id)->stations()->lists('name', 'id');
+            $buses = $user->company->buses()->lists('bus_number', 'id');
+            $stations = $user->company->stations()->lists('name', 'id');
+            $cities = $this->cityName(City::lists('city', 'state'));
         }
         $companies = Company::lists('name', 'id');
-        $stop = [];
-        $time = [];
-        $departure = [];
-        foreach ($trip->stations as $item) {
-            array_push($stop, $item->id);
-            array_push($time, $item->pivot->time);
-            array_push($departure, $item->pivot->departure);
-        }
-        return view('backend.trips.edit', compact('buses', 'stations', 'companies', 'trip', 'stop', 'time', 'departure'));
+        $trip->getStationsPivotData($depart_stops, $arrive_stops);
+        return view('backend.trips.edit', 
+            compact('buses', 'stations', 'companies', 'cities', 'depart_stops', 'arrive_stops', 'trip'));
     }
 
     /**
@@ -154,22 +144,18 @@ class TripsController extends Controller
      *
      * @return Response
      */
-    public function update($id, Request $request)
+    public function update($id, TripCreateRequest $request)
     {
-        
-        $trip = Trip::findOrFail($id);
         $data = $request->all();
+        $data['weekdays'] = $this->weekdaysCal($data['weekdays']);
+        $trip = Trip::findOrFail($id);
         $trip->update($data);
-        $trip->buses()->sync([$data['bus_id']]);
-        $stops = [];
-        if (array_key_exists('stop', $data)) {
-            for ($i=0; $i<count($data['stop']); $i++) {
-                $stops[$data['stop'][$i]] = ['time' => $data['time'][$i]];
-            }
-            $trip->stations()->sync($stops);
-        } 
-        Session::flash('flash_message', 'Trip updated!');
-
+        $trip->name = $trip->fromCity->getCityName() . ' to ' . $trip->toCity->getCityName();
+        $trip->save();
+        $trip->stations()->detach();
+        $trip->stationHandler($data['depart_stops'], $data['depart_times'], true);
+        $trip->stationHandler($data['arrive_stops'], $data['arrive_times'], false);  
+        Session::flash('success', 'Trip updated!');
         return redirect('admin/trips');
     }
 
@@ -183,9 +169,7 @@ class TripsController extends Controller
     public function destroy($id)
     {
         Trip::destroy($id);
-
-        Session::flash('flash_message', 'Trip deleted!');
-
+        Session::flash('success', 'Trip deleted!');
         return redirect('admin/trips');
     }
 

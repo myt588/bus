@@ -56,7 +56,7 @@ class BusesController extends Controller
             'bus_number'        => 'required|unique:buses,bus_number',
             ]);
         Bus::create($data);
-        Session::flash('flash_message', 'Bus added!');
+        Session::flash('success', 'Bus added!');
         return redirect('admin/buses');
     }
 
@@ -100,7 +100,7 @@ class BusesController extends Controller
         $bus = Bus::findOrFail($id);
         $data = $request->all();
         $bus->update($data);
-        Session::flash('flash_message', 'Bus updated!');
+        Session::flash('success', 'Bus updated!');
         return redirect('admin/buses');
     }
 
@@ -113,10 +113,14 @@ class BusesController extends Controller
      */
     public function destroy($id)
     {
+        // there is linked item
+        if (Bus::findOrFail($id)->getLinkedItems())
+        {
+            Session::flash('danger', 'There is a trip/rental linked with this bus. Please unlink thoese connections by choosing another bus for that trip/rental first before deleting this bus record!');
+            return redirect()->back();
+        }
         Bus::destroy($id);
-
-        Session::flash('flash_message', 'Bus deleted!');
-
+        Session::flash('success', 'Bus deleted!');
         return redirect('admin/buses');
     }
 

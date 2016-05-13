@@ -30,7 +30,17 @@ class Bus extends Model
      * @var array
      */
     protected $fillable = [
-    'company_id', 'license_plate', 'bus_number', 'vehicle_number', 'make', 'model', 'year', 'seats', 'wifi', 'usb', 'toilet'
+        'company_id', 
+        'license_plate', 
+        'bus_number', 
+        'vehicle_number', 
+        'make', 
+        'model', 
+        'year', 
+        'seats', 
+        'wifi', 
+        'usb', 
+        'toilet'
     ];
 
     /**
@@ -43,8 +53,8 @@ class Bus extends Model
     /**
      * DB Relation Function
      *
-     * @return void
-     **/
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
 
     public function company()
     {
@@ -54,8 +64,8 @@ class Bus extends Model
     /**
      * DB Relation Function
      *
-     * @return void
-     **/
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function trips()
     {
         return $this->hasMany('App\Trip');
@@ -64,8 +74,8 @@ class Bus extends Model
     /**
      * DB Relation Function
      *
-     * @return void
-     **/
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function rental()
     {
         return $this->hasOne('App\Rental');
@@ -74,8 +84,8 @@ class Bus extends Model
     /**
      * DB Relation Function
      *
-     * @return void
-     **/
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function photos()
     {
         return $this->morphToMany('App\Photo', 'imageable');
@@ -102,6 +112,20 @@ class Bus extends Model
     public function makeModel()
     {
         return $this->make . ' ' . $this->model;
+    }
+
+    /**
+     * Check if there is rental or trip linked to this bus
+     *
+     * @return Boolean
+     */
+    public function getLinkedItems()
+    {
+        if ($this->trips->count() != 0 || $this->rental)
+        {
+            return true;
+        } 
+        return false;
     }
 
 }
