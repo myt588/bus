@@ -94,14 +94,24 @@ class Station extends Model
      **/
     public function photos()
     {
-        return $this->morphToMany('App\Photo', 'imageable');
+        return $this->morphMany('App\Photo', 'imageable');
     }
 
+    /**
+     * get the time that bus stops by this station
+     *
+     * @return string
+     */
     public function stationTime() 
     {
         return date('h:i a', strtotime($this->pivot->time));
     }
 
+    /**
+     * get the full address of the station
+     *
+     * @return String
+     */
     public function fullAddress()
     {
         return $this->address . ', ' . $this->city->city . ', ' . $this->city->state;

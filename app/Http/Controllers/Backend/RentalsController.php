@@ -47,11 +47,8 @@ class RentalsController extends Controller
      */
     public function store(RentalRequest $request)
     {
-        
         Rental::create($request->all());
-
-        Session::flash('flash_message', 'Rental added!');
-
+        Session::flash('success', 'Rental added!');
         return redirect('admin/rentals');
     }
 
@@ -65,7 +62,6 @@ class RentalsController extends Controller
     public function show($id)
     {
         $rental = Rental::findOrFail($id);
-
         return view('backend.rentals.show', compact('rental'));
     }
 
@@ -78,9 +74,10 @@ class RentalsController extends Controller
      */
     public function edit($id)
     {
+        $companies = Company::lists('name', 'id');
+        $buses = Auth::user()->isAdmin() ? Bus::lists('bus_number', 'id') : Auth::user()->company->buses->lists('bus_number', 'id');
         $rental = Rental::findOrFail($id);
-
-        return view('backend.rentals.edit', compact('rental'));
+        return view('backend.rentals.edit', compact('rental', 'companies', 'buses'));
     }
 
     /**
@@ -92,12 +89,9 @@ class RentalsController extends Controller
      */
     public function update($id, RentalRequest $request)
     {
-        
         $rental = Rental::findOrFail($id);
         $rental->update($request->all());
-
-        Session::flash('flash_message', 'Rental updated!');
-
+        Session::flash('success', 'Rental updated!');
         return redirect('admin/rentals');
     }
 
@@ -115,6 +109,23 @@ class RentalsController extends Controller
         Session::flash('flash_message', 'Rental deleted!');
 
         return redirect('admin/rentals');
+    }
+
+    /**
+     * Activiate a trip
+     *
+     * @return Redirect
+     * @author me
+     **/
+    public function active($id)
+    {
+        if(Rental::findOrFail($id)->setActiveState())
+        {
+            Session::flash('success', 'Rental is activiated');
+        } else {
+            Session::flash('danger', 'Rental is deactiviated');
+        }
+        return back();
     }
 
 }

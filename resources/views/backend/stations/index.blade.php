@@ -53,11 +53,8 @@
                     <td>{{ $item->city->state}}</td>
                     <td>{{ $item->city->zipcode}}</td>
                     <td>
-                        <a class="btn btn-info btn-xs" href="{{ url('admin/stations/' . $item->id) }}">
-                           Details
-                        </a> /
                         <a class="btn btn-primary btn-xs" href="{{ url('admin/stations/' . $item->id . '/edit') }}">
-                           Update
+                           Details
                         </a> /
                         {!! Form::open([
                             'method'=>'DELETE',

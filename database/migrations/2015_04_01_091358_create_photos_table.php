@@ -15,10 +15,11 @@ class CreatePhotosTable extends Migration {
 		Schema::create('photos', function(Blueprint $table)
 		{
 			$table->increments('id');
-            $table->string('owner_type');
-            $table->integer('owner_id');
+            $table->string('imageable_type');
+            $table->integer('imageable_id');
 			$table->string('title');
 			$table->string('url');
+			$table->string('thumbnail_url');
 			$table->timestamps();
 		});
 	}

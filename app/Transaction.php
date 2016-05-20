@@ -19,7 +19,7 @@ class Transaction extends Model
      *
      * @var array
      */
-    protected $fillable = ['company_id', 'confirmation_number', 'quantity', 'description'];
+    protected $fillable = ['company_id', 'confirmation_number', 'quantity', 'description', 'invoice_id'];
 
 
      /**
@@ -50,6 +50,21 @@ class Transaction extends Model
     public function company()
     {
         return $this->belongsTo('App\Company');
+    }
+
+    /**
+     * Create Transactions for Tickets
+     *
+     * @return $tickets
+     * @author Me
+     **/
+    public static function forTicket($company_id, $price, $invoice_id)
+    {
+        $transaction = new static;
+        $transaction->company_id = $company_id;
+        $transaction->quantity = $price;
+        $transaction->invoice_id = $invoice_id;
+        return $transaction;
     }
 
 }

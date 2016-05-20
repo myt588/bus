@@ -75,13 +75,6 @@
                         <div class="form-group">
                             <div class="checkbox">
                                 <label>
-                                    <input name="subscribe" type="checkbox"> I want to receive <span class="skin-color">Travelo</span> promotional offers in the future
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <label>
                                     <input name="agreement" type="checkbox"> By continuing, you agree to the <a href="#"><span class="skin-color">Terms and Conditions</span></a>.
                                 </label>
                             </div>
@@ -98,13 +91,10 @@
                 <div class="booking-details travelo-box">
                     <h4>Booking Details</h4>
                     <article class="car-detail">
-                        <figure class="clearfix">
-                            <a title="" href="car-detailed.html" class="middle-block"><img class="middle-item" alt="" src="http://placehold.it/75x75"></a>
-                            <div class="travel-title">
-                                <h5 class="box-title">{{$rental->bus->makeModel()}}<small>{{$rental->bus->type}}</small></h5>
-                                <a href="car-detailed.html" class="button">EDIT</a>
-                            </div>
-                        </figure>
+                        <div class="travel-title">
+                            <h5 class="box-title">{{$rental->bus->makeModel()}}<small>{{$rental->bus->type}}</small></h5>
+                            <a href="{{URL::route('rentals.show', $data, null)}}" class="button">EDIT</a>
+                        </div>
                         <div class="details">
                             <div class="icon-box style11 full-width">
                                 <div class="icon-wrapper">
@@ -112,7 +102,7 @@
                                 </div>
                                 <dl class="details">
                                     <dt class="skin-color">Start Date</dt>
-                                    <dd>{{$data['start']}}</dd>
+                                    <dd>{{$data['start'] . ' ' . $data['start_at']}}</dd>
                                 </dl>
                             </div>
                             <div class="icon-box style11 full-width">
@@ -121,7 +111,7 @@
                                 </div>
                                 <dl class="details">
                                     <dt class="skin-color">End Date</dt>
-                                    <dd>{{$data['end']}}</dd>
+                                    <dd>{{$data['end'] . ' ' . $data['end_at']}}</dd>
                                 </dl>
                             </div>
                             <div class="icon-box style11 full-width">
@@ -138,7 +128,7 @@
                     
                     <h4>Other Details</h4>
                     <dl class="other-details">
-                        <dt class="feature">Per day price:</dt><dd class="value">${{$rental->one_day}}</dd>
+                        <dt class="feature">Per day price:</dt><dd class="value">${{$rental->per_day}}</dd>
                         <dt class="total-price">Total Price</dt><dd class="total-price-value">${{$total}}</dd>
                     </dl>
                 </div>

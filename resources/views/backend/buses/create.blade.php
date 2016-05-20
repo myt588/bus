@@ -14,7 +14,16 @@
 @section('content')
 
 @include('backend.partials.info-box', ['info_header' => 'Tips!', 'info' => 'Bus Number cannot be changed after creation!'])
-<div class="box box-warning"> 
+<div class="box box-primary"> 
+    <div class="box-header">
+        <h3 class="box-title">Create Bus</h3>
+        <!-- tools box -->
+        <div class="pull-right box-tools">
+            <button type="button" class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+            <i class="fa fa-minus"></i></button>
+        </div>
+        <!-- /. tools -->
+    </div>
     <div class="box-body">
 
         {!! Form::open(['url' => 'admin/buses', 'class' => 'form-horizontal']) !!}
@@ -60,6 +69,13 @@
                 {!! $errors->first('model', '<p class="help-block">:message</p>') !!}
             </div>
         </div>
+        <div class="form-group {{ $errors->has('type') ? 'has-error' : ''}}">
+            {!! Form::label('type', 'Type: ', ['class' => 'col-sm-3 control-label']) !!}
+            <div class="col-sm-6">
+                {!! Form::select('type', ['Mini-bus', 'Economy Bus', 'Full Size Bus', 'Luxury Bus'], null, ['class' => 'form-control']) !!}
+                {!! $errors->first('type', '<p class="help-block">:message</p>') !!}
+            </div>
+        </div>
         <div class="form-group {{ $errors->has('year') ? 'has-error' : ''}}">
             {!! Form::label('year', 'Year: ', ['class' => 'col-sm-3 control-label']) !!}
             <div class="col-sm-6">
@@ -99,7 +115,6 @@
         </div>
 
         {!! Form::close() !!}
-
     </div>
 </div>
 
@@ -114,4 +129,4 @@
     });
   });
 </script>
-@endsection
+@endsection 

@@ -3,6 +3,19 @@
 @section('css')
 <link rel="stylesheet" href="/plugins/select2/select2.min.css">
 <link rel="stylesheet" href="/css/app.css">
+  <!-- Bootstrap time Picker -->
+<link rel="stylesheet" href="/plugins/timepicker/bootstrap-timepicker.min.css">
+<style>
+section#content {  min-height: 1000px; padding: 0; position: relative; overflow: hidden; }
+#main { padding-top: 100px; }
+.page-title, .page-description { color: #fff; }
+.page-title { font-size: 4.1667em; font-weight: bold; }
+.page-description { font-size: 2.5em; margin-bottom: 50px; }
+.featured { position: absolute; right: 50px; bottom: 50px; z-index: 9; margin-bottom: 0;  text-align: right; }
+.featured figure a { border: 2px solid #fff; }
+.featured .details { margin-right: 10px; }
+.featured .details > * { color: #fff; line-height: 1.25em; margin: 0; font-weight: bold; text-shadow: 2px -2px rgba(0, 0, 0, 0.2); }
+</style>
 @endsection
 
 @section('title') TriponBus @endsection
@@ -46,7 +59,7 @@
             </div>
         </div>
     </div>
-    <div class="featured image-box">
+    <!-- <div class="featured image-box">
         <div class="details pull-left">
             <h3>Tropical Beach,<br/>Hotel and Resorts</h3>
             <h5>THAILAND</h5>
@@ -57,14 +70,20 @@
                 <img width="64" height="64" alt="" src="http://placehold.it/64x64" class="">
             </a>
         </figure>
-    </div>
+    </div> -->
 </section>
 @endsection
 
 @section('js')
 <script src="/plugins/select2/select2.full.min.js"></script>
+<!-- bootstrap time picker -->
+<script src="/plugins/timepicker/bootstrap-timepicker.min.js"></script>
 <script>
   jQuery(document).ready(function($){
+     //Timepicker
+    $(".timepicker").timepicker({
+      showInputs: false
+    });
     $(".location").select2({
         width: '100%',
         multiple: true,

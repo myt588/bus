@@ -1,5 +1,5 @@
 <li {!! set_active('/', 'menu-item-has-children') !!}>
-    <a href="{{url('/')}}">Home</a>
+    <a href="{{url('/')}}"></a>
 </li>
 <!-- <li class="menu-item-has-children">
     <a href="hotel-index.html">Bus Tickets</a>

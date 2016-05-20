@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Bus;
 use App\Company;
+use App\Photo;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Http\Requests\BusRequest;
@@ -55,9 +56,26 @@ class BusesController extends Controller
         $this->validate($request, [
             'bus_number'        => 'required|unique:buses,bus_number',
             ]);
-        Bus::create($data);
-        Session::flash('success', 'Bus added!');
-        return redirect('admin/buses');
+        $bus = Bus::create($data);
+        Session::flash('success', 'Bus added! And You may add some photo to it!');
+        return redirect()->route('admin::admin.buses.edit', $bus->id);
+    }
+
+    /**
+     * add photo to the bus
+     *
+     * @return void
+     * @author 
+     **/
+    public function addPhoto($id, Request $request)
+    {
+        $this->validate($request, [
+            'photo' => 'required|mimes:jpg,jpeg,png,bmp'
+        ]);
+        $bus = Bus::findOrFail($id);
+        $photo = Photo::fromForm($request->file('photo'), $id, get_class($bus));
+        $photo->save();
+        return 'done';
     }
 
     /**s
@@ -123,5 +141,6 @@ class BusesController extends Controller
         Session::flash('success', 'Bus deleted!');
         return redirect('admin/buses');
     }
+
 
 }

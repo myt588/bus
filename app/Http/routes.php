@@ -26,12 +26,14 @@ Route::group(['middleware' => ['web', 'auth', 'admin'], 'namespace' =>'Backend',
 
 	//Bus
 	Route::resource('buses', 'BusesController');
+	Route::post('buses/{id}/photo', 'BusesController@addPhoto')->name('buses.addPhoto');
 	
 	//Company
 	Route::resource('companies', 'CompaniesController');
 
 	//Trip
 	Route::resource('trips', 'TripsController');
+	Route::post('trips/{id}/active', 'TripsController@active')->name('trips.active');
 
 	//Stop
 	Route::resource('stations', 'StationsController');
@@ -49,14 +51,21 @@ Route::group(['middleware' => ['web', 'auth', 'admin'], 'namespace' =>'Backend',
 
 	//Rentals
 	Route::resource('rentals', 'RentalsController');
+	Route::post('rentals/{id}/active', 'RentalsController@active')->name('rentals.active');
 
-	Route::get('settings/profile', 'SettingsController@profile')->name('settings.profile');
-	Route::post('settings/profile', 'SettingsController@update')->name('settings.update');
-	Route::get('settings/template', 'SettingsController@template')->name('settings.template');
-	Route::get('settings/format', 'SettingsController@template')->name('settings.format');
-	Route::get('settings/policy', 'SettingsController@template')->name('settings.policy');
-
+	//Settings
+	// Route::get('settings/profile', 'SettingsController@profile')->name('settings.profile');
+	// Route::post('settings/profile', 'SettingsController@update')->name('settings.update');
+	// Route::get('settings/template', 'SettingsController@template')->name('settings.template');
+	// Route::get('settings/format', 'SettingsController@template')->name('settings.format');
+	// Route::get('settings/policy', 'SettingsController@policy')->name('settings.policy');
+	// Route::post('settings/policy', 'SettingsController@policyUpload')->name('settings.policy.upload');
 });
+
+Route::get('policy', function(){
+		$policy = auth()->user()->company->policy;
+		return view('share.policy', compact('policy'));
+	});
 
 Route::group(['middleware' => 'web'], function () {
 
@@ -75,32 +84,31 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/', 'HomeController@index')->name('home');	
 
     //Tickets
-
-	Route::get('/tickets/search', 'TicketsController@search')->name('tickets.search');
-
-	Route::get('/tickets/picked', 'TicketsController@picked')->name('tickets.picked');
-
-	Route::get('/tickets/checkout', 'TicketsController@checkout')->name('tickets.checkout');
-
-	Route::post('/tickets/pay', 'TicketsController@pay')->name('tickets.pay');
-
-	Route::get('/tickets/thankyou/{id}', 'TicketsController@thankyou')->name('tickets.thankyou');
+    Route::group(['prefix' => 'tickets', 'as' => 'tickets.'], function() {
+		Route::get('/search', 'TicketsController@search')->name('search');
+		Route::get('/picked', 'TicketsController@picked')->name('picked');
+		Route::get('/checkout', 'TicketsController@checkout')->name('checkout');
+		Route::post('/pay', 'TicketsController@pay')->name('pay');
+		Route::get('/thankyou/{id}', 'TicketsController@thankyou')->name('thankyou');
+		Route::get('/{id}/invoice', function ($id) {
+			$v_id = App\Transaction::findOrFail($id)->invoice_id;
+		    $invoice = Auth::user()->findInvoiceOrFail($v_id);
+		    return $invoice->view([
+		        'vendor' => 'TriponBus',
+		        'product' => 'Bus Ticket'
+		    ]);
+		})->name('invoice');
+    });
 
 	//Rentals
-
-	Route::get('/rentals/search', 'RentalsController@search')->name('rentals.search');
-
-	Route::get('/rentals', 'RentalsController@index')->name('rentals.index');
-
-	Route::get('/rentals/show', 'RentalsController@show')->name('rentals.show');
-
-	Route::get('/rentals/booking', 'RentalsController@booking')->name('rentals.booking');
-
-	Route::post('/rentals/confirm', 'RentalsController@confirm')->name('rentals.confirm');
-
-	Route::get('/rentals/thankyou/{id}', 'RentalsController@thankyou')->name('rentals.thankyou');
-
-
+	Route::group(['prefix' => 'rentals', 'as' => 'rentals.'], function() {
+		Route::get('/search', 'RentalsController@search')->name('search');
+		Route::get('/', 'RentalsController@index')->name('index');
+		Route::get('/show', 'RentalsController@show')->name('show');
+		Route::get('/booking', 'RentalsController@booking')->name('booking');
+		Route::post('/confirm', 'RentalsController@confirm')->name('confirm');
+		Route::get('/thankyou/{id}', 'RentalsController@thankyou')->name('thankyou');
+    });
 
 });
 

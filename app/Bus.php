@@ -38,6 +38,7 @@ class Bus extends Model
         'model', 
         'year', 
         'seats', 
+        'type',
         'wifi', 
         'usb', 
         'toilet'
@@ -88,9 +89,14 @@ class Bus extends Model
      */
     public function photos()
     {
-        return $this->morphToMany('App\Photo', 'imageable');
+        return $this->morphMany('App\Photo', 'imageable');
     }
 
+    /**
+     * Get the Features of the Bus
+     *
+     * @return String
+     */
     public function features()
     {
         $features = '';
@@ -106,9 +112,18 @@ class Bus extends Model
         {
             $features = $features . 'tiolet';
         }
+        if ($features == '')
+        {
+            $features = 'No Feautres';
+        }
         return $features;
     }
 
+    /**
+     * Get the make and model of the bus and make them into a string
+     *
+     * @return String
+     */
     public function makeModel()
     {
         return $this->make . ' ' . $this->model;
@@ -126,6 +141,28 @@ class Bus extends Model
             return true;
         } 
         return false;
+    }
+
+    /**
+     * Get One Thumbnail url that is attached to this bus
+     *
+     * @return photo url
+     * @author 
+     **/
+    public function getThumbnail()
+    {
+        return $this->photos->first()->thumbnail_url;
+    }
+
+    /**
+     * Get One Photo url that is attached to this bus
+     *
+     * @return photo url
+     * @author 
+     **/
+    public function getPhoto()
+    {
+        return $this->photos->first()->url;
     }
 
 }

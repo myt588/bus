@@ -50,19 +50,6 @@
       <script type='text/javascript' src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
       <script type='text/javascript' src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
     <![endif]-->
-    @if(Request::path() == '/' )
-        <style>
-        section#content {  min-height: 1000px; padding: 0; position: relative; overflow: hidden; }
-        #main { padding-top: 200px; }
-        .page-title, .page-description { color: #fff; }
-        .page-title { font-size: 4.1667em; font-weight: bold; }
-        .page-description { font-size: 2.5em; margin-bottom: 50px; }
-        .featured { position: absolute; right: 50px; bottom: 50px; z-index: 9; margin-bottom: 0;  text-align: right; }
-        .featured figure a { border: 2px solid #fff; }
-        .featured .details { margin-right: 10px; }
-        .featured .details > * { color: #fff; line-height: 1.25em; margin: 0; font-weight: bold; text-shadow: 2px -2px rgba(0, 0, 0, 0.2); }
-    </style>
-    @endif
     
 </head>
 <body>

@@ -34,7 +34,7 @@
                             <h4 class="main-message">Thank You. Your Booking Order is Confirmed Now.</h4>
                             <p>A confirmation email has been sent to your provided email address.</p>
                         </div>
-                        <a href="#" class="print-button button btn-small">PRINT DETAILS</a>
+                        <a href="{{route('tickets.invoice', $transaction->id)}}" class="print-button button btn-small">SEE INVOICE</a>
                     </div>
                     <hr />
                     <h2>Traveler Information</h2>

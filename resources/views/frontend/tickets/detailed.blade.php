@@ -30,9 +30,6 @@
         <div class="row">
             <div id="main" class="col-md-9">
                 <div id="flight-features" class="tab-container">
-                    <ul class="tabs">
-                        <li class="active"><a href="#car-details" data-toggle="tab">Trip Details</a></li>
-                    </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="car-details">
                             @include('frontend.tickets.partials.trip-detail-box', [

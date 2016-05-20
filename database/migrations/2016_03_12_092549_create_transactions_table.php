@@ -20,6 +20,7 @@ class CreateTransactionsTable extends Migration
             $table->string('confirmation_number');
             $table->decimal('quantity');
             $table->text('description');
+            $table->text('invoice_id');
             $table->timestamps();
         });
             

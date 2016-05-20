@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\City;
 use App\Trip;
 use App\Station;
 use App\Ticket;
@@ -15,62 +14,90 @@ use App\Http\Requests;
 use DB;
 use Auth;
 use Log;
+use URL;
+use Mail;
 
 use App\Http\Requests\HomeSearchRequest;
 use App\Http\Requests\TicketCheckoutRequest;
 
 class TicketsController extends Controller
 {
+    /**
+     * Search for matching trips 
+     *
+     * @return View
+     * @author Me
+     **/
     public function search(HomeSearchRequest $request)
     {
-        $cities = $this->cityNames();
-        $data = $request->all();
-        if (array_key_exists('trip_one_id', $data)){
-            if (array_key_exists('date_new', $data)){
-                $data['return'] = dateMath($data['return'], $data['date_new']);
-                unset($data['date_new']);
-            } 
-            $date_bit = stringToWeekday($data['return']);
-            $date_list = getDateList($data['return']);
-            $trips = $this->searchTrip($data['going_to'], $data['leaving_from'], $data['return']);
-        } else {
-            if (array_key_exists('date_new', $data)){
-                $data['depart'] = dateMath($data['depart'], $data['date_new']);
-                unset($data['date_new']);
-            } 
-            $date_bit = stringToWeekday($data['depart']);
-            $date_list = getDateList($data['depart']); 
-            $trips = $this->searchTrip($data['leaving_from'], $data['going_to'], $data['depart']);
+        $data = $request->all();      
+        if ($request->has('trip_one_id')){ 
+            //When search for the 2nd trip of the round trip 
+            $date_list = $this->dateHandler($data, 'return');
+            $trips = Trip::search($data['going_to'], $data['leaving_from'], stringToWeekday($data['return']))->paginate(15);
+        } else { 
+            //When search for the 1st trip
+            $date_list = $this->dateHandler($data, 'depart');
+            $trips = Trip::search($data['leaving_from'], $data['going_to'], stringToWeekday($data['return']))->paginate(15);
         }                                                     
-        return view('frontend.tickets.search', compact('trips', 'date_list', 'data', 'cities'));
+        return view('frontend.tickets.search', compact('trips', 'date_list', 'data'));
     }
 
-    public function searchTrip($from, $to, $weekdays)
+    /**
+     * Handling Date
+     *
+     * @return void
+     * @author 
+     **/
+    public function dateHandler(&$data, $date)       
     {
-        $trips = Trip::where('from', '=', $from)
-                     ->where('to', '=', $to)
-                     ->where('weekdays', '&', $weekdays)
-                  // ->where('ticket_left', '>', $request->adults)
-                     ->get();
-        return $trips;
+         if (array_has($data, 'date_new')){
+            $data['depart'] = dateMath($data['depart'], $data['date_new']);
+            $data['return'] = dateMath($data['return'], $data['date_new']);
+            unset($data['date_new']);
+            Log::info($data);
+        } 
+        return getDateList($data[$date]);
     }
 
-    public function cityNames()
+    /**
+     * Show Detail View
+     *
+     * @return View
+     * @author Me
+     **/
+    public function picked(Request $request)
     {
-        $city_list = City::all();
-        $cities = [];
-        foreach ( $city_list as $city ) {
-            $cities[$city->id] = $city->city . ', ' . $city->state;
-        }
-        return $cities;
+        $data = $request->all();
+        $info = $this->getTicketInfo($data);
+        return view('frontend.tickets.detailed', compact('data'), $info);
     }
 
+    /**
+     * Checkout View
+     *
+     * @return View
+     * @author Me
+     **/
+    public function checkout(Request $request)
+    {
+        $data = $request->all();
+        $info = $this->getTicketInfo($data);
+        return view('frontend.tickets.checkout', compact('data'), $info);
+    }
+
+    /**
+     * Get Ticket Info 
+     *
+     * @return Compact Data
+     * @author Me
+     **/
     public function getTicketInfo($data)
     {
         $trip_one = Trip::findOrFail($data['trip_one_id']);
         $trip_one_DS = $trip_one->stations->find($data['trip_one_DS']);
         $trip_one_AS = $trip_one->stations->find($data['trip_one_AS']);
-        if (array_key_exists('trip_two_id', $data)){
+        if (array_has($data, 'trip_two_id')){
             $trip_two = Trip::findOrFail($data['trip_two_id']);
             $trip_two_DS = $trip_two->stations->find($data['trip_two_DS']);
             $trip_two_AS = $trip_two->stations->find($data['trip_two_DS']);
@@ -79,47 +106,20 @@ class TicketsController extends Controller
         return compact('trip_one', 'trip_one_DS', 'trip_one_AS');
     }
 
-    public function picked(Request $request)
-    {
-        $data = $request->all();
-        $info = $this->getTicketInfo($data);
-        return view('frontend.tickets.detailed', compact('data'), $info);
-    }
-
-    public function checkout(Request $request)
-    {
-        $data = $request->all();
-        $info = $this->getTicketInfo($data);
-        return view('frontend.tickets.checkout', compact('data'), $info);
-    }
-
+    /**
+     * Pay Function
+     *
+     * @return Redirect
+     * @author Me
+     **/
     public function pay(TicketCheckoutRequest $request)
     {
-         // dd($request->all());
         //user is logged in
         $data = $request->all();
-        if (Auth::check()){
-            $user = Auth::user();
-        } else {
-            if (!is_null(User::where('email', '=', $request->email)->first()) ) {
-                $user = User::where('email', '=', $request->email)->first();
-            } else {
-                $user = User::create([
-                    'first_name'    => $request->first_name,
-                    'last_name'     => $request->last_name,
-                    'email'         => $request->email,
-                ]);
-            }
-        }
-        $user->charge($request->totalPrice * 100, [
-            'source' => $request->stripeToken
-            ]);
-        $transaction = Transaction::create([
-            'company_id'            => Trip::findOrFail($request->trip_one_id)->company->id,
-            'quantity'              => $request->totalPrice,
-            'confirmation_number'   => random('distinct', 8),
-            'description'           => "tickets price",
-            ]);
+        $user = $this->getOrCreateAnonymous($request);
+        $invoice = $this->createInvoice($user, $request->totalPrice, $request->stripeToken);
+
+        $transaction_one = Transaction::forTicket($company_id, $price, $invoice_id);
         $this->createTicket($request->adults_depart,
                             $user->id, 
                             $request->trip_one_id, 
@@ -139,7 +139,6 @@ class TicketsController extends Controller
                             $request->trip_one_AS, 
                             'kids_depart');
         if (array_key_exists('trip_two_id', $data)){
-            dd($request->return);
             $this->createTicket(
                             $request->adults_return,
                             $user->id, 
@@ -161,7 +160,48 @@ class TicketsController extends Controller
                             $request->trip_two_AS, 
                             'kids_return');
         }
+        // Mail::send('emails.ticket_confirmation', ['user' => $user, 'transaction' => $transaction], function ($m) use ($user) {
+        //     $m->to($user->email, $user->name)->subject('Your Reminder!');
+        // });
         return redirect()->route('tickets.thankyou', $transaction->id);
+    }
+
+    /**
+     * Logic for creating proper invoice
+     *
+     * @return $invoice
+     * @author Me
+     **/
+    public function createInvoice($user, $price, $token)
+    {
+        // check if the user is a stripe customer
+        if (!$user->hasStripeId()) {
+            $user->createAsStripeCustomer($token);
+        }
+        // I modified invoiceFor in the cashier vendor to have it return the invoice
+        return $user->invoiceFor('Ticket Fee', $price * 100);
+    }
+
+    /**
+     * Get the login user or create an anonymous user
+     *
+     * @return user
+     * @author 
+     **/
+    public function getOrCreateAnonymous(TicketCheckoutRequest $request)
+    {
+        if (Auth::check()){
+            $user = Auth::user();
+        } else {
+            if (is_null($user = User::getByEmail($request->email)) ) {
+                $user = User::create([
+                    'first_name'    => $request->first_name,
+                    'last_name'     => $request->last_name,
+                    'email'         => $request->email,
+                ]);
+            } 
+        }
+        return $user;
     }
 
     public function createTicket($amount, $user_id, $trip_id, $transaction_id, $data, $depart_date, $depart_station, $arrive_station, $name)
@@ -186,4 +226,5 @@ class TicketsController extends Controller
         $tickets = $transaction->tickets;
         return view('frontend.tickets.thankyou', compact('transaction', 'tickets'));
     }
+
 }

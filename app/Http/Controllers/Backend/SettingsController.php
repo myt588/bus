@@ -8,12 +8,14 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Helpers\PhotoService;
 use Auth;
+use Session;
 
 class SettingsController extends Controller
 {
 	function __construct(PhotoService $photoService)
     {
         $this->user = Auth::user();
+        $this->company = $this->user->company;
         $this->photoService = $photoService;
         // $this->middleware('auth', ['only' => ['store', 'destroy']]);
     }
@@ -59,6 +61,30 @@ class SettingsController extends Controller
     {
     	
         return view('backend.404');
+    }
+
+    /**
+     * Modify the company policy.
+     *
+     * @return Response
+     */
+    public function policy()
+    {
+        $policy = $this->company->policy;
+        return view('backend.settings.policy', compact('policy'));
+    }
+
+    /**
+     * Modify the company policy.
+     *
+     * @return Response
+     */
+    public function policyUpload(Request $request)
+    {
+        $this->company->policy = $request->policy;
+        $this->company->save();
+        Session::flash('success', 'Policy Uploaded!');
+        return redirect()->back();
     }
 
 

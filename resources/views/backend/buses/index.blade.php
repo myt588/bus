@@ -54,11 +54,8 @@
                     <td>{{ $item->year }}</td>
                     <td>{{ $item->seats }}</td>
                     <td>
-                        <a class="btn btn-info btn-xs" href="{{ url('admin/buses/' . $item->id) }}">
-                           Details
-                        </a> /
                         <a class="btn btn-primary btn-xs" href="{{ url('admin/buses/' . $item->id . '/edit') }}">
-                           Update
+                           Details
                         </a> /
                         {!! Form::open([
                             'method'=>'DELETE',

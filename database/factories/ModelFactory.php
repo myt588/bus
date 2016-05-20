@@ -106,9 +106,9 @@ $factory->define(App\Rental::class, function (Faker\Generator $faker) {
     return [
         'company_id'            => 1,
         'description'           => $faker->text,
-        'one_day'               => $faker->numberBetween(1, 10),
-        'three_days'            => $faker->numberBetween(10, 50),
-        'one_week'              => $faker->numberBetween(50, 100),
+        'per_hour'              => $faker->numberBetween(1, 10),
+        'per_day'               => $faker->numberBetween(10, 50),
+        'per_week'              => $faker->numberBetween(50, 100),
         'created_at'            => $faker->dateTimeBetween($startDate = '-7 days', $endDate = '+7 days'),
     ];
 });

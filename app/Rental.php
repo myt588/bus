@@ -19,8 +19,15 @@ class Rental extends Model
      *
      * @var array
      */
-    protected $fillable = ['company_id', 'bus_id', 'transaction_id', 'description', 'one_day', 'three_days', 'one_week'];
-
+    protected $fillable = [
+        'company_id', 
+        'bus_id', 
+        'transaction_id', 
+        'description', 
+        'per_day', 
+        'per_hour', 
+        'per_week'
+        ];
 
     /**
      * DB Relation Function
@@ -59,7 +66,20 @@ class Rental extends Model
      **/
     public function photos()
     {
-        return $this->morphToMany('App\Photo', 'imageable');
+        return $this->morphMany('App\Photo', 'imageable');
+    }
+
+    /**
+     * set the active state of the Rental
+     *
+     * @return void
+     * @author Boolean
+     **/
+    public function setActiveState()
+    {
+        $this->active = $this->active ? false : true;
+        $this->save();
+        return $this->active;
     }
 
 }

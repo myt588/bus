@@ -49,7 +49,7 @@
                 </div>
             </div>
             <div class="from-group">
-                <button type="submit" class="btn-medium col-sms-6 col-sm-4">upload</button>
+                <button type="submit" class="btn btn-primary">upload</button>
             </div>
         </div>
         {!! Form::close() !!}

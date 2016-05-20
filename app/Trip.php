@@ -127,50 +127,103 @@ class Trip extends Model
      **/
     public function photos()
     {
-        return $this->morphToMany('App\Photo', 'imageable');
+        return $this->morphMany('App\Photo', 'imageable');
     }
 
     /**
      * get Company Name
      *
-     * @return void
+     * @return string
      **/
     public function companyName()
     {
         return $this->company->name;
     }
 
+    /**
+     * get the total time it takes for the trip
+     *
+     * @return time in H:i
+     **/
     public function totalTime()
     {
         return date('h:i', strtotime($this->arrive_at) - strtotime($this->depart_at));
     }
 
+    /**
+     * get subname for the trip
+     *
+     * @return string
+     **/
     public function subname()
     {
         return 'Depart: ' . $this->depart_at . ' & Arrive: ' . $this->arrive_at;
     }
 
+    /**
+     * get actual price for the trip
+     *
+     * @return decimal with two digits
+     **/
     public function price()
     {
         $number = $this->price * $this->discount;
         return number_format((float)$number, 2, '.', '');
     }
 
+    /**
+     * scope a search query on the trips
+     *
+     * @return $trips
+     * @author Me
+     **/
+    public function scopeSearch($query, $from, $to, $weekdays)
+    {
+        return $query->where('from', '=', $from)
+                     ->where('to', '=', $to)
+                     ->where('weekdays', '&', $weekdays)
+                     ->where('active', '=', 1);
+    }
+
+    /**
+     * Number of tickets booked for this trip on $date
+     *
+     * @param Date $date
+     * @return Int
+     **/
     public function ticketsBookedCountOn($date)
     {
         return $this->tickets()->where('depart_date', '=', $date)->count();
     }
 
+    /**
+     * Number of tickets sold for this trip on $date
+     *
+     * @param Date $date
+     * @return Int
+     **/
     public function ticketsSoldCountOn($date)
     {
         return $this->tickets()->whereDate('created_at', '=', $date)->count();
     }
 
+    /**
+     * Check if the trip on this $date is available
+     *
+     * @param Date $date
+     * @return Bool
+     **/
     public function isAvailable($date)
     {
         return $this->weekdays & stringToWeekday($date);
     }
 
+    /**
+     * get Dates available between $start and $end
+     *
+     * @param Date $start, $end
+     * @return String $dates
+     **/
     public function availableDatesBetween($start, $end)
     {
         $datediff = abs(strtotime($end) - strtotime($start));
@@ -222,6 +275,30 @@ class Trip extends Model
                 $arrive_stops->push(['stop' => $item->id, 'time' => $item->pivot->time]);
             }
         }
+    }
+
+    /**
+     * check whether the trip is running overnight
+     *
+     * @return void
+     * @author 
+     **/
+    public function checkTimeIsOvernight()
+    {
+        return (str_contains($this->depart_at, 'PM') && str_contains($this->arrive_at, 'AM'));
+    }
+
+    /**
+     * set the active state of the trip
+     *
+     * @return void
+     * @author Boolean
+     **/
+    public function setActiveState()
+    {
+        $this->active = $this->active ? false : true;
+        $this->save();
+        return $this->active;
     }
 
 }

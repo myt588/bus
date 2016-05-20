@@ -87,12 +87,28 @@ class User extends Model implements AuthenticatableContract,
      **/
     public function photos()
     {
-        return $this->morphToMany('App\Photo', 'imageable');
+        return $this->morphMany('App\Photo', 'imageable');
     }
 
+    /**
+     * get Full name of the user
+     *
+     * @return string
+     **/
     public function fullName()
     {
         return $this->first_name . ' ' . $this->last_name;
+    }
+
+    /**
+     * Query Users throught Emails
+     *
+     * @return $user
+     * @author 
+     **/
+    public static function getByEmail($email)
+    {
+        return static::where('email', '=', $email)->first();
     }
 
 }

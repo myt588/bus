@@ -53,11 +53,19 @@
                     <td>{{ $item->depart_at }}</td>
                     <td>{{ $item->arrive_at }}</td>
                     <td>
-                        <a class="btn btn-info btn-xs" href="{{ url('admin/trips/' . $item->id) }}">
-                           Details
-                        </a> /
+                        {!! Form::open([
+                            'method'=>'POST',
+                            'route' => ['admin::trips.active', $item->id],
+                            'style' => 'display:inline'
+                        ]) !!}
+                            @if($item->active)
+                            {!! Form::submit('Deactivate', ['class' => 'btn btn-warning btn-xs']) !!}
+                            @else
+                            {!! Form::submit('Activate', ['class' => 'btn btn-success btn-xs']) !!}
+                            @endif
+                        {!! Form::close() !!} /
                         <a class="btn btn-primary btn-xs" href="{{ url('admin/trips/' . $item->id . '/edit') }}">
-                           Update
+                           Details
                         </a> /
                         {!! Form::open([
                             'method'=>'DELETE',

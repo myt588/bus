@@ -20,6 +20,7 @@ class CreateCompaniesTable extends Migration
             $table->boolean('verified');
             $table->string('code');
             $table->string('base');
+            $table->text('policy');
             $table->timestamps();
             $table->softDeletes();
         });

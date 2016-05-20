@@ -36,9 +36,9 @@
                 <tr>
                     @can('admin_full_access')<th>Company</th>@endcan
                     <th>Bus</th>
-                    <th>One Day</th>
-                    <th>Three Days</th>
-                    <th>One Week</th>
+                    <th>Per Hour</th>
+                    <th>Per Day</th>
+                    <th>Per Week</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -47,15 +47,23 @@
                 <tr>
                     @can('admin_full_access')<td>{{ $item->company_id }}</td>@endcan
                     <td>{{ $item->bus->bus_number }}</td>
-                    <td>${{ $item->one_day }}</td>
-                    <td>${{ $item->three_days }}</td>
-                    <td>${{ $item->one_week }}</td>
+                    <td>${{ $item->per_hour }}</td>
+                    <td>${{ $item->per_day }}</td>
+                    <td>${{ $item->per_week }}</td>
                     <td>
-                        <a class="btn btn-info btn-xs" href="{{ url('admin/rentals/' . $item->id) }}">
-                           Details
-                        </a> /
+                        {!! Form::open([
+                            'method'=>'POST',
+                            'route' => ['admin::rentals.active', $item->id],
+                            'style' => 'display:inline'
+                        ]) !!}
+                            @if($item->active)
+                            {!! Form::submit('Deactivate', ['class' => 'btn btn-warning btn-xs']) !!}
+                            @else
+                            {!! Form::submit('Activate', ['class' => 'btn btn-success btn-xs']) !!}
+                            @endif
+                        {!! Form::close() !!} /
                         <a class="btn btn-primary btn-xs" href="{{ url('admin/rentals/' . $item->id . '/edit') }}">
-                           Update
+                           Details
                         </a> /
                         {!! Form::open([
                             'method'=>'DELETE',
@@ -72,9 +80,9 @@
                 <tr>
                     @can('admin_full_access')<th>Company</th>@endcan
                     <th>Bus</th>
-                    <th>One Day</th>
-                    <th>Three Days</th>
-                    <th>One Week</th>
+                    <th>Per Hour</th>
+                    <th>Per Day</th>
+                    <th>Per Week</th>
                     <th>Actions</th>
                 </tr>
             </thead>

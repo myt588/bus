@@ -20,9 +20,10 @@ class CreateRentalsTable extends Migration
             $table->integer('bus_id')->unsigned();
             $table->foreign('bus_id')->references('id')->on('buses');
             $table->text('description');
-            $table->decimal('one_day');
-            $table->decimal('three_days');
-            $table->decimal('one_week');
+            $table->decimal('per_hour');
+            $table->decimal('per_day');
+            $table->decimal('per_week');
+            $table->boolean('active')->default(false);
             $table->timestamps();
         });
             

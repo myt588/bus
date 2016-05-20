@@ -1,5 +1,13 @@
 @extends('layouts.backend')
 
+@section('css')
+
+<!-- bootstrap wysihtml5 - text editor -->
+<link rel="stylesheet" href="/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/dropzone.css">
+
+@endsection
+
 @section('title') Rental Homepage @endsection @section('heading') Rental @endsection
 
 @section('breadcrumb')
@@ -12,76 +20,86 @@
 @endsection
 
 @section('content')
-
+@include('backend.partials.info-box', ['info_header' => 'Tips!', 'info' => 'You must set the rental price for each bus!'])
 <div class="box box-warning"> 
-    <div class="box-body">
-
-        {!! Form::model($rental, [
-            'method' => 'PATCH',
-            'url' => ['admin/rentals', $rental->id],
-            'class' => 'form-horizontal'
-        ]) !!}
-
-                    <div class="form-group {{ $errors->has('company_id') ? 'has-error' : ''}}">
-        {!! Form::label('company_id', 'Company Id: ', ['class' => 'col-sm-3 control-label']) !!}
-        <div class="col-sm-6">
-            {!! Form::number('company_id', null, ['class' => 'form-control']) !!}
-            {!! $errors->first('company_id', '<p class="help-block">:message</p>') !!}
+    {!! Form::model($rental, ['method' => 'PATCH', 'url' => ['admin/rentals', $rental->id]]) !!}
+    <div class="box-header">
+        <h3 class="box-title">Create Rental</h3>
+        <!-- tools box -->
+        <div class="pull-right box-tools">
+            <button type="button" class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+            <i class="fa fa-minus"></i></button>
         </div>
+        <!-- /. tools -->
     </div>
-    <div class="form-group {{ $errors->has('bus_id') ? 'has-error' : ''}}">
-        {!! Form::label('bus_id', 'Bus Id: ', ['class' => 'col-sm-3 control-label']) !!}
-        <div class="col-sm-6">
-            {!! Form::number('bus_id', null, ['class' => 'form-control']) !!}
-            {!! $errors->first('bus_id', '<p class="help-block">:message</p>') !!}
-        </div>
-    </div>
-    <div class="form-group {{ $errors->has('transaction_id') ? 'has-error' : ''}}">
-        {!! Form::label('transaction_id', 'Transaction Id: ', ['class' => 'col-sm-3 control-label']) !!}
-        <div class="col-sm-6">
-            {!! Form::number('transaction_id', null, ['class' => 'form-control']) !!}
-            {!! $errors->first('transaction_id', '<p class="help-block">:message</p>') !!}
-        </div>
-    </div>
-    <div class="form-group {{ $errors->has('description') ? 'has-error' : ''}}">
-        {!! Form::label('description', 'Description: ', ['class' => 'col-sm-3 control-label']) !!}
-        <div class="col-sm-6">
-            {!! Form::textarea('description', null, ['class' => 'form-control']) !!}
-            {!! $errors->first('description', '<p class="help-block">:message</p>') !!}
-        </div>
-    </div>
-    <div class="form-group {{ $errors->has('one_day') ? 'has-error' : ''}}">
-        {!! Form::label('one_day', 'One Day: ', ['class' => 'col-sm-3 control-label']) !!}
-        <div class="col-sm-6">
-            {!! Form::number('one_day', null, ['class' => 'form-control']) !!}
-            {!! $errors->first('one_day', '<p class="help-block">:message</p>') !!}
-        </div>
-    </div>
-    <div class="form-group {{ $errors->has('three_days') ? 'has-error' : ''}}">
-        {!! Form::label('three_days', 'Three Days: ', ['class' => 'col-sm-3 control-label']) !!}
-        <div class="col-sm-6">
-            {!! Form::number('three_days', null, ['class' => 'form-control']) !!}
-            {!! $errors->first('three_days', '<p class="help-block">:message</p>') !!}
-        </div>
-    </div>
-    <div class="form-group {{ $errors->has('one_week') ? 'has-error' : ''}}">
-        {!! Form::label('one_week', 'One Week: ', ['class' => 'col-sm-3 control-label']) !!}
-        <div class="col-sm-6">
-            {!! Form::number('one_week', null, ['class' => 'form-control']) !!}
-            {!! $errors->first('one_week', '<p class="help-block">:message</p>') !!}
-        </div>
-    </div>
-
-
-        <div class="form-group">
-            <div class="col-sm-offset-3 col-sm-3">
-                {!! Form::submit('Update', ['class' => 'btn btn-primary form-control']) !!}
+    <!-- /.box-header -->
+    <div class="box-body pad">
+        <textarea name="description" class="textarea" placeholder="Enter the Description/Policy of the Rental Here" style="width: 100%; height: 400px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+        <br></br>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group {{ $errors->has('company_id') ? 'has-error' : '' }} @can('admin') @else hidden @endcan">
+                    <div class="col-sm-6">
+                        @can('admin')
+                        {!! Form::select('company_id', $companies, null, ['class' => 'form-control', 'placeholder' => 'company id']) !!}
+                        @else
+                        {!! Form::select('company_id', $companies, Auth::user()->company_id, ['class' => 'form-control', 'placeholder' => 'company id']) !!}
+                        @endcan
+                        {!! $errors->first('company_id', '<p class="help-block">:message</p>') !!}
+                    </div>
+                </div>
+                <div class="form-group {{ $errors->has('bus_id') ? 'has-error' : ''}}">
+                    {!! Form::select('bus_id', $buses, null, ['class' => 'form-control', 'placeholder' => 'Please Pick a Bus Number']) !!}
+                    {!! $errors->first('bus_id', '<p class="help-block">:message</p>') !!}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group {{ $errors->has('per_hour') ? 'has-error' : ''}}">
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        {!! Form::number('per_hour', null, ['class' => 'form-control', 'step' => '0.01', 'min' => '0', 'placeholder' => 'Price Per Hour']) !!}
+                        <span class="input-group-addon">.00</span>
+                    </div>
+                    {!! $errors->first('per_hour', '<p class="help-block">:message</p>') !!}
+                </div>
+                <div class="form-group {{ $errors->has('per_day') ? 'has-error' : ''}}">
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        {!! Form::number('per_day', null, ['class' => 'form-control', 'step' => '0.01', 'min' => '0', 'placeholder' => 'Price Per Day']) !!}
+                        <span class="input-group-addon">.00</span>
+                    </div>
+                    {!! $errors->first('per_day', '<p class="help-block">:message</p>') !!}
+                </div>
+                <div class="form-group {{ $errors->has('per_week') ? 'has-error' : ''}}">
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        {!! Form::number('per_week', null, ['class' => 'form-control', 'step' => '0.01', 'min' => '0', 'placeholder' => 'Price Per Week']) !!}
+                        <span class="input-group-addon">.00</span>
+                    </div>  
+                    {!! $errors->first('per_week', '<p class="help-block">:message</p>') !!}
+                </div>
             </div>
         </div>
-
-        {!! Form::close() !!}
-
+        @include('errors.error-list')
     </div>
+
+    <div class="box-footer">
+        {!! Form::submit('Update', ['class' => 'btn btn-primary']) !!}
+    </div>
+    {!! Form::close() !!}
 </div>
 
+@endsection
+
+@section('js')
+<!-- Bootstrap WYSIHTML5 -->
+<script src="/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/dropzone.js"></script>
+<script>
+  $(function () {
+    //bootstrap WYSIHTML5 - text editor
+    $(".textarea").wysihtml5();
+    $('.textarea').html('{{ $rental->description }}');
+  });
+</script>
 @endsection

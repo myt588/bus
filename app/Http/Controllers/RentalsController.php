@@ -54,7 +54,7 @@ class RentalsController extends Controller
     	$data = $request->all();
         $rental = Rental::findOrFail($request->id);
         $day = (strtotime($request->end) - strtotime($request->start))/60/60/24;
-        $total = $rental->one_day * $day;
+        $total = $rental->per_day * $day;
         $total = number_format((float)$total, 2, '.', '');
         $location = City::findOrFail($request->location)->getCityName();
         return view('frontend.rentals.detailed', compact('rental', 'total', 'data', 'location'));
@@ -72,7 +72,7 @@ class RentalsController extends Controller
         $data = $request->all();
         $rental = Rental::findOrFail($request->id);
         $day = (strtotime($request->end) - strtotime($request->start))/60/60/24;
-        $total = $rental->one_day * $day;
+        $total = $rental->per_day * $day;
         $total = number_format((float)$total, 2, '.', '');
         $location = City::findOrFail($request->location)->getCityName();
         return view('frontend.rentals.contact-us', compact('rental', 'total', 'data', 'location'));

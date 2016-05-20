@@ -25,11 +25,11 @@ class RentalRequest extends Request
     {
         $rules = [
             'company_id'        => 'required',
-            'bus_id'            => 'required',
+            'bus_id'            => 'required|not_in:0|unique:rentals,bus_id',
             'description'       => 'required',
-            'one_day'           => 'required',
-            'three_days'        => 'required',
-            'one_week'          => 'required',
+            'per_day'           => 'required',
+            'per_hour'          => 'required',
+            'per_week'          => 'required',
         ];
         return $rules;
     }

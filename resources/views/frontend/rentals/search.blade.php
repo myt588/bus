@@ -108,10 +108,10 @@
                             <div class="col-sms-6 col-sm-6 col-md-4">
                                 <article class="box">
                                     <figure>
-                                        <a title="" href="#"><img alt="" src="http://placehold.it/270x160"></a>
+                                        <a title="" href="#"><img alt="" src="/{{$rental->bus->getThumbnail()}}"></a>
                                     </figure>
                                     <div class="details">
-                                        <span class="price"><small>per day</small>${{$rental->one_day}}</span>
+                                        <span class="price"><small>per day</small>${{$rental->per_day}}</span>
                                         <h4 class="box-title">{{$rental->bus->type}}<small>{{$rental->bus->makeModel()}}</small></h4>
                                         <div class="amenities">
                                             <ul>

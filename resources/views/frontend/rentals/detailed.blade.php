@@ -29,9 +29,6 @@
     <div class="container car-detail-page">
         <div class="row">
             <div id="main" class="col-md-9">
-                <div class="featured-image box">
-                    <img src="http://placehold.it/870x496.png" alt="" />
-                </div>
                 <div class="tab-container">
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="car-details">
@@ -42,9 +39,10 @@
                                         <dt>Bus Type:</dt><dd>{{$rental->bus->type}}</dd>
                                         <dt>Bus name:</dt><dd>{{$rental->bus->makeModel()}}</dd>
                                         <dt>seats:</dt><dd>{{$rental->bus->seats}}</dd>
-                                        <dt>Bus features:</dt><dd>{{$rental->bus->features()}}
-                                        <dt>Price per Day</dt><dd>${{$rental->one_day}}</dd>
-                                        <dt>Price per Week</dt><dd>${{$rental->one_week}}</dd>
+                                        <dt>Bus features:</dt><dd>{{$rental->bus->features()}}</dd>
+                                        <dt>Price per Hour:</dt><dd>${{$rental->per_hour}}</dd>
+                                        <dt>Price per Day</dt><dd>${{$rental->per_day}}</dd>
+                                        <dt>Price per Week</dt><dd>${{$rental->per_week}}</dd>
                                         <dt>Estimated Total</dt><dd>${{$total}}</dd>
                                     </dl>
                                 </div>
@@ -60,7 +58,7 @@
                                                 </div>
                                                 <dl class="details">
                                                     <dt class="skin-color">Start Date</dt>
-                                                    <dd>{{$data['start']}}</dd>
+                                                    <dd>{{$data['start'] . ' ' . $data['start_at']}}</dd>
                                                 </dl>
                                             </div>
                                             <div class="icon-box style11">
@@ -83,7 +81,7 @@
                                                 </div>
                                                 <dl class="details">
                                                     <dt class="skin-color">End Date</dt>
-                                                    <dd>{{$data['end']}} </dd>
+                                                    <dd>{{$data['end'] . ' ' . $data['end_at']}} </dd>
                                                 </dl>
                                             </div>
                                             <div class="icon-box style11">
@@ -125,14 +123,11 @@
             </div>
             <div class="sidebar col-md-3">
                 <article class="detailed-logo">
-                    <figure>
-                        <img width="114" height="85" src="http://placehold.it/114x85" alt="">
-                    </figure>
                     <div class="details">
                         <h2 class="box-title">BMW Mini<small>economy car</small></h2>
                         <span class="price clearfix">
                             <small class="pull-left">per day</small>
-                            <span class="pull-right">${{$rental->one_day}}</span>
+                            <span class="pull-right">${{$rental->per_day}}</span>
                         </span>
                         <div class="price clearfix">
                             <small class="pull-left">Total</small>

@@ -114,7 +114,7 @@ class Company extends Model
      **/
     public function photos()
     {
-        return $this->morphToMany('App\Photo', 'imageable');
+        return $this->morphMany('App\Photo', 'imageable');
     }
 
     public function ticketsCount()

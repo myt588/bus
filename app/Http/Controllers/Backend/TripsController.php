@@ -91,7 +91,7 @@ class TripsController extends Controller
     {
         $sum = 0;
         foreach ($weekdays as $weekday) {
-            $sum += constant($weekday);
+            $sum |= constant($weekday);
         }
         return $sum;
     }
@@ -171,6 +171,23 @@ class TripsController extends Controller
         Trip::destroy($id);
         Session::flash('success', 'Trip deleted!');
         return redirect('admin/trips');
+    }
+
+    /**
+     * Activiate a trip
+     *
+     * @return view
+     * @author me
+     **/
+    public function active($id)
+    {
+        if(Trip::findOrFail($id)->setActiveState())
+        {
+            Session::flash('success', 'Trip is activiated');
+        } else {
+            Session::flash('danger', 'Trip is deactiviated');
+        }
+        return back();
     }
 
 }

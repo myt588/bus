@@ -30,73 +30,12 @@
         <div id="main">
             <div class="row">
                 <div class="col-sm-4 col-md-3">
-                    <h4 class="search-results-title"><i class="soap-icon-search"></i><b>{{ $trips->count() }}</b> results found.</h4>
-                    <div class="toggle-container filters-container">
-                        <div class="panel style1 arrow-right">
-                            <h4 class="panel-title">
-                                <a data-toggle="collapse" href="#price-filter" class="collapsed">Price</a>
-                            </h4>
-                            <div id="price-filter" class="panel-collapse collapse">
-                                <div class="panel-content">
-                                    <div id="price-range"></div>
-                                    <br />
-                                    <span class="min-price-label pull-left"></span>
-                                    <span class="max-price-label pull-right"></span>
-                                    <div class="clearer"></div>
-                                </div><!-- end content -->
-                            </div>
-                        </div>
-                        
-                        <div class="panel style1 arrow-right">
-                            <h4 class="panel-title">
-                                <a data-toggle="collapse" href="#flight-times-filter" class="collapsed">Departure Times</a>
-                            </h4>
-                            <div id="flight-times-filter" class="panel-collapse collapse">
-                                <div class="panel-content">
-                                    <div id="flight-times" class="slider-color-yellow"></div>
-                                    <br />
-                                    <span class="start-time-label pull-left"></span>
-                                    <span class="end-time-label pull-right"></span>
-                                    <div class="clearer"></div>
-                                </div><!-- end content -->
-                            </div>
-                        </div>
-                        
-                        <div class="panel style1 arrow-right">
-                            <h4 class="panel-title">
-                                <a data-toggle="collapse" href="#airlines-filter" class="collapsed">Operators</a>
-                            </h4>
-                            <div id="airlines-filter" class="panel-collapse collapse">
-                                <div class="panel-content">
-                                    <ul class="check-square filters-option">
-                                        <li><a href="#">Major Airline<small>($620)</small></a></li>
-                                        <li><a href="#">United Airlines<small>($982)</small></a></li>
-                                        <li class="active"><a href="#">delta airlines<small>($1,127)</small></a></li>
-                                        <li><a href="#">Alitalia<small>($2,322)</small></a></li>
-                                        <li><a href="#">US airways<small>($3,158)</small></a></li>
-                                        <li><a href="#">Air France<small>($4,239)</small></a></li>
-                                        <li><a href="#">Air tahiti nui<small>($5,872)</small></a></li>
-                                    </ul>
-                                    <a class="button btn-mini">MORE</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @include('frontend.tickets.partials.filters')
                 </div>
 
                 <div class="col-sm-8 col-md-9">
                     <div class="tab-container box">
-                        <ul class="nav nav-tabs nav-justified hidden-xs">
-                            <li><a href=""><i class="fa icon-angle-left fa-1x"></i><</a></li>
-                            <li>{{ link_to_route('tickets.search', $title = $date_list[-3], $parameters = array_add($data, 'date_new', '-3'), $attributes = array()) }}</li>
-                            <li>{{ link_to_route('tickets.search', $title = $date_list[-2], $parameters = array_add($data, 'date_new', '-2'), $attributes = array()) }}</li>
-                            <li>{{ link_to_route('tickets.search', $title = $date_list[-1], $parameters = array_add($data, 'date_new', '-1'), $attributes = array()) }}</li>
-                            <li class="active"><a>{{ $date_list[0] }}</a></li>
-                            <li>{{ link_to_route('tickets.search', $title = $date_list[1], $parameters = array_add($data, 'date_new', '+1'), $attributes = array()) }}</li>
-                            <li>{{ link_to_route('tickets.search', $title = $date_list[2], $parameters = array_add($data, 'date_new', '+2'), $attributes = array()) }}</li>
-                            <li>{{ link_to_route('tickets.search', $title = $date_list[3], $parameters = array_add($data, 'date_new', '+3'), $attributes = array()) }}</li>
-                            <li><a href=""><i class="fa icon-angle-right fa-1x"></i>></a></li>
-                        </ul>
+                        @include('frontend.tickets.partials.date-nav')
                         <div class="tab-content">
                             <div class="tab-pane fade in active" id="tours-suggestions">
                                 <div class="flight-list listing-style3 flight">
@@ -155,13 +94,13 @@
 
                                             @if($data['options'] == 'round-trip')
                                                 @if(array_key_exists('trip_one_id', $data)) 
-                                                {!! Form::open(['url' => '/tickets/picked', 'method' => 'GET']) !!}
+                                                {!! Form::open(['url' => route('tickets.picked'), 'method' => 'GET']) !!}
                                                 {!! Form::number('trip_one_id', $data['trip_one_id'], ['hidden']) !!}
                                                 {!! Form::number('trip_two_id', $trip->id, ['hidden']) !!}
                                                 {!! Form::number('trip_one_DS', $data['trip_one_DS'], ['hidden']) !!}
                                                 {!! Form::number('trip_one_AS', $data['trip_one_AS'], ['hidden']) !!}
                                                 @else
-                                                {!! Form::open(['url' => '/tickets/search', 'method' => 'GET']) !!}
+                                                {!! Form::open(['url' => route('tickets.search'), 'method' => 'GET']) !!}
                                                 {!! Form::number('trip_one_id', $trip->id, ['hidden']) !!}
                                                 @endif
                                                 {!! Form::text('return', $data['return'], ['hidden']) !!}
@@ -172,7 +111,6 @@
                                             {!! Form::number('trip_one_id', $trip->id, ['hidden']) !!}
                                             @endif
                                             @include('frontend.tickets.partials.search-form-hidden', $data)
-
                                             <div id="{{$trip->id}}" class="collapse hidden-row">
                                                 <div class="row time">
                                                     <div class="col-xs-12 col-lg-6 col-md-6 col-sm-6 stops">
@@ -223,7 +161,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="action">
-                                                    <button id="selected" class="pull-right">ADD TO CART</button>
+                                                    <button id="selected" submit="submit" class="pull-right">BOOK NOW</button>
                                                 </div>
                                             </div>
                                             {!! Form::close() !!}
@@ -235,7 +173,8 @@
                             </div>
                         </div>
                     </div>
-                    <a class="button uppercase full-width btn-large">load more listings</a>
+                    <!-- <a class="button uppercase full-width btn-large">load more listings</a> -->
+                    {!! $trips->appends($data)->links() !!}
                 </div>
             </div>
         </div>
@@ -286,6 +225,25 @@
         });
         tjq(".start-time-label").html( convertTimeToHHMM(tjq("#flight-times").slider( "values", 0 )) );
         tjq(".end-time-label").html( convertTimeToHHMM(tjq("#flight-times").slider( "values", 1 )) );
+
+        function updateSelect($key, $this) {
+            if (window.location.search.indexOf('&' + $key + '=') > -1) {
+                window.location = updateQueryStringParameter(window.location.href, $key, $this.options[$this.selectedIndex].value);
+            } else {
+                window.location = window.location.href + '&' + $key + '=' + $this.options[$this.selectedIndex].value;
+            }
+        }
+
+        function updateQueryStringParameter(uri, key, value) {
+           var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+           var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+           if (uri.match(re)) {
+             return uri.replace(re, '$1' + key + "=" + value + '$2');
+           }
+           else {
+             return uri + separator + key + "=" + value;
+           }
+        }
     });
 </script>
 

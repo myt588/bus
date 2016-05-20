@@ -52,6 +52,11 @@ class Rent extends Model
         return $this->belongsTo('App\Transaction');
     }
 
+    /**
+     * Check if the rent is already over
+     *
+     * @return Boolean
+     **/
     public function isPast()
     {
         $date = $this->depart_date;
