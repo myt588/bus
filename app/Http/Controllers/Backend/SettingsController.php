@@ -6,17 +6,14 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Helpers\PhotoService;
 use Auth;
 use Session;
 
 class SettingsController extends Controller
 {
-	function __construct(PhotoService $photoService)
+	function __construct()
     {
         $this->user = Auth::user();
-        $this->company = $this->user->company;
-        $this->photoService = $photoService;
         // $this->middleware('auth', ['only' => ['store', 'destroy']]);
     }
 
@@ -42,11 +39,7 @@ class SettingsController extends Controller
         	'photo' => 'required',
     	]);
     	$user = $this->user;
-    	$photo = $this->photoService->create($request->file('photo'), [
-            'owner_type'    =>  get_class($user),
-            'owner_id'      =>  $user->id,
-            'title'         => 'test'
-            ]);
+    	$photo = Photo::fromForm($request->file('photo'), $user->id, get_class($user));
         $user->photo = $photo->url;
         $user->save();
         return redirect()->back();
@@ -70,7 +63,7 @@ class SettingsController extends Controller
      */
     public function policy()
     {
-        $policy = $this->company->policy;
+        $policy = $this->user->company->policy;
         return view('backend.settings.policy', compact('policy'));
     }
 
@@ -81,8 +74,8 @@ class SettingsController extends Controller
      */
     public function policyUpload(Request $request)
     {
-        $this->company->policy = $request->policy;
-        $this->company->save();
+        $this->user->company->policy = $request->policy;
+        $this->user->company->save();
         Session::flash('success', 'Policy Uploaded!');
         return redirect()->back();
     }

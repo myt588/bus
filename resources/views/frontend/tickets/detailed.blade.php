@@ -28,34 +28,24 @@
 <section id="content">
     <div class="container flight-detail-page">
         <div class="row">
+            {!! Form::open(['url' => route('tickets.checkout', $data), 'method' => 'GET']) !!}
             <div id="main" class="col-md-9">
                 <div id="flight-features" class="tab-container">
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="car-details">
+                            @foreach($info as $i => $item)
                             @include('frontend.tickets.partials.trip-detail-box', [
-                                'trip'      => $trip_one, 
-                                'trip_DS'   => $trip_one_DS, 
-                                'trip_AS'   => $trip_one_AS, 
+                                'trip'      => $item['trip'], 
+                                'trip_DS'   => $item['ds'], 
+                                'trip_AS'   => $item['as'], 
                                 'date'      => $data['depart'], 
-                                'adults'    => $data['adults_depart'],
-                                'kids'      => $data['kids_depart'],
-                                'adults_id' => 'adults_depart',
-                                'kids_id'   => 'kids_depart',
+                                'adults'    => $data['adults'],
+                                'kids'      => $data['kids'],
+                                'adults_id' => 'adults_'.$i,
+                                'kids_id'   => 'kids_'.$i,
                                 'checkout'  => false    
                             ])
-                            @if(array_key_exists('trip_two_id', $data))
-                            @include('frontend.tickets.partials.trip-detail-box', [
-                                'trip'      => $trip_two, 
-                                'trip_DS'   => $trip_two_DS, 
-                                'trip_AS'   => $trip_two_AS, 
-                                'date'      => $data['depart'], 
-                                'adults'    => $data['adults_return'],
-                                'kids'      => $data['kids_return'],
-                                'adults_id' => 'adults_return',
-                                'kids_id'   => 'kids_return',
-                                'checkout'  => false
-                            ])
-                            @endif
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -63,15 +53,14 @@
             <div class="sidebar col-md-3">
                 <article class="detailed-logo">
                     <div class="details">
-                        <h2 class="box-title">{{ $trip_one->name }}<small>{{ $trip_one->companyName() }}</small></h2>
+                        <h2 class="box-title">{{ $info[0]['trip']->name }}<small>{{ $info[0]['trip']->companyName() }}</small></h2>
                         <span class="price clearfix">
-                            <small class="pull-left">avg/person</small>
-                            <span class="pull-right">$@include('frontend.tickets.partials.total-price')</span>
+                            <small class="pull-left">Total Fare</small>
+                            <span id="total" class="pull-right"></span>
                         </span>
-                        
                         <p class="description">Nunc cursus libero purus ac congue ar lorem cursus ut sed vitae pulvinar massa idend porta nequetiam elerisque mi id, consectetur adipi deese cing elit maus fringilla bibe endum.</p>
                         @if(Auth::check())
-                        <a id="bookButton" href="{{route('tickets.checkout', $data, null)}}" class="button green full-width uppercase btn-medium">book now</a>
+                        <button id="bookButton" submit="submit" class="green full-width uppercase btn-medium">BOOK NOW</button>
                         @else
                         <a id="bookButton" href="#travelo-signup" class="soap-popupbox button green full-width uppercase btn-medium">book now</a>
                         @endif
@@ -79,6 +68,7 @@
                 </article>
                 @include('frontend.partials.help-box')
             </div>
+            {!! Form::close() !!}
             <div id="travelo-signup" class="travelo-login-box travelo-box">
                 <div class="row">
                     <div class="col-md-5">
@@ -120,6 +110,7 @@
 <script type="text/javascript" src="/js/calendar.js"></script>
 <script type="text/javascript">
     tjq(document).ready(function() {
+        updateTotal();
         // calendar panel
         var cal = new Calendar();
         var unavailable_days = [17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
@@ -164,20 +155,45 @@
             });
         });
 
-        tjq('#adults_depart').change(function() {
-            updateSelect('adults_depart', this);
+        function getFloat($id) {
+            return parseFloat(tjq($id).text().split(" ")[0].substr(1));
+        }
+
+        function updateTotal() {
+            if (tjq('#fare_adults_1').length){
+                total = getFloat('#fare_adults_0') + getFloat('#fare_adults_1');
+            } else {
+                total = getFloat('#fare_adults_0');
+            }
+            tjq('#total').text('$' + total);
+        }
+
+        tjq('#adults_0').change(function() {
+            price = getFloat('#price_adults_0');
+            fare = (parseInt(tjq('#adults_0').val()) + parseInt(tjq('#kids_0').val())) * price;
+            tjq('#fare_adults_0').text('$' + fare);
+            updateTotal();
         });
 
-        tjq('#kids_depart').change(function() {
-            updateSelect('kids_depart', this);
+        tjq('#kids_0').change(function() {
+            price = getFloat('#price_adults_0');
+            fare = (parseInt(tjq('#adults_0').val()) + parseInt(tjq('#kids_0').val())) * price;
+            tjq('#fare_adults_0').text('$' + fare);
+            updateTotal();
         });
 
-        tjq('#adults_return').change(function() {
-            updateSelect('adults_return', this);
+        tjq('#adults_1').change(function() {
+            price = getFloat('#price_adults_1');
+            fare = (parseInt(tjq('#adults_1').val()) + parseInt(tjq('#kids_1').val())) * price;
+            tjq('#fare_adults_1').text('$' + fare);
+            updateTotal();
         });
 
-        tjq('#kids_return').change(function() {
-            updateSelect('kids_return', this);
+        tjq('#kids_1').change(function() {
+            price = getFloat('#price_adults_1');
+            fare = (parseInt(tjq('#adults_1').val()) + parseInt(tjq('#kids_1').val())) * price;
+            tjq('#fare_adults_1').text('$' + fare);
+            updateTotal();
         });
 
         function updateSelect($key, $this) {

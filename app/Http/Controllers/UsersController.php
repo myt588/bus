@@ -6,45 +6,30 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 use App\Http\Requests;
-use App\Helpers\PhotoService;
 use App\Http\Requests\UserProfileRequest;
+use App\Photo;
 use Mail;
 
 class UsersController extends Controller
 {
-
-	function __construct(PhotoService $photoService)
-    {
-        $this->photoService = $photoService;
-    }
 
     /**
      * Show user's booking .
      *
      * @return \Illuminate\Http\Response
      */
-    public function booking()
+    public function booking(Request $request)
     {
+        $data = $request->all();
     	$user = auth()->user();
-    	$collection = $user->tickets()->orderBy('depart_date', 'desc')->paginate(10);
-
-    	// $collection = $user->tickets->merge($user->rents)->sortByDesc('depart_date');
-    	
-    	// //Get current page form url e.g. &page=6
-     //    $currentPage = LengthAwarePaginator::resolveCurrentPage();
-
-     //    //Define how many items we want to be visible in each page
-     //    $perPage = 10;
-
-     //    //Slice the collection to get the items to display in current page
-     //    $currentPageSearchResults = $collection->slice($currentPage * $perPage, $perPage)->all();
-
-     //    //Create our paginator and pass it to the view
-     //    $paginatedSearchResults= new LengthAwarePaginator($currentPageSearchResults, count($collection), $perPage);
-
-     //    $paginatedSearchResults->setPath('dashboard');
-
-        return view('frontend.users.booking', ['collection' => $collection], compact('user'));
+        if ($request->has('type') && $request->type == 'rental')
+        {    
+            $collection = $user->rents()->orderBy('start', 'desc');
+        } else {
+            $collection = $user->tickets()->orderBy('depart_date', 'desc');
+        }
+        $collection = $collection->simplePaginate(10);
+        return view('frontend.users.booking', compact('user', 'collection', 'data'));
     }
 
     /**
@@ -86,11 +71,7 @@ class UsersController extends Controller
     	$user = auth()->user();
     	$user->update($request->all());
         if ($request->has('photo')){
-            $photo = $this->photoService->create($request->file('photo'), [
-            'owner_type'    =>  get_class($user),
-            'owner_id'      =>  $user->id,
-            'title'         => 'test'
-            ]);
+            $photo = Photo::fromForm($request->file('photo'), $user->id, get_class($user));
             $user->photo = $photo->url;
             $user->save();
         }
@@ -103,7 +84,6 @@ class UsersController extends Controller
 
         Mail::send('emails.reminder', ['user' => $user], function ($m) use ($user) {
             $m->from('hello@app.com', 'Your Application');
-
             $m->to($user->email, $user->name)->subject('Your Reminder!');
         });
     }

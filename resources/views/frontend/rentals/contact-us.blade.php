@@ -84,6 +84,7 @@
                                 <button type="submit" class="full-width btn-large">CONFIRM BOOKING</button>
                             </div>
                         </div>
+                        @include('errors.error-list')
                     {!! Form::close() !!}
                 </div>
             </div>
@@ -92,7 +93,7 @@
                     <h4>Booking Details</h4>
                     <article class="car-detail">
                         <div class="travel-title">
-                            <h5 class="box-title">{{$rental->bus->makeModel()}}<small>{{$rental->bus->type}}</small></h5>
+                            <h5 class="box-title">{{$rental->bus->getMakeModel()}}<small>{{$rental->bus->type}}</small></h5>
                             <a href="{{URL::route('rentals.show', $data, null)}}" class="button">EDIT</a>
                         </div>
                         <div class="details">

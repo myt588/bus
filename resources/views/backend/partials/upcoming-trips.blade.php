@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="section text-center">
-                            <h4>{{$count * $item->price()}}</h4>
+                            <h4>{{$count * $item->fee}}</h4>
                             <p>Revenue</p>
                         </div>
                     </div>

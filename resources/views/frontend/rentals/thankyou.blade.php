@@ -39,7 +39,6 @@
                     <hr />
                     <h2>Traveler Information</h2>
                     <dl class="term-description">
-                        <dt>Booking number:</dt><dd>{{ $rent->transaction->confirmation_number }}</dd>
                         <dt>First name:</dt><dd>{{ $rent->user->first_name }}</dd>
                         <dt>Last name:</dt><dd>{{ $rent->user->last_name }}</dd>
                         <dt>E-mail address:</dt><dd>{{ $rent->user->email }}</dd>

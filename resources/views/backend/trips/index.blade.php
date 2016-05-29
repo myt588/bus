@@ -49,7 +49,7 @@
                     @can('admin_full_access')<td> {{ $item->company->name }} </td>@endcan
                     <td>{{ $item->fromCity->getCityName() }}</td>
                     <td>{{ $item->toCity->getCityName() }}</td>
-                    <td>${{ $item->price() }}</td>
+                    <td>${{ $item->fee }}</td>
                     <td>{{ $item->depart_at }}</td>
                     <td>{{ $item->arrive_at }}</td>
                     <td>

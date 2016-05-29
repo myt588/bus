@@ -100,12 +100,6 @@ section#content {  min-height: 1000px; padding: 0; position: relative; overflow:
     $('#round-trip').change(function(){
         roundTripSetting();
     });
-    $('#adults_depart').change(function(){
-        $('#adults_return').attr('value', $('#adults_depart').attr('value'));
-    });
-    $('#kids_depart').change(function(){
-        $('#kids_return').attr('value', $('#kids_depart').attr('value'));
-    });
     function oneWaySetting() {
         $('#return-div').removeAttr('class');
         $('#return').attr('disabled', 'true');
@@ -114,8 +108,6 @@ section#content {  min-height: 1000px; padding: 0; position: relative; overflow:
         $('#return').attr('placeholder', '');
         $('#return').css('background-color', '#eee');
         $('#return-div').css('height', '32px');
-        $('#adults_return').attr('disabled', 'true');
-        $('#kids_return').attr('disabled', 'true');
     }
     function roundTripSetting() {
         $('#return-div').attr('class', 'datepicker-wrap');
@@ -123,8 +115,6 @@ section#content {  min-height: 1000px; padding: 0; position: relative; overflow:
         $('#return').attr('value', $value);
         $('#return').attr('placeholder', 'mm/dd/yy');
         $('#return').css('background-color', '#fff');
-        $('#adults_return').removeAttr('disabled');
-        $('#kids_return').removeAttr('disabled');
     }
 });
 </script>

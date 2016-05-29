@@ -82,4 +82,93 @@ class Rental extends Model
         return $this->active;
     }
 
+    /**
+     * Scope by seat number of the bus
+     *
+     * @return query
+     * @author ME
+     **/
+    public function scopeBySeats($query, $size)
+    {
+        return $query->whereHas('bus', function ($query) use ($size) {
+            $query->where('seats', '>=', $size);
+        });
+    }
+
+    /**
+     * Scope by type of the bus
+     *
+     * @return query
+     * @author ME
+     **/
+    public function scopeTypeFilter($query, $type)
+    {
+        return $query->whereHas('bus', function ($query) use ($type) {
+            $query->where('type', '=', $type);
+        });
+    }
+
+    /**
+     * scope a filter by price
+     *
+     * @return $trips
+     * @author Me
+     **/
+    public function scopePriceFilter($query, $min, $max)
+    {
+        return $query->whereBetween('per_day', [$min, $max]);
+    }
+
+    /**
+     * scope a filter by company name 
+     *
+     * @return $query
+     * @author Me
+     **/
+    public function scopeCompanyFilter($query, $names)
+    {
+        if ($names == ["all"])
+        {
+            return $query;
+        }
+        $company_ids = [];
+        foreach($names as $i => $name)
+        {
+            $company = Company::byName($name);
+            if (count($company) > 0)
+            {
+                $company_ids[$i] = $company->first()->id;
+            }
+        }
+        return $query->whereIn('company_id', $company_ids);
+    }
+
+    /**
+     * scope a filter by bus type
+     *
+     * @return $query
+     * @author Me
+     **/
+    public function scopeMultiTypeFilter($query, $names)
+    {
+        if ($names == [])
+        {
+            return $query;
+        }
+        return $query->whereHas('bus', function ($query) use ($names) {
+            $query->whereIn('type', $names);
+        });
+    }
+
+    /**
+     * get the count of each type
+     *
+     * @return int
+     * @author me
+     **/
+    public function typeCount($rentals, $type)
+    {   
+        return 0;
+    }
+
 }

@@ -154,6 +154,7 @@ return [
         Laravel\Cashier\CashierServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
         // App\Providers\HelperServiceProvider::class,
 
         /*

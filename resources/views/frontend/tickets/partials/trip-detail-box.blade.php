@@ -1,32 +1,33 @@
+{{-- */$a=['0', '1', '2', '3', '4'];/* --}}
 <div class="intro small-box table-wrapper full-width hidden-table-sms">
     @if($checkout)
     <div class="col-sm-4 table-cell cruise-itinerary">
         <div class="travelo-box">
             <h4 class="box-title">Traveler's Names</h4>
             <label>Adults:</label>
-            @for($i = 1 ; $i < $adults + 1 ; $i ++)
+            @for($i = 0 ; $i < $adults ; $i ++)
             <div class="form-group">
                 @if ($errors->has($adults_id . '_' . $i))
                     <span>
                         <strong>required</strong>
                     </span>
                 @endif
-                <input name="{{$adults_id . '_' . $i}}" type="text" class="input-text full-width" value="" placeholder="Traveler Name {{$i}}" />
+                <input name="{{$adults_id}}[]" type="text" class="input-text full-width" value="" placeholder="Traveler Name {{$i + 1}}" />
             </div>
             @endfor
-            @if($kids != 0)
+            @for($i = 0 ; $i < $kids ; $i ++)
+            @if($i == 0)
             <label>Kids:</label>
-            @for($i = 1 ; $i < $kids + 1 ; $i ++)
+            @endif
             <div class="form-group">
                 @if ($errors->has($kids_id . '_' . $i))
                     <span>
                         <strong>required </strong>
                     </span>
                 @endif
-                <input name="{{$kids_id . '_' . $i}}" type="text" class="input-text full-width" value="" placeholder="Child Name {{$i}}" />
+                <input name="{{$kids_id}}[]" type="text" class="input-text full-width" value="" placeholder="Child Name {{$i + 1}}" />
             </div>
             @endfor
-            @endif
         </div>
     </div>
     @else
@@ -34,10 +35,11 @@
         <dl class="term-description">
             <dt>Operator:</dt><dd>{{ $trip->companyName() }}</dd>
             <dt>Bus Number:</dt><dd>{{ $trip->bus->bus_number }}</dd>
-            <dt>Terms & Conditions:</dt><dd>view</dd>
-            <dt>Adult:</dt><dd>{!! Form::select('adults', ['0', '1', '2', '3', '4'], $adults, ['id' => $adults_id]) !!}</dd>
-            <dt>Children:</dt><dd>{!! Form::select('kids', ['0', '1', '2', '3', '4'], $kids, ['id' => $kids_id]) !!}</dd>
-            <dt>Fare:</dt><dd>${{ ($adults + $kids) * $trip->price() }}</dd>
+            <dt>Terms & Conditions:</dt><dd><a href="{{route('policy', $trip->company->id)}}">view</a></dd>
+            <dt>Adult:</dt><dd>{!! Form::select('adults[]', $a, $adults, ['id' => $adults_id, 'style' => 'height: 10px']) !!}</dd>
+            <dt>Children:</dt><dd>{!! Form::select('kids[]', $a, $kids, ['id' => $kids_id, 'style' => 'height: 10px']) !!}</dd>
+            <dt>Price / Person:</dt><dd id="{{'price_'.$adults_id}}">${{ ($adults + $kids) * $trip->fee }} / Person</dd>
+            <dt>Total Fare:</dt><dd id="{{'fare_'.$adults_id}}">${{ ($adults + $kids) * $trip->fee }}</dd>
         </dl>
     </div>
     @endif

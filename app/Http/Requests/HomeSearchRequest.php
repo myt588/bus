@@ -24,12 +24,12 @@ class HomeSearchRequest extends Request
     public function rules()
     {
         return [
-            'leaving_from'      => 'required|max:100',
-            'going_to'          => 'required|max:100|different:leaving_from',
+            'from'              => 'required|max:100',
+            'to'                => 'required|max:100|different:from',
             'depart'            => 'required|date_format:m/d/Y',
             'return'            => 'date_format:m/d/Y|after_equal:depart|required_if:options,round-trip',
-            'adults_depart'     => 'required|integer|min:0',
-            'kids_depart'       => 'required|integer|min:0',
+            'adults'            => 'required|integer|min:0',
+            'kids'              => 'required|integer|min:0',
             'options'           => 'required',
             'date_new'          => 'integer',
         ];

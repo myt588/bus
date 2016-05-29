@@ -34,20 +34,21 @@
                             <h4 class="main-message">Thank You. Your Booking Order is Confirmed Now.</h4>
                             <p>A confirmation email has been sent to your provided email address.</p>
                         </div>
-                        <a href="{{route('tickets.invoice', $transaction->id)}}" class="print-button button btn-small">SEE INVOICE</a>
+                        <a href="{{route('tickets.invoice', $transactions[0]->invoice_id)}}" class="print-button button btn-small">SEE INVOICE</a>
                     </div>
                     <hr />
                     <h2>Traveler Information</h2>
                     <dl class="term-description">
-                        <dt>Booking number:</dt><dd>{{ $transaction->confirmation_number }}</dd>
-                        <dt>First name:</dt><dd>{{ $transaction->tickets->first()->firstName() }}</dd>
-                        <dt>Last name:</dt><dd>{{ $transaction->tickets->first()->lastName() }}</dd>
-                        <dt>E-mail address:</dt><dd>{{ $transaction->tickets->first()->email() }}</dd>
+                        <dt>Booking number:</dt><dd>{{ $transactions[0]->booking_no }}</dd>
+                        <dt>First name:</dt><dd>{{ $user->first_name }}</dd>
+                        <dt>Last name:</dt><dd>{{ $user->last_name }}</dd>
+                        <dt>E-mail address:</dt><dd>{{ $user->email }}</dd>
                     </dl>
                     <hr />
                     <h2>Tickets</h2>
+                    @foreach($transactions as $i => $transaction)
                     <div id="car-details">
-                        @foreach($tickets as $item)
+                        @foreach($transaction->tickets as $item)
                             @include('frontend.tickets.partials.ticket', [
                                 'trip'      => $item->trip, 
                                 'trip_DS'   => $item->trip->stations->find($item->depart_station), 
@@ -57,6 +58,7 @@
                             ])
                         @endforeach
                     </div>
+                    @endforeach
                     <hr />
                     <h2>Payment</h2>
                     <p>Praesent dolor lectus, rutrum sit amet risus vitae, imperdiet cursus neque. Nulla tempor nec lorem eu suscipit. Donec dignissim lectus a nunc molestie consectetur. Nulla eu urna in nisi adipiscing placerat. Nam vel scelerisque magna. Donec justo urna, posuere ut dictum quis.</p>

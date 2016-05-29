@@ -19,7 +19,7 @@ class Transaction extends Model
      *
      * @var array
      */
-    protected $fillable = ['company_id', 'confirmation_number', 'quantity', 'description', 'invoice_id'];
+    protected $fillable = ['company_id', 'booking_no', 'quantity', 'description', 'invoice_id', 'user_id'];
 
 
      /**
@@ -53,18 +53,53 @@ class Transaction extends Model
     }
 
     /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    /**
      * Create Transactions for Tickets
      *
      * @return $tickets
      * @author Me
      **/
-    public static function forTicket($company_id, $price, $invoice_id)
+    public static function forTicket($user_id, $company_id, $price, $invoice_id)
     {
         $transaction = new static;
+        $transaction->user_id = $user_id;
         $transaction->company_id = $company_id;
         $transaction->quantity = $price;
         $transaction->invoice_id = $invoice_id;
+        $transaction->booking_no = substr($invoice_id, 3, 8);
+        $transaction->save();
         return $transaction;
+    }
+
+    /**
+     * Scope by invoice id
+     *
+     * @return $query 
+     * @author ME
+     **/
+    public function scopeByInvoice($query, $invoice_id)
+    {
+        return $query->where('invoice_id', '=', $invoice_id)->get();
+    }
+
+    /**
+     * Scope by booking number id
+     *
+     * @return $query 
+     * @author ME
+     **/
+    public function scopeByBookingNo($query, $booking_no)
+    {
+        return $query->where('booking_no', '=', $booking_no)->get();
     }
 
 }

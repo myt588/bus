@@ -80,6 +80,7 @@ class TripsController extends Controller
         $data['weekdays'] = $this->weekdaysCal($data['weekdays']);
         $trip = Trip::create($data);
         $trip->name = $trip->fromCity->getCityName() . ' to ' . $trip->toCity->getCityName();
+        $trip->start = $trip->depart_at;
         $trip->save();
         $trip->stationHandler($data['depart_stops'], $data['depart_times'], true);
         $trip->stationHandler($data['arrive_stops'], $data['arrive_times'], false);  
@@ -151,6 +152,7 @@ class TripsController extends Controller
         $trip = Trip::findOrFail($id);
         $trip->update($data);
         $trip->name = $trip->fromCity->getCityName() . ' to ' . $trip->toCity->getCityName();
+        $trip->start = $trip->depart_at;
         $trip->save();
         $trip->stations()->detach();
         $trip->stationHandler($data['depart_stops'], $data['depart_times'], true);

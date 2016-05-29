@@ -13,7 +13,7 @@
 
 $factory->define(App\Bus::class, function (Faker\Generator $faker) {
     return [
-        'company_id'            => 1,
+        'company_id'            => factory(App\Company::class)->create()->id,
         'license_plate' 		=> $faker->numberBetween($min = 1000000, $max = 9000000),
         'bus_number' 			=> $faker->buildingNumber,
         'vehicle_number' 		=> $faker->swiftBicNumber,
@@ -35,6 +35,8 @@ $factory->define(App\Company::class, function (Faker\Generator $faker) {
         'rating' 				=> $faker->randomFloat($nbMaxDecimals = 1, $min = 0, $max = 5),
         'verified' 				=> $faker->boolean($chanceOfGettingTrue = 50),
         'code'                  => $faker->stateAbbr,
+        'base'                  => $faker->city. $faker->state,
+        'policy'                => $faker->paragraph(10),
     ];
 });
 
@@ -66,23 +68,26 @@ function getTo($from){
 $factory->define(App\Trip::class, function (Faker\Generator $faker) {
     return [
         'company_id'            => factory(App\Company::class)->create()->id,
-        'from'                  => $from = factory(App\City::class)->create()->id,
-        'to'                    => $to = factory(App\City::class)->create()->id,
+        'from'                  => $from = 1,
+        'to'                    => $to = 2,
         'bus_id'                => factory(App\Bus::class)->create()->id,
         'rating' 				=> $faker->randomFloat($nbMaxDecimals = 1, $min = 0, $max = 5),
-        'depart_at' 			=> $faker->time($format = 'H:i', $max = 'now'),
-        'arrive_at' 			=> $faker->time($format = 'H:i', $max = 'now'),
+        'depart_at' 			=> $faker->time($format = 'H:i A', $max = 'now'),
+        'arrive_at' 			=> $faker->time($format = 'H:i A', $max = 'now'),
         'name'                  => App\City::find($from)->city . ', ' . App\City::find($from)->state . ' to ' . App\City::find($to)->city . ', ' . App\City::find($to)->state,
-        'weekdays'              => array_rand(['1', '2', '4', '8', '16', '32', '64', '127'], 1),
+        'weekdays'              => 127,
         'price'                 => $price = $faker->randomFloat($nbMaxDecimals = 1, $min = 0, $max = 100),
         'discount'              => $discount = $faker->randomFloat($nbMaxDecimals = 1, $min = 0, $max = 1),
+        'fee'                   => $price * $discount,
+        'active'                => 1,
     ];
 });
 
 $factory->define(App\Transaction::class, function (Faker\Generator $faker) {
     return [
+        'user_id'               => 3,
         'company_id'            => $faker->numberBetween(1, 10),
-        'confirmation_number'   => random('distinct', 8),
+        'booking_no'            => generateBookingNo('distinct', 8),
         'description'           => $faker->text,
     ];
 });
@@ -104,12 +109,13 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Rental::class, function (Faker\Generator $faker) {
     return [
-        'company_id'            => 1,
+        'company_id'            => factory(App\Company::class)->create()->id,
         'description'           => $faker->text,
         'per_hour'              => $faker->numberBetween(1, 10),
         'per_day'               => $faker->numberBetween(10, 50),
         'per_week'              => $faker->numberBetween(50, 100),
         'created_at'            => $faker->dateTimeBetween($startDate = '-7 days', $endDate = '+7 days'),
+        'active'                => 1,
     ];
 });
 
@@ -118,6 +124,17 @@ $factory->define(App\City::class, function (Faker\Generator $faker) {
         'city'                  => $faker->city,
         'state'                 => $faker->stateAbbr,
         'zipcode'               => $faker->postcode,
+    ];
+});
+
+$factory->define(App\Rent::class, function (Faker\Generator $faker) {
+    return [
+        'user_id'               => 3,
+        'rental_id'             => 1,
+        'transaction_id'        => 3
+        'start'                 => $faker->dateTimeBetween($startDate = '-7 days', $endDate = '+7 days'),
+        'end'                   => $faker->dateTimeBetween($startDate = '-7 days', $endDate = '+7 days'),
+        'created_at'            => $faker->dateTimeBetween($startDate = '-7 days', $endDate = '+7 days'),
     ];
 });
 

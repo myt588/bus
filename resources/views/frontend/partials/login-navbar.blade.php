@@ -21,6 +21,7 @@
             @if(Auth::check())
             <li><a href="{{ url('/logout') }}">LOGOUT</a></li>
             @else
+            {{-- */Session::put('url.intended', url()->full());/* --}}
             <li><a href="{{ url('/login') }}">LOGIN</a></li>
             <li><a href="{{ url('/register') }}">SIGNUP</a></li>
             @endif

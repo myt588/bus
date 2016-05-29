@@ -91,6 +91,16 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
+     * DB Relation Function
+     *
+     * @return void
+     **/
+    public function transaction()
+    {
+        return $this->hasMany('App\Transaction');
+    }
+
+    /**
      * get Full name of the user
      *
      * @return string
@@ -109,6 +119,30 @@ class User extends Model implements AuthenticatableContract,
     public static function getByEmail($email)
     {
         return static::where('email', '=', $email)->first();
+    }
+
+    /**
+     * get user if exist else create anomymous
+     *
+     * @return user
+     * @author 
+     **/
+    public static function getUserOrCreateAnonymous($first, $last, $email, $phone)
+    {
+        $photo = new static;
+        if (auth()->check()){
+            $user = auth()->user();
+        } else {
+            if (is_null($user = User::getByEmail($email)) ) {
+                $user = new static;
+                $user->first_name = $first;
+                $user->last_name = $last;
+                $user->email = $email;
+                $user->phone = $phone;
+                $user->save();
+            } 
+        }
+        return $user;
     }
 
 }

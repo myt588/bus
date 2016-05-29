@@ -32,6 +32,7 @@ class CreateTripsTable extends Migration
             $table->integer('weekdays');
             $table->decimal('price');
             $table->decimal('discount');
+            $table->decimal('fee');
             $table->boolean('active')->default(false);
             $table->timestamps();
             $table->softDeletes();

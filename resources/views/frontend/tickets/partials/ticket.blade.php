@@ -4,7 +4,7 @@
             <dt>Passenger Name:</dt><dd>{{ $ticket->description }}</dd>
             <dt>Operator:</dt><dd>{{ $trip->companyName() }}</dd>
             <dt>Bus Number:</dt><dd>{{ $trip->bus->bus_number }}</dd>
-            <dt>Terms & Conditions:</dt><dd>view</dd>
+            <dt>Terms & Conditions:</dt><dd><a href="{{route('policy', $trip->company->id)}}">view</a></dd>
         </dl>
     </div>
     <div class="col-sm-8 table-cell">

@@ -16,10 +16,10 @@ class TicketsSeeder extends Seeder
         // factory(App\Trip::class, 10)->create();
 
         // DB::table('transactions')->delete();
-        factory(App\Transaction::class, 10)->create();
+        factory(App\Transaction::class, 30)->create();
 
         $faker = Faker\Factory::create();
-        foreach(range(1, 200) as $index)
+        foreach(range(1, 20) as $index)
         {
             DB::table('tickets')->insert([
                 'user_id'               => 3,

@@ -161,7 +161,7 @@
                     <div class="row">
                         @foreach($set as $photo)
                         <div class="col-sm-6">
-                            <img src="/{{$photo->thumbnail_url}}" style="padding-left: 20px; margin-bottom: 1em">
+                            <img src="/{{$photo->thumbnail_url}}" style="margin-bottom: 1em">
                         </div>
                         @endforeach
                     </div>

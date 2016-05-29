@@ -2,7 +2,7 @@
 <div class="toggle-container filters-container">
     <div class="panel style1 arrow-right">
         <h4 class="panel-title">
-            <a data-toggle="collapse" href="#price-filter" class="collapsed">Price</a>
+            <a data-toggle="collapse" href="#price-filter" class="filter collapsed">Price</a>
         </h4>
         <div id="price-filter" class="panel-collapse collapse">
             <div class="panel-content">
@@ -17,7 +17,7 @@
     
     <div class="panel style1 arrow-right">
         <h4 class="panel-title">
-            <a data-toggle="collapse" href="#flight-times-filter" class="collapsed">Departure Times</a>
+            <a data-toggle="collapse" href="#flight-times-filter" class="filter collapsed">Departure Times</a>
         </h4>
         <div id="flight-times-filter" class="panel-collapse collapse">
             <div class="panel-content">
@@ -32,21 +32,28 @@
     
     <div class="panel style1 arrow-right">
         <h4 class="panel-title">
-            <a data-toggle="collapse" href="#airlines-filter" class="collapsed">Operators</a>
+            <a data-toggle="collapse" href="#airlines-filter" class="filter collapsed">Operators</a>
         </h4>
         <div id="airlines-filter" class="panel-collapse collapse">
             <div class="panel-content">
                 <ul class="check-square filters-option">
-                    <li><a href="#">Major Airline<small>($620)</small></a></li>
-                    <li><a href="#">United Airlines<small>($982)</small></a></li>
-                    <li class="active"><a href="#">delta airlines<small>($1,127)</small></a></li>
-                    <li><a href="#">Alitalia<small>($2,322)</small></a></li>
-                    <li><a href="#">US airways<small>($3,158)</small></a></li>
-                    <li><a href="#">Air France<small>($4,239)</small></a></li>
-                    <li><a href="#">Air tahiti nui<small>($5,872)</small></a></li>
+                    <li id="all" class="active"><a href="">All</a></li>
+                    {{-- */$temp = null/* --}}
+                    {{-- */$x = 0/* --}}
+                    @foreach($trips as $item)
+                    @if($temp != null && $temp->company == $item->company) 
+                    @else
+                    <li id="company_{{$x}}" class="company_options"><a href="">{{$item->company->name}}<small>${{$item->fee}}</small></a></li>
+                    @endif 
+                    {{-- */$temp = $item;/* --}}
+                    {{-- */$x ++/* --}}
+                    @endforeach
                 </ul>
-                <a class="button btn-mini">MORE</a>
+                <a id="count" class="button btn-mini">{{$x-1}} Companies</a>
             </div>
         </div>
+    </div>
+    <div class="panel style1 arrow-right">
+        <button id="filter" class="full-width">Filter Results</button>
     </div>
 </div>

@@ -19,7 +19,7 @@ class Rent extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'rental_id', 'transaction_id', 'description'];
+    protected $fillable = ['user_id', 'rental_id', 'transaction_id', 'description', 'start', 'end'];
 
 
     /**
@@ -59,7 +59,41 @@ class Rent extends Model
      **/
     public function isPast()
     {
-        $date = $this->depart_date;
+        $date = $this->start;
         return (strtotime($date) < time());
+    }
+
+    /**
+     * get the name, combine bus make model type, start, end date
+     *
+     * @return string
+     * @author 
+     **/
+    public function getName()
+    {
+        $bus = $this->rental->bus;
+        return $bus->type. ' '. $bus->getMakeModel(). ' from '. $this->start. ' to '. $this->end;
+    }
+
+    /**
+     * scope filter by date
+     *
+     * @return query
+     * @author 
+     **/
+    public function scopeUpcoming($query)
+    {
+        return $query->where('start', '>=', time());
+    }
+
+    /**
+     * scope filter by date
+     *
+     * @return query
+     * @author 
+     **/
+    public function scopeCancelled($query)
+    {
+        return $query->where('start', '>', time());
     }
 }

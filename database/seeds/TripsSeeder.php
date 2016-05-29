@@ -25,7 +25,7 @@ class TripsSeeder extends Seeder
              $r->stations()->save(App\Station::create([
                 'company_id'    => $r->company_id,
                 'city_id'       => $r->to,
-                'name'          => 'Depart Station',
+                'name'          => 'Arrive Station',
                 'address'       => $faker->address,]), [
                 'time'          => $r->arrive_at, 
                 'departure'     => false

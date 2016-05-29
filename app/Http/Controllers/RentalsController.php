@@ -10,8 +10,11 @@ use App\Rent;
 use App\User;
 use App\Transaction;
 use App\Http\Requests;
+use App\Http\Requests\RentalSearchRequest;
+use App\Http\Requests\RentalCheckoutRequest;
 
 use Auth;
+use JavaScript;
 
 class RentalsController extends Controller
 {
@@ -21,13 +24,28 @@ class RentalsController extends Controller
      *
      * @return Response
      */
-    public function search(Request $request)
+    public function search(RentalSearchRequest $request)
     {
     	$data = $request->all();
-        $rentals = Rental::whereHas('bus', function ($query) use ($request) {
-		    $query->where('seats', '>=', $request->passengers);
-		})->paginate(15);
-        return view('frontend.rentals.search', compact('rentals', 'data'));
+        $rentals = Rental::bySeats($request->passengers);
+        // Handle filters
+        if ($request->has('filter'))
+        {
+            $min = $request->has('min') ? $request->min : 0;
+            $max = $request->has('max') ? $request->max : 1000;
+            $companyNames = $request->has('companyName') ? $request->companyName : ['all'];
+            $types = $request->has('type') ? $request->type : [];
+            $rentals = $rentals->priceFilter($min, $max)->companyFilter($companyNames)->multiTypeFilter($types);
+        } 
+        $types = [];
+        foreach (config('constants.bus_type') as $type)
+        {
+            $a = clone $rentals;
+            $types[$type] = $a->typeFilter($type)->count();
+        }
+        // paginator
+        $rentals = $rentals->paginate(10);
+        return view('frontend.rentals.search', compact('rentals', 'data', 'types'));
     }
 
     /**
@@ -37,7 +55,6 @@ class RentalsController extends Controller
      */
     public function index()
     {
-        // $rentals = Auth::user()->isAdmin() ? Rental::all() : Auth::user()->company->rentals;
         $rentals = Rental::paginate(15);
         return view('frontend.rentals.search', compact('rentals'));
     }
@@ -57,6 +74,10 @@ class RentalsController extends Controller
         $total = $rental->per_day * $day;
         $total = number_format((float)$total, 2, '.', '');
         $location = City::findOrFail($request->location)->getCityName();
+        session()->put('location', $location);
+        session()->put('total', $total);
+        session()->put('day', $day);
+        session()->put('data', $data);
         return view('frontend.rentals.detailed', compact('rental', 'total', 'data', 'location'));
     }
 
@@ -85,31 +106,22 @@ class RentalsController extends Controller
      *
      * @return Response
      */
-    public function confirm(Request $request)
+    public function confirm(RentalCheckoutRequest $request)
     {
         $data = $request->all();
-        if (Auth::check()){
-            $user = Auth::user();
-        } else {
-            if (!is_null(User::where('email', '=', $request->email)->first()) ) {
-                $user = User::where('email', '=', $request->email)->first();
-            } else {
-                $user = User::create([
-                    'first_name'    => $request->first_name,
-                    'last_name'     => $request->last_name,
-                    'email'         => $request->email,
-                ]);
-            }
-        }
-        $transaction = Transaction::create([
-            'quantity'              => 0,
-            'confirmation_number'   => random('distinct', 8),
-            'description'           => "rental",
-            ]);
+        $location = session()->get('location');
+        $total = session()->get('total');
+        $day = session()->get('day');
+        $data = session()->get('data');
+        $start = $data['start'] . ' ' . $data['start_at'];
+        $end = $data['end'] . ' ' . $data['end_at'];
+        $user = User::getUserOrCreateAnonymous($request->first_name, $request->last_name, $request->email, $request->phone);
         $rent = Rent::create([
             'user_id'               => $user->id,
             'rental_id'             => $request->id,
-            'transaction_id'        => $transaction->id
+            'start'                 => stringToDateTime($start),
+            'end'                   => stringToDateTime($end),
+            'description'           => $location,
             ]);
         return redirect()->route('rentals.thankyou', $rent->id);
     }

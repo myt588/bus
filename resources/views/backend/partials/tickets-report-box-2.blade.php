@@ -31,7 +31,7 @@
                         <td>{{ $item->depart_at }}</td>
                         <td>{{ $item->arrive_at }}</td>
                         <td>{{ $count = $item->ticketsBookedCountOn($date) }}</td>
-                        <td>${{ $price = $item->price() }}</td>
+                        <td>${{ $price = $item->fee }}</td>
                         <td>${{ $count * $price }} </td>
                         <td>
                             <a class="btn btn-info btn-xs" href="{{route('admin::tickets.show', ['id' => $item->id, 'date' => $date])}}">

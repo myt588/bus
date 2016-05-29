@@ -124,7 +124,7 @@ class Bus extends Model
      *
      * @return String
      */
-    public function makeModel()
+    public function getMakeModel()
     {
         return $this->make . ' ' . $this->model;
     }
@@ -151,7 +151,11 @@ class Bus extends Model
      **/
     public function getThumbnail()
     {
-        return $this->photos->first()->thumbnail_url;
+        if ($this->photos->count() > 0)
+        {
+            return $this->photos->first()->thumbnail_url;
+        }
+        return "image/defaults/no-image.png";
     }
 
     /**
@@ -162,7 +166,11 @@ class Bus extends Model
      **/
     public function getPhoto()
     {
-        return $this->photos->first()->url;
+        if ($this->photos->count() > 0)
+        {
+            return $this->photos->first()->url;
+        }
+        return "image/defaults/no-image.png";
     }
 
 }

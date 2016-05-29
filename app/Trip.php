@@ -39,6 +39,7 @@ class Trip extends Model
         'arrive_at', 
         'name', 
         'price', 
+        'fee',
         'discount', 
         'weekdays'
         ];
@@ -161,17 +162,6 @@ class Trip extends Model
     }
 
     /**
-     * get actual price for the trip
-     *
-     * @return decimal with two digits
-     **/
-    public function price()
-    {
-        $number = $this->price * $this->discount;
-        return number_format((float)$number, 2, '.', '');
-    }
-
-    /**
      * scope a search query on the trips
      *
      * @return $trips
@@ -183,6 +173,56 @@ class Trip extends Model
                      ->where('to', '=', $to)
                      ->where('weekdays', '&', $weekdays)
                      ->where('active', '=', 1);
+    }
+
+    /**
+     * scope a filter by price
+     *
+     * @return $trips
+     * @author Me
+     **/
+    public function scopePriceFilter($query, $min, $max)
+    {
+        return $query->whereBetween('fee', [$min, $max]);
+    }
+
+    /**
+     * scope a filter by depart time
+     *
+     * @return $trips
+     * @author Me
+     **/
+    public function scopeDepartFilter($query, $start, $end)
+    {
+        if ($start == "12:00 AM" && $start == $end)
+        {
+            $end = "11:59 PM";
+        }
+        return $query->whereBetween('start', [date("H:i:s", strtotime($start)), date("H:i:s", strtotime($end))]);
+    }
+
+     /**
+     * scope a filter by depart time
+     *
+     * @return $trips
+     * @author Me
+     **/
+    public function scopeCompanyFilter($query, $names)
+    {
+        if ($names == ["all"])
+        {
+            return $query;
+        }
+        $company_ids = [];
+        foreach($names as $i => $name)
+        {
+            $company = Company::byName($name);
+            if (count($company) > 0)
+            {
+                $company_ids[$i] = $company->first()->id;
+            }
+        }
+        return $query->whereIn('company_id', $company_ids);
     }
 
     /**

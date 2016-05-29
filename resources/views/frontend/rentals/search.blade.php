@@ -31,67 +31,12 @@
             <div class="row">
                 <!-- filters start -->
                 <div class="col-sm-4 col-md-3">
-                    <div class="toggle-container filters-container">
-                        <div class="panel style1 arrow-right">
-                            <h4 class="panel-title">
-                                <a data-toggle="collapse" href="#price-filter" class="collapsed">Price</a>
-                            </h4>
-                            <div id="price-filter" class="panel-collapse collapse">
-                                <div class="panel-content">
-                                    <div id="price-range"></div>
-                                    <br />
-                                    <span class="min-price-label pull-left"></span>
-                                    <span class="max-price-label pull-right"></span>
-                                    <div class="clearer"></div>
-                                </div><!-- end content -->
-                            </div>
-                        </div>
-                        
-                        <div class="panel style1 arrow-right">
-                            <h4 class="panel-title">
-                                <a data-toggle="collapse" href="#cartype-filter" class="collapsed">Bus Type</a>
-                            </h4>
-                            <div id="cartype-filter" class="panel-collapse collapse filters-container">
-                                <div class="panel-content">
-                                    <ul class="check-square filters-option">
-                                        <li><a href="#">Full Size<small>(10)</small></a></li>
-                                        <li><a href="#">Compact<small>(82)</small></a></li>
-                                        <li class="active"><a href="#">Economy<small>(127)</small></a></li>
-                                        <li><a href="#">Luxury / Premium<small>(22)</small></a></li>
-                                        <li><a href="#">Mini Car<small>(38)</small></a></li>
-                                        <li><a href="#">Van / Minivan<small>(39)</small></a></li>
-                                        <li><a href="#">Exotic / Special<small>(72)</small></a></li>
-                                    </ul>
-                                    <a class="button btn-mini">MORE</a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="panel style1 arrow-right">
-                            <h4 class="panel-title">
-                                <a data-toggle="collapse" href="#car-rental-agent-filter" class="collapsed">Bus Rental Operator</a>
-                            </h4>
-                            <div id="car-rental-agent-filter" class="panel-collapse collapse">
-                                <div class="panel-content">
-                                    <ul class="check-square filters-option">
-                                        <li><a href="#">Fox Rent A Car<small>(08)</small></a></li>
-                                        <li><a href="#">Payless<small>(32)</small></a></li>
-                                        <li class="active"><a href="#">Ez rent a car<small>(227)</small></a></li>
-                                        <li><a href="#">Thrifty<small>(22)</small></a></li>
-                                        <li><a href="#">Enterprise<small>(18)</small></a></li>
-                                        <li><a href="#">Alamo<small>(29)</small></a></li>
-                                        <li><a href="#">Dollar<small>(12)</small></a></li>
-                                    </ul>
-                                    <a class="button btn-mini">MORE</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @include('frontend.rentals.partials.filters')
                 </div>
                 <!-- filters end  -->
                 <div class="col-sm-8 col-md-9">
                     <!-- sort start -->
-                    <div class="sort-by-section clearfix">
+                    <!-- <div class="sort-by-section clearfix">
                         <h4 class="sort-by-title block-sm">Sort results by:</h4>
                         <ul class="sort-bar clearfix block-sm">
                             <li class="sort-by-name"><a class="sort-by-container" href="#"><span>name</span></a></li>
@@ -100,8 +45,11 @@
                             <li class="sort-by-rating active"><a class="sort-by-container" href="#"><span>rating</span></a></li>
                             <li class="sort-by-popularity"><a class="sort-by-container" href="#"><span>popularity</span></a></li>
                         </ul>
-                    </div>
+                    </div> -->
                     <!-- sort end -->
+                    @if(count($rentals) == 0)
+                    <h1>Sorry, Nothing Matches your Search! </h1>
+                    @endif
                     <div class="car-list">
                         <div class="row image-box car listing-style1">
                             @foreach($rentals as $rental)
@@ -112,7 +60,7 @@
                                     </figure>
                                     <div class="details">
                                         <span class="price"><small>per day</small>${{$rental->per_day}}</span>
-                                        <h4 class="box-title">{{$rental->bus->type}}<small>{{$rental->bus->makeModel()}}</small></h4>
+                                        <h4 class="box-title">{{$rental->bus->type}}<small>{{$rental->bus->getMakeModel()}}</small></h4>
                                         <div class="amenities">
                                             <ul>
                                                 <li>
@@ -154,6 +102,7 @@
 @endsection
 
 @section('js')
+
  <!-- Google Map Api -->
 <script type='text/javascript' src="http://maps.google.com/maps/api/js?sensor=false&amp;language=en"></script>
 <script type="text/javascript" src="/js/gmap3.min.js"></script>
@@ -164,37 +113,110 @@
             range: true,
             min: 0,
             max: 1000,
-            values: [ 100, 800 ],
+            values: priceDefault(),
             slide: function( event, ui ) {
                 tjq(".min-price-label").html( "$" + ui.values[ 0 ]);
                 tjq(".max-price-label").html( "$" + ui.values[ 1 ]);
-            }
+            },
         });
         tjq(".min-price-label").html( "$" + tjq("#price-range").slider( "values", 0 ));
         tjq(".max-price-label").html( "$" + tjq("#price-range").slider( "values", 1 ));
 
-        function convertTimeToHHMM(t) {
-            var minutes = t % 60;
-            var hour = (t - minutes) / 60;
-            var timeStr = (hour + "").lpad("0", 2) + ":" + (minutes + "").lpad("0", 2);
-            var date = new Date("2014/01/01 " + timeStr + ":00");
-            var hhmm = date.toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'});
-            return hhmm;
+        function priceDefault() {
+            if (getUrlParameter('min') !== null) {
+                return [getUrlParameter('min'), getUrlParameter('max')];
+            } else {
+                return [0, 1000];
+            }
         }
-        tjq("#flight-times").slider({
-            range: true,
-            min: 0,
-            max: 1440,
-            step: 5,
-            values: [ 360, 1200 ],
-            slide: function( event, ui ) {
-                
-                tjq(".start-time-label").html( convertTimeToHHMM(ui.values[0]) );
-                tjq(".end-time-label").html( convertTimeToHHMM(ui.values[1]) );
+
+        tjq('.company_options').click(function(){
+            tjq('#all').removeClass('active');
+        });
+
+        tjq('#all').click(function(){
+            tjq('.company_options').removeClass('active');
+        });
+
+        tjq("#filter").click(function(){
+            min = tjq(".min-price-label").text().substring(1);
+            max = tjq(".max-price-label").text().substring(1);
+            url = updateQueryStringParameter(window.location.href, 'filter', true);
+            url = updateQueryStringParameter(url, 'min', min);
+            url = updateQueryStringParameter(url, 'max', max);
+            url = removeParam('companyName[]', url);
+            url = removeParam('type[]', url);
+            for (var j = tjq("#type_count").text().substring(0,1); j >= 0; j--) 
+            {
+                if (tjq("#type_" + j).hasClass('active'))
+                {
+                    type = tjq("#type_" + j).text().split('(')[0];
+                    url = updateQueryStringParameter(url, 'type[]', type);
+                }
+            }
+            if (tjq('#all').hasClass('active'))
+            {
+                url = updateQueryStringParameter(url, 'companyName[]', 'all');
+            } else {
+                for (var i = tjq("#count").text().substring(0,1); i >= 0; i--) 
+                {
+                    if (tjq("#company_" + i).hasClass('active'))
+                    {
+                        company = tjq("#company_" + i).text().split('$')[0];
+                        url = updateQueryStringParameter(url, 'companyName[]', company);
+                    }
+                }
+            }
+            window.location = url;
+        });
+
+        
+        tjq('.filter').removeClass(function(){
+            if (getUrlParameter('filter') !== null)
+            {
+                tjq('.panel-collapse.collapse').addClass('in');
+                return 'collapsed';
             }
         });
-        tjq(".start-time-label").html( convertTimeToHHMM(tjq("#flight-times").slider( "values", 0 )) );
-        tjq(".end-time-label").html( convertTimeToHHMM(tjq("#flight-times").slider( "values", 1 )) );
+
+        function updateQueryStringParameter(uri, key, value) {
+           var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+           var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+           if (uri.match(re)) {
+             return uri.replace(re, '$1' + key + "=" + value + '$2');
+           }
+           else {
+             return uri + separator + key + "=" + value;
+           }
+        }
+
+        function getUrlParameter(name){
+            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+            if (results === null){
+               return null;
+            }
+            else{
+               return decodeURIComponent(results[1]) || 0;
+            }
+        }
+
+        function removeParam(key, sourceURL) {
+            var rtn = sourceURL.split("?")[0],
+                param,
+                params_arr = [],
+                queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+            if (queryString !== "") {
+                params_arr = queryString.split("&");
+                for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+                    param = params_arr[i].split("=")[0];
+                    if (param === key) {
+                        params_arr.splice(i, 1);
+                    }
+                }
+                rtn = rtn + "?" + params_arr.join("&");
+            }
+            return rtn;
+        }
     });
 </script>
 

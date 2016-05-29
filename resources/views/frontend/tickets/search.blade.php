@@ -32,7 +32,6 @@
                 <div class="col-sm-4 col-md-3">
                     @include('frontend.tickets.partials.filters')
                 </div>
-
                 <div class="col-sm-8 col-md-9">
                     <div class="tab-container box">
                         @include('frontend.tickets.partials.date-nav')
@@ -59,7 +58,7 @@
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <span class="price"><small>AVG/PERSON</small> ${{ $trip->price() }} </span>
+                                                        <span class="price"><small>AVG/PERSON</small> ${{ $trip->fee }} </span>
                                                     </div>
                                                 </div>
                                                 <div class="second-row">
@@ -68,7 +67,7 @@
                                                             <div class="icon"><i class="soap-icon-plane-right yellow-color"></i></div>
                                                             <div>
                                                                 <span class="skin-color">Departure Time</span><br />
-                                                                {{ date('h:i a', strtotime($trip->depart_at)) }}
+                                                                {{ $trip->depart_at }}
                                                             </div>
                                                         </div>
                                                         <div class="landing col-sm-4">
@@ -87,31 +86,30 @@
                                                         </div>
                                                     </div>
                                                     <div class="action">
-                                                        <a data-toggle="collapse" href="#{{$trip->id}}" class="button btn-small full-width collapsed">SELECT NOW</a>
+                                                        <a data-toggle="collapse" href="#{{'trip_' . $trip->id}}" class="button btn-small full-width collapsed">SELECT NOW</a>
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            @if($data['options'] == 'round-trip')
-                                                @if(array_key_exists('trip_one_id', $data)) 
-                                                {!! Form::open(['url' => route('tickets.picked'), 'method' => 'GET']) !!}
-                                                {!! Form::number('trip_one_id', $data['trip_one_id'], ['hidden']) !!}
-                                                {!! Form::number('trip_two_id', $trip->id, ['hidden']) !!}
-                                                {!! Form::number('trip_one_DS', $data['trip_one_DS'], ['hidden']) !!}
-                                                {!! Form::number('trip_one_AS', $data['trip_one_AS'], ['hidden']) !!}
-                                                @else
+                                            @if($data['options'] == 'round-trip' && !array_has($data, 'trip_id'))
+                                                <!-- round-trip and picked only the first-trip -->
                                                 {!! Form::open(['url' => route('tickets.search'), 'method' => 'GET']) !!}
-                                                {!! Form::number('trip_one_id', $trip->id, ['hidden']) !!}
-                                                @endif
+                                                {!! Form::number('trip_id[]', $trip->id, ['hidden']) !!}
                                                 {!! Form::text('return', $data['return'], ['hidden']) !!}
-                                                {!! Form::text('adults_return', $data['adults_return'], ['hidden']) !!}
-                                                {!! Form::text('kids_return', $data['kids_return'], ['hidden']) !!}
-                                            @else 
-                                            {!! Form::open(['url' => '/tickets/picked', 'method' => 'GET']) !!}
-                                            {!! Form::number('trip_one_id', $trip->id, ['hidden']) !!}
+                                            @elseif($data['options'] == 'round-trip' && array_has($data, 'trip_id'))
+                                                <!-- round-trip and both trip picked -->
+                                                {!! Form::open(['url' => route('tickets.picked'), 'method' => 'GET']) !!}
+                                                {!! Form::number('trip_id[]', $data['trip_id'][0], ['hidden']) !!}
+                                                {!! Form::number('trip_id[]', $trip->id, ['hidden']) !!}
+                                                {!! Form::number('trip_DS[]', $data['trip_DS'][0], ['hidden']) !!}
+                                                {!! Form::number('trip_AS[]', $data['trip_AS'][0], ['hidden']) !!}
+                                                {!! Form::text('return', $data['return'], ['hidden']) !!}
+                                            @else <!-- one-way trip -->
+                                                {!! Form::open(['url' => route('tickets.picked'), 'method' => 'GET']) !!}
+                                                {!! Form::number('trip_id[]', $trip->id, ['hidden']) !!}
                                             @endif
+
                                             @include('frontend.tickets.partials.search-form-hidden', $data)
-                                            <div id="{{$trip->id}}" class="collapse hidden-row">
+                                            <div id="{{'trip_' . $trip->id}}" class="collapse hidden-row">
                                                 <div class="row time">
                                                     <div class="col-xs-12 col-lg-6 col-md-6 col-sm-6 stops">
                                                         <div class="icon"><i class="soap-icon-clock yellow-color"></i></div>
@@ -125,8 +123,7 @@
                                                                 <label>
                                                                 <input 
                                                                 type="radio" 
-                                                                name="{{array_key_exists('trip_one_id', $data) ? 'trip_two_DS' : 'trip_one_DS'}}" 
-                                                                id="{{$station->id}}" 
+                                                                name="trip_DS[]" 
                                                                 value="{{$station->id}}" 
                                                                 checked="">
                                                                 {{date('h:i a', strtotime($station->pivot->time))}} &nbsp; {{$station->name}}
@@ -148,8 +145,7 @@
                                                                 <label>
                                                                 <input 
                                                                 type="radio" 
-                                                                name="{{array_key_exists('trip_one_id', $data) ? 'trip_two_AS' : 'trip_one_AS'}}"  
-                                                                id="{{$station->id}}" 
+                                                                name="trip_AS[]"  
                                                                 value="{{$station->id}}" 
                                                                 checked="">
                                                                 {{date('h:i a', strtotime($station->pivot->time))}} &nbsp; {{$station->name}}
@@ -175,6 +171,7 @@
                     </div>
                     <!-- <a class="button uppercase full-width btn-large">load more listings</a> -->
                     {!! $trips->appends($data)->links() !!}
+                    
                 </div>
             </div>
         </div>
@@ -185,23 +182,33 @@
 
 @section('js')
  <!-- Google Map Api -->
-<script type='text/javascript' src="http://maps.google.com/maps/api/js?sensor=false&amp;language=en"></script>
-<script type="text/javascript" src="/js/gmap3.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyBUdG-LWODBF8OiWvhRy8t0b2KGF69jjpE"></script>
+<!-- <script type="text/javascript" src="/js/gmap3.min.js"></script> -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.24/gmaps.js"></script>
 <!-- <script type="text/javascript" src="/js/app.js"></script> -->
 <script type="text/javascript">
     tjq(document).ready(function() {
+
         tjq("#price-range").slider({
             range: true,
             min: 0,
             max: 1000,
-            values: [ 100, 800 ],
+            values: priceDefault(),
             slide: function( event, ui ) {
                 tjq(".min-price-label").html( "$" + ui.values[ 0 ]);
                 tjq(".max-price-label").html( "$" + ui.values[ 1 ]);
-            }
+            },
         });
         tjq(".min-price-label").html( "$" + tjq("#price-range").slider( "values", 0 ));
         tjq(".max-price-label").html( "$" + tjq("#price-range").slider( "values", 1 ));
+
+        function priceDefault() {
+            if (getUrlParameter('min') !== null) {
+                return [getUrlParameter('min'), getUrlParameter('max')];
+            } else {
+                return [0, 1000];
+            }
+        }
 
         function convertTimeToHHMM(t) {
             var minutes = t % 60;
@@ -211,12 +218,13 @@
             var hhmm = date.toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'});
             return hhmm;
         }
+
         tjq("#flight-times").slider({
             range: true,
             min: 0,
             max: 1440,
             step: 5,
-            values: [ 360, 1200 ],
+            values: dateDefault(),
             slide: function( event, ui ) {
                 
                 tjq(".start-time-label").html( convertTimeToHHMM(ui.values[0]) );
@@ -226,13 +234,71 @@
         tjq(".start-time-label").html( convertTimeToHHMM(tjq("#flight-times").slider( "values", 0 )) );
         tjq(".end-time-label").html( convertTimeToHHMM(tjq("#flight-times").slider( "values", 1 )) );
 
-        function updateSelect($key, $this) {
-            if (window.location.search.indexOf('&' + $key + '=') > -1) {
-                window.location = updateQueryStringParameter(window.location.href, $key, $this.options[$this.selectedIndex].value);
+        function dateDefault() {
+            if (getUrlParameter('filter') !== null) {
+                startTime = getUrlParameter('startTime');
+                endTime = getUrlParameter('endTime');
+                return [parsehhmmsst(startTime), parsehhmmsst(endTime)];
             } else {
-                window.location = window.location.href + '&' + $key + '=' + $this.options[$this.selectedIndex].value;
+                return [ 360, 1200 ];
             }
         }
+
+        function parsehhmmsst(arg) {
+            var result = 0, arr = arg.split(':');
+            if (arr[0] < 12) {
+                result = arr[0] * 60; // hours
+            }
+            result += parseInt(arr[1]); // minutes
+            if (arg.indexOf('P') > -1) {  // 8:00 PM > 8:00 AM
+                result += 720;
+            }
+            return result;
+        }
+
+        tjq('.company_options').click(function(){
+            tjq('#all').removeClass('active');
+        });
+
+        tjq('#all').click(function(){
+            tjq('.company_options').removeClass('active');
+        });
+
+        tjq("#filter").click(function(){
+            min = tjq(".min-price-label").text().substring(1);
+            max = tjq(".max-price-label").text().substring(1);
+            startTime = tjq(".start-time-label").text();
+            endTime = tjq(".end-time-label").text();
+            url = updateQueryStringParameter(window.location.href, 'filter', true);
+            url = updateQueryStringParameter(url, 'min', min);
+            url = updateQueryStringParameter(url, 'max', max);
+            url = updateQueryStringParameter(url, 'startTime', startTime);
+            url = updateQueryStringParameter(url, 'endTime', endTime);
+            url = removeParam('companyName[]', url);
+            if (tjq('#all').hasClass('active'))
+            {
+                url = updateQueryStringParameter(url, 'companyName[]', 'all');
+            } else {
+                for (var i = tjq("#count").text().substring(0,1); i >= 0; i--) 
+                {
+                    if (tjq("#company_" + i).hasClass('active'))
+                    {
+                        company = tjq("#company_" + i).text().split('$')[0];
+                        url = updateQueryStringParameter(url, 'companyName[]', company);
+                    }
+                }
+            }
+            window.location = url;
+        });
+
+        
+        tjq('.filter').removeClass(function(){
+            if (getUrlParameter('filter') !== null)
+            {
+                tjq('.panel-collapse.collapse').addClass('in');
+                return 'collapsed';
+            }
+        });
 
         function updateQueryStringParameter(uri, key, value) {
            var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
@@ -243,6 +309,34 @@
            else {
              return uri + separator + key + "=" + value;
            }
+        }
+
+        function getUrlParameter(name){
+            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+            if (results === null){
+               return null;
+            }
+            else{
+               return decodeURIComponent(results[1]) || 0;
+            }
+        }
+
+        function removeParam(key, sourceURL) {
+            var rtn = sourceURL.split("?")[0],
+                param,
+                params_arr = [],
+                queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+            if (queryString !== "") {
+                params_arr = queryString.split("&");
+                for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+                    param = params_arr[i].split("=")[0];
+                    if (param === key) {
+                        params_arr.splice(i, 1);
+                    }
+                }
+                rtn = rtn + "?" + params_arr.join("&");
+            }
+            return rtn;
         }
     });
 </script>

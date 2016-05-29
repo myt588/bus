@@ -22,8 +22,8 @@ class CreateRentsTable extends Migration
             $table->integer('transaction_id')->unsigned()->nullable();
             $table->foreign('transaction_id')->references('id')->on('transactions');
             $table->text('description');
-            $table->date('start');
-            $table->date('end');
+            $table->dateTime('start');
+            $table->dateTime('end');
             $table->timestamps();
         });
             

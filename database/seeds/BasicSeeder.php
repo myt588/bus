@@ -41,6 +41,7 @@ class BasicSeeder extends Seeder
             'rating'        => '10',
             'verified'      => true,
             'code'          => 'AA',
+            'base'          => 'New York, NY',
         ]);
 
         User::create([
@@ -64,5 +65,7 @@ class BasicSeeder extends Seeder
             'password'      => Hash::make("aabus"),
             'company_id'    => $company->id,
         ])->assignRole("company_admin");
+
+        
     }
 }

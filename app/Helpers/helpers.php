@@ -1,6 +1,5 @@
 <?php
 
-
 define("WEEKDAY_SUNDAY",1); // 2^0
 define("WEEKDAY_MONDAY",2); // 2^1
 define("WEEKDAY_TUESDAY",4); // 2^2
@@ -9,6 +8,7 @@ define("WEEKDAY_THURSDAY",16); // 2^4
 define("WEEKDAY_FRIDAY",32); // 2^5
 define("WEEKDAY_SATURDAY",64); // 2^6
 define("EVERYDAY", 127);
+define("BUSTYPE", ['Minibus', 'Luxury Bus', 'Standard Bus', 'Electrical Bus']);
 
 function stringToWeekday($str) {
 	return pow(2, date("w", strtotime($str)));
@@ -16,6 +16,10 @@ function stringToWeekday($str) {
 
 function stringToDate($str) {
 	return date("Y-m-d", strtotime($str));
+}
+
+function stringToDateTime($str) {
+	return date("Y-m-d H:i:s", strtotime($str));
 }
 
 function getDateList($str) {
@@ -47,7 +51,7 @@ function dateMath($str, $i) {
  * @tutorial  nozero   - digit characters, 1-9
  * @tutorial  distinct - clearly distinct alpha-numeric characters
  */
-function random($type = 'alnum', $length = 8)
+function generateBookingNo($type = 'alnum', $length = 8)
 {
 	$utf8 = FALSE;
 

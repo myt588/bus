@@ -86,10 +86,10 @@
                     </div>
                 </div>
                 <div class="form-group {{ $errors->has('final_price') ? 'has-error' : ''}}">
-                    {!! Form::label('final_price', 'Final Price: ', ['class' => 'col-sm-3 control-label']) !!}
+                    {!! Form::label('fee', 'Final Price: ', ['class' => 'col-sm-3 control-label']) !!}
                     <div class="col-sm-6">
-                        {!! Form::number('final_price', null, ['class' => 'form-control final_price', 'readonly']) !!}
-                        {!! $errors->first('final_price', '<p class="help-block">:message</p>') !!}
+                        {!! Form::number('fee', null, ['class' => 'form-control fee', 'readonly']) !!}
+                        {!! $errors->first('fee', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
                 <div class="form-group {{ $errors->has('weekdays') ? 'has-error' : ''}}">
@@ -181,7 +181,7 @@
 
     // Calculate the final Price
     $('.price, .discount').change(function(){
-        $('.final_price').val($('.price').val() * $('.discount').val());
+        $('.fee').val($('.price').val() * $('.discount').val());
     });
 
     $('#departure, #arrive')

@@ -117,6 +117,17 @@ class Company extends Model
         return $this->morphMany('App\Photo', 'imageable');
     }
 
+    /**
+     * get company item by company name
+     *
+     * @return this
+     * @author me
+     **/
+    public function scopeByName($query, $name)
+    {
+        return $query->where('name', '=', $name)->get();
+    }
+
     public function ticketsCount()
     {
         $count = 0;
@@ -132,7 +143,7 @@ class Company extends Model
         $sales = 0;
         foreach($this->trips as $trip)
         {
-            $sales += $trip->tickets->count() * $trip->price();
+            $sales += $trip->tickets->count() * $trip->fee;
         }
         return $sales;
     }

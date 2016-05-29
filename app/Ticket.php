@@ -81,25 +81,14 @@ class Ticket extends Model
         return $this->belongsTo('App\Station', 'arrive_station');
     }
 
-
-    public function firstName() 
-    {
-        return $this->user->first_name;
-    }
-
-    public function lastName() 
-    {
-        return $this->user->last_name;
-    }
-
-    public function email() 
-    {
-        return $this->user->email;
-    }
-
+    /**
+     * Check if the Ticket is for a trip from the Past
+     *
+     * @return void
+     **/
     public function isPast()
     {
-        $date = $this->depart_date . ' ' . $this->trip->depart_at;
+        $date = $this->depart_date . ' ' . $this->trip->start;
         return (strtotime($date) < time());
     }
 
