@@ -16,7 +16,7 @@ section#content {  min-height: 1000px; padding: 0; position: relative; overflow:
 .featured .details { margin-right: 10px; }
 .featured .details > * { color: #fff; line-height: 1.25em; margin: 0; font-weight: bold; text-shadow: 2px -2px rgba(0, 0, 0, 0.2); }
 </style>
-@endsection
+@endsection 
 
 @section('title') TriponBus @endsection
 
@@ -43,16 +43,38 @@ section#content {  min-height: 1000px; padding: 0; position: relative; overflow:
             <h2 class="page-description col-md-6 no-float no-padding">We're bringing you a modern, comfortable and connected bus experience.</h2>
             <div class="search-box-wrapper style2">
                 <div class="search-box">
-                    <ul class="search-tabs clearfix">
-                        <li class="active"><a href="#tickets-tab" data-toggle="tab">Tickets</a></li>
+                    <ul class="search-tabs clearfix" id="myTab">
+                        <li class="{{session()->has('booking') ? '' : 'active'}}"><a href="#tickets-tab" data-toggle="tab">Tickets</a></li>
                         <li><a href="#rentals-tab" data-toggle="tab">Rentals</a></li>
+                        <li class="{{session()->has('booking') ? 'active' : ''}}"><a href="#lookup-tab" data-toggle="tab">Find Booking</a></li>
                     </ul>
                     <div class="search-tab-content">
-                        <div class="tab-pane fade active in" id="tickets-tab">
+                        <div class="tab-pane fade {{session()->has('booking') ? '' : 'active in'}}" id="tickets-tab">
                             @include('frontend.tickets.partials.search-form')
                         </div>
                         <div class="tab-pane fade" id="rentals-tab">
                             @include('frontend.rentals.partials.search-form')
+                        </div>
+                        <div class="tab-pane fade {{session()->has('booking') ? 'active in' : ''}}" id="lookup-tab">
+                            {!! Form::open(['route' => 'search.booking']) !!}
+                            <div class="row">
+                                <div class="col-xs-offset-2 col-xs-6">
+                                    <label>Booking Number</label>
+                                    <input type="text" name="booking_no" class="input-text full-width" placeholder="enter your booking number">
+                                </div>
+                                <div class="col-xs-2">
+                                    <label>&nbsp;</label>
+                                    <button class="full-width icon-check">Find Booking</button>
+                                </div>
+                            </div>
+                            {!! Form::close() !!}
+                            @if (Session::has('danger'))
+                                <br></br>
+                                <div class="alert alert-notice">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                                    {{ Session::pull('danger') }}
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -116,6 +138,22 @@ section#content {  min-height: 1000px; padding: 0; position: relative; overflow:
         $('#return').attr('placeholder', 'mm/dd/yy');
         $('#return').css('background-color', '#fff');
     }
-});
+
+    $('#myTab a').click(function(e) {
+      e.preventDefault();
+      $(this).tab('show');
+    });
+
+    // store the currently selected tab in the hash value
+    $('a[data-toggle="tab"]').on("shown.bs.tab", function(e) {
+        var id = $(e.target).attr("href").substr(1);
+        window.location.hash = "_" + id;
+    });
+
+    // on load of the page: switch to the currently selected tab
+    var hash = window.location.hash;
+
+    $('#myTab a[href="' + '#' + hash.substring(2) + '"]').tab('show');
+    });
 </script>
 @endsection

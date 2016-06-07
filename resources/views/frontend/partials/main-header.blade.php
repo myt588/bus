@@ -25,22 +25,22 @@
         
         <ul class="mobile-topnav container">
             <li><a href="#">MY ACCOUNT</a></li>
-            <li class="ribbon language menu-color-skin">
+            <!-- <li class="ribbon language menu-color-skin">
                 <a href="#" data-toggle="collapse">ENGLISH</a>
                 <ul class="menu mini">
                     <li><a href="#" title="Chinese">Chinese</a></li>
                     <li class="active"><a href="#" title="English">English</a></li>
                 </ul>
-            </li>
+            </li> -->
             <li><a href="#travelo-login" class="soap-popupbox">LOGIN</a></li>
             <li><a href="#travelo-signup" class="soap-popupbox">SIGNUP</a></li>
-            <li class="ribbon currency menu-color-skin">
+            <!-- <li class="ribbon currency menu-color-skin">
                 <a href="#">USD</a>
                 <ul class="menu mini">
                     <li><a href="#" title="CNY">CNY</a></li>
                     <li class="active"><a href="#" title="USD">USD</a></li>
                 </ul>
-            </li>
+            </li> -->
         </ul>
         
     </nav>

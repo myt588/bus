@@ -87,7 +87,7 @@ class RentalsController extends Controller
      *
      * @return Response
      */
-    public function update($id, RentalRequest $request)
+    public function update($id, Request $request)
     {
         $rental = Rental::findOrFail($id);
         $rental->update($request->all());

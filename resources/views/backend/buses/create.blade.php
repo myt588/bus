@@ -72,7 +72,7 @@
         <div class="form-group {{ $errors->has('type') ? 'has-error' : ''}}">
             {!! Form::label('type', 'Type: ', ['class' => 'col-sm-3 control-label']) !!}
             <div class="col-sm-6">
-                {!! Form::select('type', ['Mini-bus', 'Economy Bus', 'Full Size Bus', 'Luxury Bus'], null, ['class' => 'form-control']) !!}
+                {!! Form::select('type', config('constants.bus_type'), null, ['class' => 'form-control']) !!}
                 {!! $errors->first('type', '<p class="help-block">:message</p>') !!}
             </div>
         </div>
@@ -125,8 +125,8 @@
   $(function () {
 
     $('#random').on('click', function() {
-        $('.bus-number').val('{{Auth::user()->company->code}}' + Math.floor((Math.random() * 1000) + 10));
+        $('.bus-number').val('{{Auth::user()->isAdmin() ? "" : Auth::user()->company->code}}' + Math.floor((Math.random() * 1000) + 10));
     });
   });
 </script>
-@endsection 
+@endsection

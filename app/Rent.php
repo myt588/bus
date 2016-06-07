@@ -19,7 +19,7 @@ class Rent extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'rental_id', 'transaction_id', 'description', 'start', 'end'];
+    protected $fillable = ['user_id', 'rental_id', 'transaction_id', 'description', 'start', 'end', 'passengers'];
 
 
     /**
@@ -95,5 +95,19 @@ class Rent extends Model
     public function scopeCancelled($query)
     {
         return $query->where('start', '>', time());
+    }
+
+     /**
+     * Scope by company
+     *
+     * @return query
+     * @author ME
+     **/
+    public function scopeByCompany($query, $id)
+    {
+        if ($id == null) { return $query; }
+        return $query->whereHas('rental', function ($query) use ($id) {
+            $query->where('company_id', '=', $id);
+        });
     }
 }

@@ -126,7 +126,8 @@
                                                                 name="trip_DS[]" 
                                                                 value="{{$station->id}}" 
                                                                 checked="">
-                                                                {{date('h:i a', strtotime($station->pivot->time))}} &nbsp; {{$station->name}}
+                                                                <a class="yellow popup-map" href="#" data-box="{{$station->getLocationPoint()}}">
+                                                                {{date('h:i a', strtotime($station->pivot->time))}} &nbsp; {{$station->name}} </a>
                                                                 </label>
                                                             </div>
                                                             @endif
@@ -148,7 +149,8 @@
                                                                 name="trip_AS[]"  
                                                                 value="{{$station->id}}" 
                                                                 checked="">
-                                                                {{date('h:i a', strtotime($station->pivot->time))}} &nbsp; {{$station->name}}
+                                                                <a class="yellow popup-map" href="#" data-box="{{$station->getLocationPoint()}}">
+                                                                {{date('h:i a', strtotime($station->pivot->time))}} &nbsp; {{$station->name}}</a>
                                                                 </label>
                                                             </div>
                                                             @endif
@@ -184,7 +186,7 @@
  <!-- Google Map Api -->
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyBUdG-LWODBF8OiWvhRy8t0b2KGF69jjpE"></script>
 <!-- <script type="text/javascript" src="/js/gmap3.min.js"></script> -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.24/gmaps.js"></script>
+<script type="text/javascript" src="/js/gmap3.min.js"></script>
 <!-- <script type="text/javascript" src="/js/app.js"></script> -->
 <script type="text/javascript">
     tjq(document).ready(function() {

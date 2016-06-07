@@ -13,16 +13,9 @@
 
 Route::group(['middleware' => ['web', 'auth', 'admin'], 'namespace' =>'Backend', 'as' => 'admin::', 'prefix' => 'admin'], function()
 {
-	Route::get('dashboard', function () {
-		$company = Auth::user()->company;
-		$trips = $company->tripsBetweenDates('today', 'tomorrow');
-		$orders = $company->transactions;
-    	return view('backend.dashboard', compact('company', 'trips', 'orders'));
-	})->name('dashboard');
-
-	Route::get('reports/tickets/booking', 'ReportsController@ticketsBooking')->name('reports.tickets.booking');
-
-	Route::get('reports/tickets/passengers/{id}', 'ReportsController@passengersList')->name('reports.tickets.passengers');
+	//Dashboard
+	Route::get('dashboard', 'DashboardController@dashboard')->name('dashboard');
+	Route::get('/', 'DashboardController@admin')->name('site.admin');
 
 	//Bus
 	Route::resource('buses', 'BusesController');
@@ -35,31 +28,35 @@ Route::group(['middleware' => ['web', 'auth', 'admin'], 'namespace' =>'Backend',
 	Route::resource('trips', 'TripsController');
 	Route::post('trips/{id}/active', 'TripsController@active')->name('trips.active');
 
+	//Rental
+	Route::resource('rentals', 'RentalsController');
+	Route::post('rentals/{id}/active', 'RentalsController@active')->name('rentals.active');
+
 	//Stop
 	Route::resource('stations', 'StationsController');
-
-	//Fare
-	Route::resource('fares', 'FaresController');
 
 	//Ticket
 	Route::get('tickets/bookings', 'TicketsController@bookings')->name('tickets.bookings');
 	Route::get('tickets/sales', 'TicketsController@sales')->name('tickets.sales');
 	Route::get('tickets/{id}', 'TicketsController@show')->name('tickets.show');
 
-	//Transactions
-	Route::resource('transactions', 'TransactionsController');
+	//Rent
+	Route::get('rents', 'RentsController@index')->name('rents.bookings');
 
-	//Rentals
-	Route::resource('rentals', 'RentalsController');
-	Route::post('rentals/{id}/active', 'RentalsController@active')->name('rentals.active');
-
-	// Settings
-	Route::get('settings/profile', 'SettingsController@profile')->name('settings.profile');
-	Route::post('settings/profile', 'SettingsController@update')->name('settings.update');
-	Route::get('settings/template', 'SettingsController@template')->name('settings.template');
-	Route::get('settings/format', 'SettingsController@template')->name('settings.format');
-	Route::get('settings/policy', 'SettingsController@policy')->name('settings.policy');
-	Route::post('settings/policy', 'SettingsController@policyUpload')->name('settings.policy.upload');
+	//Settings
+	Route::group(['prefix' => 'settings', 'as' => 'settings.'], function() {
+		Route::get('/profile', 'SettingsController@profile')->name('profile');
+		Route::post('/profile', 'SettingsController@update')->name('update');
+		Route::get('/template', 'SettingsController@template')->name('template');
+		Route::get('/format', 'SettingsController@template')->name('format');
+		Route::get('/policy', 'SettingsController@policy')->name('policy');
+		Route::post('/policy', 'SettingsController@policyUpload')->name('policy.upload');
+		Route::get('/site', 'SettingsController@siteSetting')->name('site');
+		Route::post('/site', 'SettingsController@siteSettingUpload')->name('site.upload');
+		Route::get('/payment', 'SettingsController@payment')->name('site.payment');
+		Route::post('/payment', 'SettingsController@paymentUpload')->name('site.payment.upload');
+    });
+	
 });
 
 Route::group(['middleware' => 'web'], function () {
@@ -67,6 +64,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::auth();
 
     Route::get('/', 'HomeController@index')->name('home');	
+    Route::post('/search/booking', 'HomeController@bookingSearch')->name('search.booking');
 
     //User
     Route::group(['prefix' => 'users', 'as' => 'user.', 'middleware' => 'auth'], function() {
@@ -101,5 +99,10 @@ Route::group(['middleware' => 'web'], function () {
     	$policy = App\Company::findOrFail($id)->policy;
 		return view('share.policy', compact('policy'));
     })->name('policy');
+
+    Route::get('/policy', function(){
+    	$policy = App\Metas::byKey('site_policy')->first()->value;
+		return view('share.policy', compact('policy'));
+    })->name('site.policy');
 
 });

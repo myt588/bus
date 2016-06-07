@@ -17,7 +17,7 @@
                         <div>
                             {!! Form::model($user, [
                                 'method' => 'PATCH',
-                                'url' => 'user/update',
+                                'route' => 'user.update',
                                 'class' => 'edit-profile-form',
                                 'files' => true
                             ]) !!}
@@ -50,7 +50,7 @@
                                         </div>
                                         <div class="col-sms-6 col-sm-6">
                                             <label>Phone Number</label>
-                                            <input name="phone" type="text" class="input-text full-width" value="" placeholder="" />
+                                            <input name="phone" type="text" class="input-text full-width" value="{{ $user->phone }}" placeholder="" />
                                         </div>
                                     </div>
                                     <hr>

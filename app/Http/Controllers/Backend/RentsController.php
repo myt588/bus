@@ -9,6 +9,7 @@ use App\Rent;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Session;
+use Auth;
 
 class RentsController extends Controller
 {
@@ -20,8 +21,7 @@ class RentsController extends Controller
      */
     public function index()
     {
-        $rents = Rent::paginate(15);
-
+        $rents = Rent::byCompany(auth()->user()->company_id)->get();
         return view('backend.rents.index', compact('rents'));
     }
 
@@ -44,9 +44,7 @@ class RentsController extends Controller
     {
         
         Rent::create($request->all());
-
         Session::flash('flash_message', 'Rent added!');
-
         return redirect('admin/rents');
     }
 

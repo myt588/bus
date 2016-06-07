@@ -91,8 +91,23 @@ Dashboard
             <ul class="list-group">
                 @foreach($orders as $item)
                 @if(is_null($item->tickets->first()))
-                @break;
-                @endif
+                <li class="list-group-item">
+                    <h6 class="ellipsis">
+                        <a href="">
+                            Rent Inquery 
+                        </a>
+                    </h6>
+                    <p class="list-group-text">
+                        <a href="">
+                            <b>#{{$item->booking_no}}</b></a> -
+                        <a href=""></a> {{$item->user->fullName()}}
+                        is interested in renting a {{$item->rent->rental->bus->type}} bus with {{$item->rent->passengers}} people from {{$item->rent->description}} location. The renting period will be from {{$item->rent->start}} to {{$item->rent->end}}. Here is the contact phone number: {{$item->rent->user->phone}}
+                    </p>
+                    <h6>
+                        {{humanTiming($item->created_at)}} ago • <span style="color: green;">${{$item->quantity}}</span>
+                    </h6>
+                </li>
+                @else
                 <li class="list-group-item">
                     <h6 class="ellipsis">
                         <a href="">
@@ -101,7 +116,7 @@ Dashboard
                     </h6>
                     <p class="list-group-text">
                         <a href="">
-                            <b>#{{$item->confirmation_number}}</b></a> -
+                            <b>#{{$item->booking_no}}</b></a> -
                         <a href=""></a> {{$item->tickets->first()->user->fullName()}}
                         ordered {{$item->tickets->count()}} ticket.
                     </p>
@@ -109,6 +124,7 @@ Dashboard
                         {{humanTiming($item->created_at)}} ago • <span style="color: green;">${{$item->quantity}}</span>
                     </h6>
                 </li>
+                @endif
                 @endforeach
             </ul>
         </div>

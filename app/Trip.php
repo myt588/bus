@@ -56,16 +56,6 @@ class Trip extends Model
      *
      * @return void
      **/
-    public function fares()
-    {
-        return $this->belongsToMany('App\Fare');
-    }
-
-    /**
-     * DB Relation Function
-     *
-     * @return void
-     **/
     public function stations()
     {
         return $this->belongsToMany('App\Station')->withPivot('time', 'departure');

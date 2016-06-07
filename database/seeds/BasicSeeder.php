@@ -48,6 +48,7 @@ class BasicSeeder extends Seeder
             'first_name'    => 'yetian',
             'last_name'     => 'mao',
             'email'         => 'yetian.mao@gmail.com',
+            'phone'         => '4088935052',
             'password'      => Hash::make("Tianjiayou"),
         ]);
 
@@ -55,6 +56,7 @@ class BasicSeeder extends Seeder
             'first_name'    => 'admin',
             'last_name'     => 'admin',
             'email'         => 'admin@gmail.com',
+            'phone'         => '9999999999',
             'password'      => Hash::make("admin"),
         ])->assignRole("admin");
 
@@ -63,6 +65,7 @@ class BasicSeeder extends Seeder
             'last_name'     => 'aabus',
             'email'         => 'aabus@gmail.com',
             'password'      => Hash::make("aabus"),
+            'phone'         => '4088888888',
             'company_id'    => $company->id,
         ])->assignRole("company_admin");
 

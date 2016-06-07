@@ -47,14 +47,6 @@ $factory->define(App\Station::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Fare::class, function (Faker\Generator $faker) {
-    return [
-        'price' 				=> $price = $faker->randomFloat($nbMaxDecimals = 1, $min = 0, $max = 100),
-        'discount' 				=> $discount = $faker->randomFloat($nbMaxDecimals = 1, $min = 0, $max = 1),
-        'final_price'           => $price * $discount,
-    ];
-});
-
 function getTo($from){
     $faker = Faker\Factory::create();
     $to = $faker->numberBetween(1, 10);
@@ -131,7 +123,7 @@ $factory->define(App\Rent::class, function (Faker\Generator $faker) {
     return [
         'user_id'               => 3,
         'rental_id'             => 1,
-        'transaction_id'        => 3
+        'transaction_id'        => 3,
         'start'                 => $faker->dateTimeBetween($startDate = '-7 days', $endDate = '+7 days'),
         'end'                   => $faker->dateTimeBetween($startDate = '-7 days', $endDate = '+7 days'),
         'created_at'            => $faker->dateTimeBetween($startDate = '-7 days', $endDate = '+7 days'),

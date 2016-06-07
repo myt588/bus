@@ -97,7 +97,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="alert alert-notice">
+                            <div>
+                                {!!$rental->description!!}
+                            </div>
+                            <!-- <div class="alert alert-notice">
                                     Surcharge may apply when vehicle starts or ends hire at different places or outside the area of operator's base location. Surcharge amount depends on locations.
                             </div>
                             <div class="policy">
@@ -116,7 +119,7 @@
                                     <li>up to 8 hours usage</li>
                                     <li>up to 12 hours usage add ¥15,000 (12 hour usage option must be decided at time of booking otherwise overuse charges apply)</li>
                                 </ul>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -133,7 +136,7 @@
                             <small class="pull-left">Total</small>
                             <span class="pull-right">${{$total}}</span>
                         </div>
-                        <p class="description">Nunc cursus libero purus ac congue ar lorem cursus ut sed vitae pulvinar massa idend porta nequetiam elerisque mi id, consectetur adipi deese cing elit maus fringilla bibe endum.</p>
+                        <p class="description">{{config('constants.rental_rule')}}</p>
                         @if(Auth::check())
                         <a class="button yellow full-width uppercase btn-small" href="{{route('rentals.booking', $data)}}">book now</a>
                         @else

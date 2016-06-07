@@ -1,5 +1,4 @@
 <header class="main-header">
-
     <!-- Logo -->
     <a href="{{url('/')}}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
@@ -26,16 +25,23 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="{{Auth::user()->photo}}" class="user-image" alt="User Image">
-              <span class="hidden-xs">{{Auth::user()->company->name}}</span>
+              <span class="hidden-xs">
+                @if(Auth::user()->isAdmin())
+                  {{Auth::user()->fullname()}}
+                @else
+                  {{Auth::user()->company->name}}
+                @endif
+              </span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
                 <img src="{{Auth::user()->photo}}" class="img-circle" alt="User Image">
-
-                <p>
-                  {{Auth::user()->company->name}} <small>{{Auth::user()->company->base}}</small>
-                </p>
+                @if(Auth::user()->isAdmin())
+                  <p>{{Auth::user()->fullname()}}</p>
+                @else
+                  <p>{{Auth::user()->company->name}} <small>{{Auth::user()->company->base}}</small></p>
+                @endif
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
@@ -51,6 +57,5 @@
           </li>
         </ul>
       </div>
-
     </nav>
   </header>

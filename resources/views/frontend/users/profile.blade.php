@@ -26,6 +26,7 @@
                                         <dt>first name:</dt><dd>{{$user->first_name}}</dd>
                                         <dt>last name:</dt><dd>{{$user->last_name}}</dd>
                                         <dt>email:</dt><dd>{{$user->email}}</dd>
+                                        <dt>phone:</dt><dd>{{$user->phone}}</dd>
                                     </dl>
                                 </div>
                             </article>

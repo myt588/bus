@@ -8,7 +8,11 @@
           <img src="{{Auth::user()->photo}}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
+          @if(Auth::user()->isAdmin())
+          <p>{{Auth::user()->fullname()}}</p>
+          @else
           <p>{{Auth::user()->company->name}}</p>
+          @endif
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
@@ -20,7 +24,7 @@
             <i class="fa fa-dashboard"></i> <span>Dashboard</span> 
           </a>
         </li>
-        <li {!! set_active(['admin/tickets', 'admin/tickets/*'], 'treeview') !!}>
+        <li {!! set_active(['admin/tickets', 'admin/tickets/*', 'admin/rents'], 'treeview') !!}>
           <a href="#">
             <i class="fa fa-files-o"></i>
             <span>Reports</span>
@@ -29,12 +33,12 @@
           <ul class="treeview-menu">
             <li><a href="{{route('admin::tickets.bookings')}}"><i class="fa fa-circle-o"></i> Tickets Bookings Report</a></li>
             <li><a href="{{route('admin::tickets.sales')}}"><i class="fa fa-circle-o"></i> Tickets Sales Report</a></li>
-           <!--  <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Rentals Report</a></li>
-            <li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> Tours Report</a></li>
+            <li><a href="{{route('admin::rents.bookings')}}"><i class="fa fa-circle-o"></i> Rent Report</a></li>
+           <!--  <li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> Tours Report</a></li>
             <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Customer Reviews</a></li> -->
           </ul>
         </li>
-        <li {!! set_active(['admin/buses', 'admin/buses/*', 'admin/stations/*', 'admin/stations', 'admin/trips/*', 'admin/trips', 'admin/rentals', 'admin/rentals'], 'treeview') !!}>
+        <li {!! set_active(['admin/buses', 'admin/buses/*', 'admin/stations/*', 'admin/stations', 'admin/trips/*', 'admin/trips', 'admin/rentals', 'admin/rentals/*'], 'treeview') !!}>
           <a href="#">
             <i class="fa fa-pie-chart"></i>
             <span>Manage Products</span>
@@ -49,7 +53,21 @@
             <!-- <li><a href=""><i class="fa fa-circle-o"></i> Tour</a></li> -->
           </ul>
         </li>
+        @can('admin')
         <li {!! set_active(['settings/profile', 'settings/template', 'settings/format', 'settings/policy'], 'treeview') !!}>
+          <a href="#">
+            <i class="fa fa-laptop"></i>
+            <span>Settings</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{{route('admin::settings.policy')}}"><i class="fa fa-circle-o"></i> Site Policy</a></li>
+            <li><a href="{{route('admin::settings.site')}}"><i class="fa fa-circle-o"></i> Site Settings</a></li>
+            <li><a href="{{route('admin::settings.site.payment')}}"><i class="fa fa-circle-o"></i> Site Payments</a></li>
+          </ul>
+        </li>
+        @else
+         <li {!! set_active(['settings/profile', 'settings/template', 'settings/format', 'settings/policy'], 'treeview') !!}>
           <a href="#">
             <i class="fa fa-laptop"></i>
             <span>Settings</span>
@@ -62,6 +80,7 @@
             <li><a href="{{route('admin::settings.policy')}}"><i class="fa fa-circle-o"></i> My Policy</a></li>
           </ul>
         </li>
+        @endcan
         <!-- <li {!! set_active('', 'treeview') !!}>
           <a href="#">
             <i class="fa fa-edit"></i> <span>My Programs</span>

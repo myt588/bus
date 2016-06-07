@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Metas;
 use Auth;
 use Session;
 
@@ -63,8 +64,14 @@ class SettingsController extends Controller
      */
     public function policy()
     {
-        $policy = $this->user->company->policy;
-        return view('backend.settings.policy', compact('policy'));
+        if ($this->user->can('admin'))
+        {
+            $item = Metas::byKey('site_policy')->first()->value;
+        } else {
+            $item = $this->user->company->policy;
+        }
+        $route = 'admin::settings.policy.upload';
+        return view('backend.settings.editor', compact('item', 'route'));
     }
 
     /**
@@ -74,11 +81,65 @@ class SettingsController extends Controller
      */
     public function policyUpload(Request $request)
     {
-        $this->user->company->policy = $request->policy;
-        $this->user->company->save();
+        if ($this->user->can('admin'))
+        {
+            Metas::createOrUpdate('site_policy', $request->item);
+        } else {
+            $this->user->company->policy = $request->item;
+            $this->user->company->save();
+        }
         Session::flash('success', 'Policy Uploaded!');
         return redirect()->back();
     }
 
+    /**
+     * site setting show
+     *
+     * @return view
+     * @author me
+     **/
+    public function siteSetting()
+    {
+        return view('backend.settings.site');
+    }
+
+    /**
+     * site setting modify
+     *
+     * @return redirect 
+     * @author 
+     **/
+    public function siteSettingUpload(Request $request)
+    {
+        return redirect()->back();
+    }
+
+    /**
+     * site setting show
+     *
+     * @return view
+     * @author me
+     **/
+    public function payment()
+    {
+        if ($this->user->cannot('admin')){ return redirect()->back(); }
+        $item = Metas::byKey('site_payment')->first()->value;
+        $route = 'admin::settings.site.payment.upload';
+        return view('backend.settings.editor', compact('item', 'route'));
+    }
+
+    /**
+     * site setting modify
+     *
+     * @return redirect 
+     * @author 
+     **/
+    public function paymentUpload(Request $request)
+    {
+        if ($this->user->cannot('admin')){ return redirect()->back(); }
+        Metas::createOrUpdate('site_payment', $request->item);
+        Session::flash('success', 'Payment Rule Uploaded!');
+        return redirect()->back();
+    }
 
 }

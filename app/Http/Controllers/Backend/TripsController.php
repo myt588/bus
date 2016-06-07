@@ -31,7 +31,7 @@ class TripsController extends Controller
         {
             $trips = Trip::all();
         } else {
-            $trips = Company::findOrFail($user->company_id)->trips;
+            $trips = $user->company->trips;
         }
         return view('backend.trips.index', compact('trips'));
     }

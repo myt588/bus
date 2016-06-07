@@ -25,7 +25,7 @@
 @section('content')
 
 <div class="box box-primary">
-    {!! Form::open(['route' => 'admin::settings.policy.upload']) !!}
+    {!! Form::open(['route' => $route]) !!}
     <div class="box-header">
       <h3 class="box-title">Set your policies
     </h3>
@@ -42,7 +42,7 @@
     </div>
 
     <div class="box-footer">
-        {!! Form::submit('Create', ['class' => 'btn btn-primary']) !!}
+        {!! Form::submit('Submit', ['class' => 'btn btn-primary']) !!}
     </div>
 
     {!! Form::close() !!}
@@ -59,7 +59,7 @@
   $(function () {
     //bootstrap WYSIHTML5 - text editor
     $(".textarea").wysihtml5();
-    $('.textarea').html('{{ $policy }}');
+    $('.textarea').html('{{ $item }}');
   });
 </script>
 @endsection

@@ -67,7 +67,7 @@
                                 </div>
                                 <div class="col-sm-6 col-md-5">
                                     <label>Phone number</label>
-                                    <input name="phone" type="text" class="input-text full-width" value="" placeholder="" />
+                                    <input name="phone" type="text" class="input-text full-width" value="{{ Auth::check() ? Auth::user()->phone : "" }}" placeholder="" />
                                 </div>
                             </div>
                         </div>
@@ -75,7 +75,7 @@
                         <div class="form-group">
                             <div class="checkbox">
                                 <label>
-                                    <input name="agreement" type="checkbox"> By continuing, you agree to the <a href="#"><span class="skin-color">Terms and Conditions</span></a>.
+                                    <input name="agreement" type="checkbox"> By continuing, you agree to the <a href="{{route('site.policy')}}"><span class="skin-color">Terms and Conditions</span></a>.
                                 </label>
                             </div>
                         </div>

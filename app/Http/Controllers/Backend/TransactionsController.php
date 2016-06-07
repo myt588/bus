@@ -22,7 +22,6 @@ class TransactionsController extends Controller
     public function index()
     {
         $transactions = Transaction::paginate(15);
-
         return view('backend.transactions.index', compact('transactions'));
     }
 

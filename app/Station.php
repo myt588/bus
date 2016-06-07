@@ -130,4 +130,15 @@ class Station extends Model
         } 
         return false;
     }
+
+    /**
+     * get Location point and make it into a string
+     *
+     * @return string
+     * @author Me
+     **/
+    public function getLocationPoint()
+    {
+        return $this->lat . ', ' . $this->lng;
+    }
 }

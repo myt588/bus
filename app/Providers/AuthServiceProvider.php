@@ -40,6 +40,10 @@ class AuthServiceProvider extends ServiceProvider
         //         return $user->hasRole($role);
         //     });
         // }
+
+        $gate->define('admin', function ($user) {
+            return $user->isAdmin();
+        });
     }
 
     /**

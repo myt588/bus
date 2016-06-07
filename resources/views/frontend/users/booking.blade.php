@@ -54,7 +54,7 @@
                                         <label class="date">{{getDay($item->start)}}</label>
                                         <label class="day">{{getWeekday($item->start)}}</label>
                                     </div>
-                                    <h4 class="box-title"><i class="icon soap-icon-car blue-color circle"></i><a href="{{route('tickets.thankyou', $item->transaction->id)}}">{{$item->getName()}}</a></h4>
+                                    <h4 class="box-title"><i class="icon soap-icon-car blue-color circle"></i><a href="{{route('rentals.thankyou', $item->transaction->id)}}">{{$item->getName()}}</a></h4>
                                     <dl class="info">
                                         <dt>Booking Number</dt>
                                         <dd>{{$item->transaction->booking_no}}</dd>

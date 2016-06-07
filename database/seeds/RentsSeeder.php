@@ -12,6 +12,7 @@ class RentsSeeder extends Seeder
     public function run()
     {
         $faker = Faker\Factory::create();
+        factory(App\Transaction::class, 20)->create();
         foreach(range(1, 20) as $index)
         {
             DB::table('rents')->insert([

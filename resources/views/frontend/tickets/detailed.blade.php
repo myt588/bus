@@ -58,7 +58,7 @@
                             <small class="pull-left">Total Fare</small>
                             <span id="total" class="pull-right"></span>
                         </span>
-                        <p class="description">Nunc cursus libero purus ac congue ar lorem cursus ut sed vitae pulvinar massa idend porta nequetiam elerisque mi id, consectetur adipi deese cing elit maus fringilla bibe endum.</p>
+                        <p class="description">{{config('constants.ticket_rule')}}</p>
                         @if(Auth::check())
                         <button id="bookButton" submit="submit" class="green full-width uppercase btn-medium">BOOK NOW</button>
                         @else
@@ -108,6 +108,10 @@
 
 @section('js')
 <script type="text/javascript" src="/js/calendar.js"></script>
+<!-- Google Map Api -->
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyBUdG-LWODBF8OiWvhRy8t0b2KGF69jjpE"></script>
+<!-- <script type="text/javascript" src="/js/gmap3.min.js"></script> -->
+<script type="text/javascript" src="/js/gmap3.min.js"></script>
 <script type="text/javascript">
     tjq(document).ready(function() {
         updateTotal();

@@ -8,7 +8,6 @@ use App\Station;
 use App\Ticket;
 use App\Transaction;
 use App\User;
-use App\Fare;
 use App\Company;
 use App\Http\Requests;
 
@@ -64,7 +63,9 @@ class TicketsController extends Controller
     {
          if (array_has($data, 'date_new')){
             $data['depart'] = dateMath($data['depart'], $data['date_new']);
-            $data['return'] = dateMath($data['return'], $data['date_new']);
+            if (array_has($data, 'return')) {
+                $data['return'] = dateMath($data['return'], $data['date_new']);
+            }
             unset($data['date_new']);
         } 
         return getDateList($data[$date]);
@@ -145,9 +146,9 @@ class TicketsController extends Controller
     public function pay(TicketCheckoutRequest $request)
     {
         //user is logged in
-        $data = session()->get('searchTerms');
-        $info = session()->get('info');
-        $fares = session()->get('fares');
+        $data = session()->pull('searchTerms');
+        $info = session()->pull('info');
+        $fares = session()->pull('fares');
         $user = User::getUserOrCreateAnonymous($request->first_name, $request->last_name, $request->email, $request->phone);
         $total = count($fares) == 1 ? $fares[0] : $fares[0] + $fares[1];
         $invoice = $this->createInvoice($user, $total, $request->stripeToken);
@@ -178,9 +179,9 @@ class TicketsController extends Controller
                 }
             }
         }
-        // Mail::send('emails.ticket_confirmation', ['user' => $user, 'transaction' => $transaction], function ($m) use ($user) {
-        //     $m->to($user->email, $user->name)->subject('Your Reminder!');
-        // });
+        Mail::send('emails.ticket_confirmation', ['user' => $user, 'transaction' => $transaction], function ($m) use ($user) {
+            $m->to($user->email, $user->name)->subject('Your Reminder!');
+        });
         return redirect()->route('tickets.thankyou', $transaction->booking_no);
     }
 
@@ -219,7 +220,7 @@ class TicketsController extends Controller
      **/
     public function thankyou($booking_no)
     {
-        $transactions = Transaction::byBookingNo($booking_no);
+        $transactions = Transaction::byBookingNo($booking_no)->get();
         $user = $transactions->first()->user;
         return view('frontend.tickets.thankyou', compact('transactions', 'user'));
     }

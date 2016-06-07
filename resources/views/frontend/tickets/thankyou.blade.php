@@ -61,27 +61,17 @@
                     @endforeach
                     <hr />
                     <h2>Payment</h2>
-                    <p>Praesent dolor lectus, rutrum sit amet risus vitae, imperdiet cursus neque. Nulla tempor nec lorem eu suscipit. Donec dignissim lectus a nunc molestie consectetur. Nulla eu urna in nisi adipiscing placerat. Nam vel scelerisque magna. Donec justo urna, posuere ut dictum quis.</p>
+                    <p>{{App\Metas::byKey('site_payment')->count() == 0 ? '' : Metas::byKey('site_payment')->first()->value}}</p>
                     <br />
-                    <p class="red-color">Payment is made by Credit Card Via Paypal.</p>
+                    <p class="red-color">Payment is made by Credit Card Via Strip.</p>
                     <hr />
                     <h2>View Booking Details</h2>
-                    <p>Praesent dolor lectus, rutrum sit amet risus vitae, imperdiet cursus neque. Nulla tempor nec lorem eu suscipit. Donec dignissim lectus a nunc molestie consectetur. Nulla eu urna in nisi adipiscing placerat. Nam vel scelerisque magna. Donec justo urna, posuere ut dictum quis.</p>
+                    <p>You may view the booking details through the link below or find it in your personal page. A confirmation email is also sent to your email address</p>
                     <br />
-                    <a href="#" class="red-color underline view-link">https://www.travelo.com/booking-details/?=f4acb19f-9542-4a5c-b8ee</a>
+                    <a href="#" class="red-color underline view-link">{{url()->current()}}</a>
                 </div>
             </div>
-            <div class="sidebar col-sm-4 col-md-3">
-                <div class="travelo-box contact-box">
-                    <h4>Need Travelo Help?</h4>
-                    <p>We would be more than happy to help you. Our team advisor are 24/7 at your service to help you.</p>
-                    <address class="contact-details">
-                        <span class="contact-phone"><i class="soap-icon-phone"></i> 1-800-123-HELLO</span>
-                        <br>
-                        <a class="contact-email" href="#">help@travelo.com</a>
-                    </address>
-                </div>
-            </div>
+            @include('frontend.partials.help-box')
         </div>
     </div>
 </section>
@@ -89,7 +79,9 @@
 
 @section('js')
 <!-- Google Map Api -->
-<script src="http://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyBUdG-LWODBF8OiWvhRy8t0b2KGF69jjpE"></script>
+<!-- <script type="text/javascript" src="/js/gmap3.min.js"></script> -->
+<script type="text/javascript" src="/js/gmap3.min.js"></script>
 
 <script type="text/javascript" src="/js/calendar.js"></script>
 @endsection

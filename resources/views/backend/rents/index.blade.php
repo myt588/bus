@@ -1,15 +1,15 @@
 @extends('layouts.backend')
 
+@section('css')
+<!-- DataTables -->
+<link rel="stylesheet" href="/plugins/datatables/dataTables.bootstrap.css">
+@endsection
+
 @section('title') Rent Homepage @endsection 
 
 @section('heading') 
 
     Rent 
-    <small>
-        <a href=" {{ url('admin/rents/create') }} "class="btn btn-sm  btn-primary iframe">
-            Add New Rent
-        </a>
-    </small>
 
 @endsection
 
@@ -30,39 +30,56 @@
         <table id="example1" class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>User Id</th><th>Rental Id</th><th>Transaction Id</th><th>Description</th><th>Actions</th>
+                    <th>User Name</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th># of Passengers</th>
+                    <th>Desired Rental</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Ordered Date</th>
                 </tr>
             </thead>
             <tbody>
             @foreach($rents as $item)
                 <tr>
-                    <td><a href="{{ url('admin/rents', $item->id) }}">{{ $item->user_id }}</a></td><td>{{ $item->rental_id }}</td><td>{{ $item->transaction_id }}</td><td>{{ $item->description }}</td>
-                    <td>
-                        <a class="btn btn-info btn-xs" href="{{ url('admin/rents/' . $item->id ) }}">
-                           Details
-                        </a> /
-                        <a class="btn btn-primary btn-xs" href="{{ url('admin/rents/' . $item->id . '/edit') }}">
-                           Update
-                        </a> /
-                        {!! Form::open([
-                            'method'=>'DELETE',
-                            'url' => ['admin/rents', $item->id],
-                            'style' => 'display:inline'
-                        ]) !!}
-                            {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs']) !!}
-                        {!! Form::close() !!}
-                    </td>
+                    <td><a href="">{{ $item->user->fullName() }}</a></td>
+                    <td>{{ $item->start}}</td>
+                    <td>{{ $item->end}}</td>
+                    <td>{{ $item->size}}</td>
+                    <td>{{ $item->rental->bus->type }}</td>
+                    <td>{{ $item->user->email }}</td>
+                    <td>{{ $item->user->phone }} </td>
+                    <td>{{ $item->created_at }}</td>
                 </tr>
             @endforeach
             </tbody>
             <thead>
                 <tr>
-                    <th>User Id</th><th>Rental Id</th><th>Transaction Id</th><th>Description</th><th>Actions</th>
+                    <th>User Name</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th># of Passengers</th>
+                    <th>Desired Rental</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Ordered Date</th>
                 </tr>
             </thead>
         </table>
-        <div class="pagination"> {!! $rents->render() !!} </div>
     </div>
 </div>
 
+@endsection
+
+@section('js')
+<!-- DataTables -->
+<script src="/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<!-- page script -->
+<script>
+  $(function () {
+    $("#example1").DataTable();
+  });
+</script>
 @endsection

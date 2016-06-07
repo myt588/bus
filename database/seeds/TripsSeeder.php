@@ -37,9 +37,6 @@ class TripsSeeder extends Seeder
         // DB::table('companies')->delete();
         // factory(App\Company::class, 10)->create();
 
-        // DB::table('fares')->delete();
-        // factory(App\Fare::class, 10)->create();
-
         // DB::table('buses')->delete();
         // factory(App\Bus::class, 30)->create();
 

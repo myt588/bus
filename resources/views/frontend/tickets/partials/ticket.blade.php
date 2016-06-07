@@ -29,7 +29,9 @@
                     </div>
                     <dl class="details">
                         <dt class="skin-color">Location</dt>
-                        <dd>{{ $trip_DS->fullAddress() }}</dd>
+                        <dd><a class="yellow popup-map" href="#" data-box="{{$trip_DS->getLocationPoint()}}">
+                            {{ $trip_DS->fullAddress() }} 
+                        </a></dd>
                     </dl>
                 </div>
             </div>
@@ -53,7 +55,9 @@
                     </div>
                     <dl class="details">
                         <dt class="skin-color">Location</dt>
-                        <dd>{{ $trip_AS->fullAddress() }}</dd>
+                        <dd><a class="yellow popup-map" href="#" data-box="{{$trip_AS->getLocationPoint()}}">
+                            {{ $trip_AS->fullAddress() }}
+                        </a></dd>
                     </dl>
                 </div>
             </div>

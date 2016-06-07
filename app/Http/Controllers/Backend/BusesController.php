@@ -29,7 +29,7 @@ class BusesController extends Controller
         {
             $buses = Bus::all();
         } else {
-            $buses = Company::findOrFail($user->company_id)->buses;
+            $buses = $user->company->buses;
         }
         return view('backend.buses.index', compact('buses'));
     }

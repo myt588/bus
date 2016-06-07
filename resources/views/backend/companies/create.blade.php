@@ -58,6 +58,13 @@
                 {!! $errors->first('code', '<p class="help-block">:message</p>') !!}
             </div>
         </div>
+        <div class="form-group {{ $errors->has('base') ? 'has-error' : ''}}">
+            {!! Form::label('base', 'Base: ', ['class' => 'col-sm-3 control-label']) !!}
+            <div class="col-sm-6">
+                {!! Form::text('base', null, ['class' => 'form-control']) !!}
+                {!! $errors->first('base', '<p class="help-block">:message</p>') !!}
+            </div>
+        </div>
 
 
         <div class="form-group">

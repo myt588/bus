@@ -15,6 +15,7 @@ use App\Http\Requests\RentalCheckoutRequest;
 
 use Auth;
 use JavaScript;
+use Mail;
 
 class RentalsController extends Controller
 {
@@ -96,6 +97,7 @@ class RentalsController extends Controller
         $total = $rental->per_day * $day;
         $total = number_format((float)$total, 2, '.', '');
         $location = City::findOrFail($request->location)->getCityName();
+        session()->put('company', $rental->company);
         return view('frontend.rentals.contact-us', compact('rental', 'total', 'data', 'location'));
     }
 
@@ -109,20 +111,33 @@ class RentalsController extends Controller
     public function confirm(RentalCheckoutRequest $request)
     {
         $data = $request->all();
-        $location = session()->get('location');
-        $total = session()->get('total');
-        $day = session()->get('day');
-        $data = session()->get('data');
+        $location = session()->pull('location');
+        $total = session()->pull('total');
+        $day = session()->pull('day');
+        $data = session()->pull('data');
+        $company = session()->pull('company');
         $start = $data['start'] . ' ' . $data['start_at'];
         $end = $data['end'] . ' ' . $data['end_at'];
         $user = User::getUserOrCreateAnonymous($request->first_name, $request->last_name, $request->email, $request->phone);
+        $transaction = Transaction::create([
+            'user_id'               => $user->id,
+            'company_id'            => $company->id,
+            'quantity'              => $total,
+            'description'           => 'rent, estimated price',
+            'booking_no'            => generateBookingNo()
+            ]);
         $rent = Rent::create([
             'user_id'               => $user->id,
             'rental_id'             => $request->id,
+            'transaction_id'        => $transaction->id,
             'start'                 => stringToDateTime($start),
             'end'                   => stringToDateTime($end),
             'description'           => $location,
+            'passengers'            => $data['passengers'],
             ]);
+        Mail::send('emails.rent_confirmation', ['user' => $user, 'rent' => $rent], function ($m) use ($user) {
+            $m->to($user->email, $user->name)->subject('Your Reminder!');
+        });
         return redirect()->route('rentals.thankyou', $rent->id);
     }
 
@@ -136,7 +151,6 @@ class RentalsController extends Controller
     public function thankyou($id)
     {
         $rent = Rent::findOrFail($id);
-
         return view('frontend.rentals.thankyou', compact('rent'));
     }
 }

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\City;
+use App\Transaction;
+use App\Http\Controllers\TicketsController;
 use Illuminate\Http\Request;
+use Session;
 
 class HomeController extends Controller
 {
@@ -37,6 +40,23 @@ class HomeController extends Controller
             $cities[$city->id] = $city->city . ', ' . $city->state;
         }
         return $cities;
+    }
+
+    /**
+     * find booking thru booking no
+     *
+     * @return redirect
+     * @author me
+     **/
+    public function bookingSearch(Request $request)
+    {
+        if (Transaction::byBookingNo($request->booking_no)->count() == 0)
+        {
+            Session::flash('danger', 'No booking found!');
+            return redirect()->back()->with(['booking' => true]);
+        } else {
+            return redirect()->route('tickets.thankyou', $request->booking_no);
+        }
     }
 
 }

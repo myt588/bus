@@ -37,9 +37,9 @@ class Transaction extends Model
      *
      * @return void
      **/
-    public function rents()
+    public function rent()
     {
-        return $this->hasMany('App\Rent');
+        return $this->hasOne('App\Rent');
     }
 
     /**
@@ -99,7 +99,7 @@ class Transaction extends Model
      **/
     public function scopeByBookingNo($query, $booking_no)
     {
-        return $query->where('booking_no', '=', $booking_no)->get();
+        return $query->where('booking_no', '=', $booking_no);
     }
 
 }

@@ -39,14 +39,12 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group {{ $errors->has('company_id') ? 'has-error' : '' }} @can('admin') @else hidden @endcan">
-                    <div class="col-sm-6">
-                        @can('admin')
-                        {!! Form::select('company_id', $companies, null, ['class' => 'form-control', 'placeholder' => 'company id']) !!}
-                        @else
-                        {!! Form::select('company_id', $companies, Auth::user()->company_id, ['class' => 'form-control', 'placeholder' => 'company id']) !!}
-                        @endcan
-                        {!! $errors->first('company_id', '<p class="help-block">:message</p>') !!}
-                    </div>
+                    @can('admin')
+                    {!! Form::select('company_id', $companies, null, ['class' => 'form-control', 'placeholder' => 'company id']) !!}
+                    @else
+                    {!! Form::select('company_id', $companies, Auth::user()->company_id, ['class' => 'form-control', 'placeholder' => 'company id']) !!}
+                    @endcan
+                    {!! $errors->first('company_id', '<p class="help-block">:message</p>') !!}
                 </div>
                 <div class="form-group {{ $errors->has('bus_id') ? 'has-error' : ''}}">
                     {!! Form::select('bus_id', $buses, null, ['class' => 'form-control', 'placeholder' => 'Please Pick a Bus Number']) !!}

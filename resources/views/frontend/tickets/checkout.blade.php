@@ -86,13 +86,6 @@
                                     <input name="phone" type="text" class="input-text full-width" value="{{ Auth::check() ? Auth::user()->phone : "" }}" placeholder="" />
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <label>
-                                        <input name="subscribe" type="checkbox"> I want to receive <span class="skin-color">Travelo</span> promotional offers in the future
-                                    </label>
-                                </div>
-                            </div>
                         </div>
                         <hr />
 
@@ -124,7 +117,7 @@
                         <div class="form-group">
                             <div class="checkbox">
                                 <label>
-                                    <input name="agreement" type="checkbox"> By continuing, you agree to the <a href="#"><span class="skin-color">Terms and Conditions</span></a>.
+                                    <input name="agreement" type="checkbox"> By continuing, you agree to the <a href="{{route('site.policy')}}"><span class="skin-color">Terms and Conditions</span></a>.
                                 </label>
                             </div>
                         </div>
@@ -171,8 +164,10 @@
 @endsection
 
 @section('js')
- <!-- Google Map Api -->
-<script src="http://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false"></script>
+<!-- Google Map Api -->
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyBUdG-LWODBF8OiWvhRy8t0b2KGF69jjpE"></script>
+<!-- <script type="text/javascript" src="/js/gmap3.min.js"></script> -->
+<script type="text/javascript" src="/js/gmap3.min.js"></script>
 
 <script type="text/javascript" src="/js/calendar.js"></script>
 

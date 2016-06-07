@@ -4,7 +4,7 @@ Dear {{$user->fullname()}},
 You ticket order at triponbus.com has been comfirmed.
 <br>
 Here is the link to your invoice.
-<a href="{{ $link = route('tickets.invoice', $transaction->id) }}"> {{ $link }} </a>
+<a href="{{ $link = route('tickets.invoice', $transaction->invoice_id) }}"> {{ $link }} </a>
 <br>
 Thank you
 <br>

@@ -42,17 +42,20 @@
                         <dt>First name:</dt><dd>{{ $rent->user->first_name }}</dd>
                         <dt>Last name:</dt><dd>{{ $rent->user->last_name }}</dd>
                         <dt>E-mail address:</dt><dd>{{ $rent->user->email }}</dd>
+                        <dt>Start Date & Time:</dt><dd>{{ $rent->start }}</dd>
+                        <dt>End Date & Time:</dt><dd>{{ $rent->end }}</dd>
+                        <dt>Pickup Location:</dt><dd>{{ $rent->description }}</dd>
                     </dl>
                     <hr />
                     <h2>Payment</h2>
-                    <p>Praesent dolor lectus, rutrum sit amet risus vitae, imperdiet cursus neque. Nulla tempor nec lorem eu suscipit. Donec dignissim lectus a nunc molestie consectetur. Nulla eu urna in nisi adipiscing placerat. Nam vel scelerisque magna. Donec justo urna, posuere ut dictum quis.</p>
+                    <p></p>
                     <br />
-                    <p class="red-color">Payment is made by Credit Card Via Paypal.</p>
+                    <p class="red-color">No Payment is being charged.</p>
                     <hr />
                     <h2>View Booking Details</h2>
-                    <p>Praesent dolor lectus, rutrum sit amet risus vitae, imperdiet cursus neque. Nulla tempor nec lorem eu suscipit. Donec dignissim lectus a nunc molestie consectetur. Nulla eu urna in nisi adipiscing placerat. Nam vel scelerisque magna. Donec justo urna, posuere ut dictum quis.</p>
+                    <p>You may view the booking details through the link below or find it in your personal page. A confirmation email is also sent to your email address<</p>
                     <br />
-                    <a href="#" class="red-color underline view-link">https://www.travelo.com/booking-details/?=f4acb19f-9542-4a5c-b8ee</a>
+                    <a href="#" class="red-color underline view-link">{{url()->current()}}</a>
                 </div>
             </div>
             <div class="sidebar col-sm-4 col-md-3">
