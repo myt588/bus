@@ -67,8 +67,5 @@
 @endsection
 
 @section('js')
-<!-- Google Map Api -->
-<script src="http://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false"></script>
-
 <script type="text/javascript" src="/js/calendar.js"></script>
 @endsection
